@@ -1,0 +1,13 @@
+services:
+    DBP\API\ESignBundle\Service\PdfAsApi:
+        public: false
+        autowire: true
+
+    DBP\API\ESignBundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+        autowire: true
+
+    DBP\API\ESignBundle\DataProvider\QualifiedlySignedDocumentDataProvider:
+        tags: ['api_platform.item_data_provider']
+        autowire: true

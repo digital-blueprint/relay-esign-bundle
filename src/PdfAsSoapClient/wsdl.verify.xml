@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    xmlns:tns="http://ws.web.pdfas.egiz.gv.at/" 
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+    xmlns:ns2="http://schemas.xmlsoap.org/soap/http" 
+    xmlns:ns1="http://ws.api.pdfas.egiz.gv.at/" name="PDFASVerificationImplService" targetNamespace="http://ws.web.pdfas.egiz.gv.at/">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+            xmlns:tns="http://ws.api.pdfas.egiz.gv.at/" targetNamespace="http://ws.api.pdfas.egiz.gv.at/" version="1.0">
+
+            <xs:complexType name="VerifyRequest">
+                <xs:sequence>
+                    <xs:element name="inputData" type="xs:base64Binary"/>
+                    <xs:element minOccurs="0" name="preprocessorArguments" nillable="true" type="tns:PropertyMap"/>
+                    <xs:element name="requestID" type="xs:string"/>
+                    <xs:element minOccurs="0" name="signatureIndex" nillable="true" type="xs:int"/>
+                    <xs:element minOccurs="0" name="verificationLevel" nillable="true" type="tns:VerificationLevel"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="PropertyMap">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="propertyEntries" type="tns:PropertyEntry"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="PropertyEntry">
+                <xs:sequence>
+                    <xs:element name="key" type="xs:string"/>
+                    <xs:element name="value" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="VerifyResponse">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="verifyResults" type="tns:VerifyResult"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="VerifyResult">
+                <xs:sequence>
+                    <xs:element name="certificate" type="xs:string"/>
+                    <xs:element name="certificateCode" type="xs:int"/>
+                    <xs:element name="certificateMessage" type="xs:string"/>
+                    <xs:element name="error" type="xs:string"/>
+                    <xs:element name="processed" type="xs:boolean"/>
+                    <xs:element name="requestID" type="xs:string"/>
+                    <xs:element name="signatureIndex" type="xs:int"/>
+                    <xs:element name="signedBy" type="xs:string"/>
+                    <xs:element name="signedData" type="xs:string"/>
+                    <xs:element name="valueCode" type="xs:int"/>
+                    <xs:element name="valueMessage" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:simpleType name="VerificationLevel">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="intOnly"/>
+                    <xs:enumeration value="full"/>
+                </xs:restriction>
+            </xs:simpleType>
+
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="verifyResponse">
+        <wsdl:part name="verifyResponse" type="ns1:VerifyResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="verify">
+        <wsdl:part name="verifyRequest" type="ns1:VerifyRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="PDFASVerification">
+        <wsdl:operation name="verify">
+            <wsdl:input message="ns1:verify" name="verify">
+            </wsdl:input>
+            <wsdl:output message="ns1:verifyResponse" name="verifyResponse">
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="PDFASVerificationImplServiceSoapBinding" type="ns1:PDFASVerification">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="verify">
+            <soap:operation soapAction="" style="rpc"/>
+            <wsdl:input name="verify">
+                <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="verifyResponse">
+                <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="PDFASVerificationImplService">
+        <wsdl:port binding="tns:PDFASVerificationImplServiceSoapBinding" name="PDFASVerificationImplPort">
+            <soap:address location=""/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
