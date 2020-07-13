@@ -15,11 +15,11 @@ for the API-Gateway.
 
 ## Installation
 
-#### Step 1
+### Step 1
 
 Copy this bundle to `./bundles/api-esign-bundle`
 
-#### Step 2
+### Step 2
 
 Enable this bundle in `./config/bundles.php` by adding this element to the array returned:
 
@@ -32,7 +32,7 @@ Enable this bundle in `./config/bundles.php` by adding this element to the array
 }
 ```
 
-#### Step 3
+### Step 3
 
 Add the Entities of this bundle to `./config/packages/api_platform.yaml`:
 
@@ -45,7 +45,7 @@ Add the Entities of this bundle to `./config/packages/api_platform.yaml`:
 ...
 ```
 
-#### Step 4
+### Step 4
 
 Hide some Entities from exposure by api_platform by adding them to `./src/Swagger/SwaggerDecorator.php`:
 
@@ -59,7 +59,7 @@ Hide some Entities from exposure by api_platform by adding them to `./src/Swagge
 
 ```
 
-#### Step 5
+### Step 5
 
 Add this bundle to `./symfony.lock`:
 
