@@ -7,10 +7,14 @@
         "ext-soap": "*",
         "api-platform/core": "^2.4",
         "symfony/framework-bundle": "^4.1.12",
-        "myclabs/php-enum": "^1.7"
+        "myclabs/php-enum": "^1.7",
+        "guzzlehttp/guzzle": "^6.0"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^4.4"
+        "symfony/phpunit-bridge": "^4.4",
+        "vimeo/psalm": "^3.12",
+        "phpstan/phpstan": "^0.12.33",
+        "phpstan/phpstan-phpunit": "^0.12.13"
     },
     "autoload": {
         "psr-4": {
@@ -25,6 +29,16 @@
     "scripts": {
         "test": [
             "@php vendor/bin/simple-phpunit"
+        ],
+        "phpstan": [
+            "@php vendor/bin/phpstan analyze --ansi"
+        ],
+        "psalm": [
+            "@php vendor/bin/psalm"
+        ],
+        "lint": [
+            "@composer run phpstan",
+            "@composer run psalm"
         ]
     }
 }
