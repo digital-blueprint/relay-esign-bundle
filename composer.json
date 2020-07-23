@@ -26,6 +26,12 @@
           "DBP\\API\\ESignBundle\\Tests\\": "tests/"
         }
     },
+    "config": {
+        "sort-packages": true,
+        "platform": {
+          "php": "7.2.24"
+        }
+    },
     "scripts": {
         "test": [
             "@php vendor/bin/simple-phpunit"
