@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class ESignExtension extends Extension
+class DbpEsignExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
