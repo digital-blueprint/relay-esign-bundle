@@ -24,6 +24,7 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use SoapFault;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\uri_template;
@@ -44,9 +45,18 @@ class PdfAsApi
     const SIG_TYPE_OFFICIALLY = 1;
     const SIG_TYPE_QUALIFIEDLY = 2;
 
-    public function __construct(AuditLogger $logger)
+    private $officialUrl;
+    private $qualifiedUrl;
+    private $qualifiedStaticUrl;
+
+    public function __construct(ContainerInterface $container, AuditLogger $logger)
     {
         $this->logger = $logger;
+
+        $config = $container->getParameter('dbp_api.esign.config');
+        $this->officialUrl = $config['official_url'] ?? '';
+        $this->qualifiedUrl = $config['qualified_url'] ?? '';
+        $this->qualifiedStaticUrl = $config['qualified_static_url'] ?? '';
     }
 
     private function freezePhpNoticeErrorReporting()
@@ -98,9 +108,9 @@ class PdfAsApi
     private function getService($sigType = self::SIG_TYPE_OFFICIALLY): PDFASSigningImplService
     {
         if ($sigType === self::SIG_TYPE_OFFICIALLY)
-            $wsBaseUri = $_ENV['PDF_AS_WEB_OFFICIAL_URI'];
+            $wsBaseUri = $this->officialUrl;
         else if ($sigType == self::SIG_TYPE_QUALIFIEDLY)
-            $wsBaseUri = $_ENV['PDF_AS_WEB_QUALIFIED_URI'];
+            $wsBaseUri = $this->qualifiedUrl;
         else
             throw new \RuntimeException("invalid type");
 
@@ -245,7 +255,7 @@ class PdfAsApi
 
             // add the callback url for the qualified signature process
             if ($sigType == self::SIG_TYPE_QUALIFIEDLY) {
-                $staticUri = $_ENV['PDF_AS_WEB_QUALIFIED_STATIC_URI'];
+                $staticUri = $this->qualifiedStaticUrl;
                 $params->setInvokeurl($staticUri . '/callback.html');
                 // it's important to add the port "443", PDF-AS has a bug that will set the port to "-1" if it isn't set
                 $params->setInvokeerrorurl(Tools::getUriWithPort($staticUri . '/error.html'));
@@ -309,7 +319,7 @@ class PdfAsApi
             // let's stay well below 60s browser timeouts, so we can catch timeouts ourselves
             ini_set("default_socket_timeout", 40);
 
-            $wsUri = $_ENV["PDF_AS_WEB_QUALIFIED_URI"] . '/services/wsverify';
+            $wsUri = $this->qualifiedUrl . '/services/wsverify';
             $client = new PDFASVerificationImplService($wsUri);
             $request = new VerifyRequest($data, $requestId);
             $request->setVerificationLevel(VerificationLevel::intOnly());
@@ -370,7 +380,7 @@ class PdfAsApi
      */
     protected function getQualifiedlySignedDocumentUrl(string $requestId) : string
     {
-        return $_ENV["PDF_AS_WEB_QUALIFIED_URI"] . uri_template('/PDFData;jsessionid={requestId}', [
+        return $this->qualifiedUrl . uri_template('/PDFData;jsessionid={requestId}', [
             'requestId' => $requestId,
         ]);
     }
