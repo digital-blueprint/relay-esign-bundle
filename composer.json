@@ -8,7 +8,8 @@
         "api-platform/core": "^2.4",
         "symfony/framework-bundle": "^4.1.12",
         "myclabs/php-enum": "^1.7",
-        "guzzlehttp/guzzle": "^6.0"
+        "guzzlehttp/guzzle": "^6.0",
+        "dbp/api-core-bundle": "@dev"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^4.4",
@@ -16,6 +17,12 @@
         "phpstan/phpstan": "^0.12.33",
         "phpstan/phpstan-phpunit": "^0.12.13"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../api-core-bundle"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "DBP\\API\\ESignBundle\\": "src/"
