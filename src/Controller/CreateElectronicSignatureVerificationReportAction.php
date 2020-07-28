@@ -34,6 +34,8 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
      */
     public function __invoke(Request $request): ElectronicSignatureVerificationReport
     {
+        $this->denyAccessUnlessGranted('ROLE_SCOPE_VERIFY-SIGNATURE');
+
         /** @var UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');
 
