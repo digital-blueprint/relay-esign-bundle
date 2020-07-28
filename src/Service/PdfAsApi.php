@@ -7,7 +7,7 @@ namespace DBP\API\ESignBundle\Service;
 
 use DBP\API\ESignBundle\Entity\QualifiedlySignedDocument;
 use App\Exception\ItemNotLoadedException;
-use App\Helpers\Tools;
+use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\PdfAsSoapClient\PDFASSigningImplService;
 use DBP\API\ESignBundlePdfAsSoapClient\PDFASVerificationImplService;
 use DBP\API\ESignBundle\PdfAsSoapClient\PropertyMap;
