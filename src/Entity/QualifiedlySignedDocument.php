@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD
  *
  * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"},
  *     collectionOperations={"get"},
  *     itemOperations={
  *         "get"={

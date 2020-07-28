@@ -12,6 +12,7 @@ use DBP\API\ESignBundle\Controller\CreateElectronicSignatureVerificationReportAc
  * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD
  *
  * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"},
  *     collectionOperations={
  *         "get",
  *         "sign"={

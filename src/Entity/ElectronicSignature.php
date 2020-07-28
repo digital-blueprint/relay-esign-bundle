@@ -8,6 +8,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
+ *     attributes={"security"="is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"},
  *     collectionOperations={},
  *     itemOperations={"get"},
  *     iri="http://schema.tugraz.at/ElectronicSignature",
