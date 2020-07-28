@@ -3,10 +3,8 @@
 namespace DBP\API\ESignBundle\Controller;
 
 use DBP\API\ESignBundle\Entity\QualifiedSigningRequest;
-use App\Exception\ItemNotLoadedException;
 use DBP\API\ESignBundle\Service\PdfAsApi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,14 +25,10 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
     /**
      * @param Request $request
      * @return QualifiedSigningRequest
-     * @throws ItemNotLoadedException
      * @throws HttpException
      */
     public function __invoke(Request $request): QualifiedSigningRequest
     {
-        // enable this to test exceptions
-//        $this->throwRandomException();
-
         $this->denyAccessUnlessGranted('ROLE_SCOPE_QUALIFIED-SIGNATURE');
 
         /** @var UploadedFile $uploadedFile */
@@ -104,7 +98,7 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
                     throw new ServiceUnavailableHttpException(100, $this->api->lastErrorMessage());
                     break;
                 default:
-                    throw new ItemNotLoadedException($this->api->lastErrorMessage());
+                    throw new HttpException(Response::HTTP_FAILED_DEPENDENCY, $this->api->lastErrorMessage());
             }
         }
 
@@ -114,24 +108,5 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
         $request->setUrl($url);
 
         return $request;
-    }
-
-    /**
-     * @throws ServiceUnavailableHttpException
-     * @throws ItemNotLoadedException
-     */
-    private static function throwRandomException()
-    {
-        switch (rand(0, 3)) {
-            case 0:
-                throw new ServiceUnavailableHttpException(100, "Too many requests!");
-                break;
-            case 1:
-                throw new ItemNotLoadedException("Signing request failed!");
-                break;
-            case 2:
-                throw new ItemNotLoadedException("Signing request soap call failed!");
-                break;
-        }
     }
 }

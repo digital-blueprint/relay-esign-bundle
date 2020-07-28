@@ -6,7 +6,6 @@
 namespace DBP\API\ESignBundle\Service;
 
 use DBP\API\ESignBundle\Entity\QualifiedlySignedDocument;
-use App\Exception\ItemNotLoadedException;
 use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\PdfAsSoapClient\PDFASSigningImplService;
 use DBP\API\ESignBundle\PdfAsSoapClient\PDFASVerificationImplService;
@@ -20,7 +19,6 @@ use DBP\API\ESignBundle\PdfAsSoapClient\VerifyRequest;
 use DBP\API\ESignBundle\PdfAsSoapClient\VerifyResponse;
 use DBP\API\ESignBundle\PdfAsSoapClient\VerifyResult;
 use DBP\API\CoreBundle\Service\AuditLogger;
-use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use SoapFault;
@@ -225,7 +223,6 @@ class PdfAsApi
      * Uncaught Exception: Malformed UTF-8 characters, possibly incorrectly encoded
      * {"exception":"[object] (Symfony\\Component\\Serializer\\Exception\\NotEncodableValueException(code: 0):
      * Malformed UTF-8 characters, possibly incorrectly encoded at /application/vendor/symfony/serializer/Encoder/JsonEncode.php:63,
-     * App\\Exception\\ItemNotLoadedException(code: 0)
      *
      * @param string $data
      * @param int $sigType
@@ -300,7 +297,6 @@ class PdfAsApi
      * Uncaught Exception: Malformed UTF-8 characters, possibly incorrectly encoded
      * {"exception":"[object] (Symfony\\Component\\Serializer\\Exception\\NotEncodableValueException(code: 0):
      * Malformed UTF-8 characters, possibly incorrectly encoded at /application/vendor/symfony/serializer/Encoder/JsonEncode.php:63,
-     * App\\Exception\\ItemNotLoadedException(code: 0)
      *
      * @param string $data
      * @param string $requestId
@@ -389,7 +385,7 @@ class PdfAsApi
      * @param string $requestId
      * @param string $fileName
      * @return QualifiedlySignedDocument
-     * @throws ItemNotLoadedException
+     * @throws PdfAsException
      * @throws NotFoundHttpException
      * @throws AccessDeniedHttpException
      */
@@ -413,7 +409,7 @@ class PdfAsApi
                         "QualifiedlySignedDocument with id '%s' was not found!", $requestId));
                 }
 
-                throw new ItemNotLoadedException(
+                throw new PdfAsException(
                     sprintf("QualifiedlySignedDocument with id '%s' could not be loaded!", $requestId)
                 );
             }
@@ -424,7 +420,7 @@ class PdfAsApi
                         "Access to QualifiedlySignedDocument with id '%s' is not allowed!", $requestId));
             }
 
-            throw new ItemNotLoadedException(
+            throw new PdfAsException(
                 sprintf("QualifiedlySignedDocument with id '%s' could not be loaded! Message: %s",
                     $requestId, $e->getMessage())
             );

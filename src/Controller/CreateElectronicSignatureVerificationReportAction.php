@@ -4,16 +4,16 @@ namespace DBP\API\ESignBundle\Controller;
 
 use DBP\API\ESignBundle\Entity\ElectronicSignature;
 use DBP\API\ESignBundle\Entity\ElectronicSignatureVerificationReport;
-use App\Exception\ItemNotLoadedException;
+use DBP\API\ESignBundle\Service\PdfAsException;
 use DBP\API\ESignBundle\Service\PdfAsApi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
-
 
 
 final class CreateElectronicSignatureVerificationReportAction extends AbstractController
@@ -30,13 +30,10 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
      *
      * @param Request $request
      * @return ElectronicSignatureVerificationReport
-     * @throws ItemNotLoadedException
+     * @throws HttpException
      */
     public function __invoke(Request $request): ElectronicSignatureVerificationReport
     {
-        // enable this to test exceptions
-//        $this->throwRandomException();
-
         /** @var UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');
 
@@ -75,11 +72,10 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
                     throw new ServiceUnavailableHttpException(100, $this->api->lastErrorMessage());
                     break;
                 default:
-                    throw new ItemNotLoadedException($this->api->lastErrorMessage());
+                    throw new HttpException(Response::HTTP_FAILED_DEPENDENCY, $this->api->lastErrorMessage());
             }
         }
 
-//        dump($results);
         $signatures = [];
 
         foreach($results as $result) {
@@ -128,24 +124,5 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
         $report->setSignatures($signatures);
 
         return $report;
-    }
-
-    /**
-     * @throws ServiceUnavailableHttpException
-     * @throws ItemNotLoadedException
-     */
-    private static function throwRandomException()
-    {
-        switch (rand(0, 3)) {
-            case 0:
-                throw new ServiceUnavailableHttpException(100, "Too many requests!");
-                break;
-            case 1:
-                throw new ItemNotLoadedException("Verification failed!");
-                break;
-            case 2:
-                throw new ItemNotLoadedException("Verification soap call failed!");
-                break;
-        }
     }
 }
