@@ -23,8 +23,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use SoapFault;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function GuzzleHttp\uri_template;
 
 class PdfAsApi
@@ -386,8 +384,6 @@ class PdfAsApi
      * @param string $fileName
      * @return QualifiedlySignedDocument
      * @throws PdfAsException
-     * @throws NotFoundHttpException
-     * @throws AccessDeniedHttpException
      */
     public function fetchQualifiedlySignedDocument(string $requestId, string $fileName = ""): QualifiedlySignedDocument
     {
@@ -405,7 +401,7 @@ class PdfAsApi
             if ($response->getHeader("Content-Type")[0] != "application/pdf") {
                 // PDF-AS doesn't use 404 status code when document wasn't found
                 if (strpos($signedPdfData, '<p>No signed pdf document available.</p>') !== FALSE) {
-                    throw new NotFoundHttpException(sprintf(
+                    throw new PdfAsException(sprintf(
                         "QualifiedlySignedDocument with id '%s' was not found!", $requestId));
                 }
 
@@ -416,7 +412,7 @@ class PdfAsApi
         } catch (RequestException $e) {
             switch($e->getCode()) {
                 case 403:
-                    throw new AccessDeniedHttpException(sprintf(
+                    throw new PdfAsException(sprintf(
                         "Access to QualifiedlySignedDocument with id '%s' is not allowed!", $requestId));
             }
 
