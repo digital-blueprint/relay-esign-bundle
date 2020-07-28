@@ -4,13 +4,14 @@ namespace DBP\API\ESignBundle\Controller;
 
 use DBP\API\ESignBundle\Entity\QualifiedSigningRequest;
 use App\Exception\ItemNotLoadedException;
-use App\Exception\PayloadTooLargeException;
 use DBP\API\ESignBundle\Service\PdfAsApi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
@@ -27,7 +28,7 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
      * @param Request $request
      * @return QualifiedSigningRequest
      * @throws ItemNotLoadedException
-     * @throws PayloadTooLargeException
+     * @throws HttpException
      */
     public function __invoke(Request $request): QualifiedSigningRequest
     {
@@ -61,7 +62,7 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
 
         // check if file is too large
         if ($uploadedFile->getSize() > 33554432) {
-            throw new PayloadTooLargeException('PDF file too large to sign (32MB limit)!');
+            throw new HttpException(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'PDF file too large to sign (32MB limit)!');
         }
 
         // generate a request id for the signing process
