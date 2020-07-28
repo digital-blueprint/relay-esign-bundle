@@ -9,7 +9,7 @@ use DBP\API\ESignBundle\Entity\QualifiedlySignedDocument;
 use App\Exception\ItemNotLoadedException;
 use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\PdfAsSoapClient\PDFASSigningImplService;
-use DBP\API\ESignBundlePdfAsSoapClient\PDFASVerificationImplService;
+use DBP\API\ESignBundle\PdfAsSoapClient\PDFASVerificationImplService;
 use DBP\API\ESignBundle\PdfAsSoapClient\PropertyMap;
 use DBP\API\ESignBundle\PdfAsSoapClient\SignParameters;
 use DBP\API\ESignBundle\PdfAsSoapClient\SignRequest;
