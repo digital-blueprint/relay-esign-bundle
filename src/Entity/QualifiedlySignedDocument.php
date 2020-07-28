@@ -82,15 +82,9 @@ class QualifiedlySignedDocument
         return $this->contentUrl;
     }
 
-    /**
-     * @param $contentUrl
-     * @return $this
-     */
-    public function setContentUrl($contentUrl): self
+    public function setContentUrl(string $contentUrl)
     {
         $this->contentUrl = $contentUrl;
-
-        return $this;
     }
 
     public function getName(): ?string

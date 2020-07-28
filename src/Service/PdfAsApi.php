@@ -117,12 +117,12 @@ class PdfAsApi
     }
 
     /**
-     * @param $data
+     * @param string $data
      * @param string $requestId
      * @param array $positionData
      * @return string
      */
-    public function createQualifiedSigningRequestRedirectUrl($data, $requestId = "", $positionData = []): string
+    public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = "", $positionData = []): string
     {
         // fetch the redirectUrl
         $response = $this->doSingleSignRequest($data, self::SIG_TYPE_QUALIFIEDLY, $requestId, $positionData);
@@ -145,11 +145,11 @@ class PdfAsApi
     }
 
     /**
-     * @param $fileName
+     * @param string $fileName
      * @param string $requestId
      * @return string
      */
-    public function createFakeQualifiedSigningRequestHTML($fileName, $requestId = ""): string
+    public function createFakeQualifiedSigningRequestHTML(string $fileName, string $requestId = ""): string
     {
         $text = "
             <form action='https://httpbin.org/post' method='post'>
@@ -339,19 +339,12 @@ class PdfAsApi
         }
     }
 
-    /**
-     * @return string
-     */
-    public static function generateRequestId()
+    public static function generateRequestId(): string
     {
         return uniqid();
     }
 
-    /**
-     * @param $fileName
-     * @return string
-     */
-    public static function generateSignedFileName($fileName) {
+    public static function generateSignedFileName(string $fileName): string {
         $pathInfo = pathinfo($fileName);
         $ext = isset($pathInfo["extension"]) ? '.' . $pathInfo["extension"] : '';
 
@@ -361,9 +354,9 @@ class PdfAsApi
 
     /**
      * @param string $message
-     * @param array|string|mixed|null $data
+     * @param mixed $data
      */
-    private function log(string $message, ?array $data = null)
+    private function log(string $message, $data = null)
     {
         $this->logger->log("PdfAs", $message, $data);
     }
@@ -435,19 +428,13 @@ class PdfAsApi
         $document->setName($signedFileName);
         $document->setContentSize($signedPdfDataSize);
 
-//        dump($document);
-
         return $document;
     }
 
     /**
      * Convert binary data to a data url
-     *
-     * @param $data
-     * @param string $mime
-     * @return string
      */
-    static public function getDataURI($data, $mime = 'application/pdf') {
+    static public function getDataURI(string $data, string $mime = 'application/pdf'): string {
         return 'data:' . $mime . ';base64,' . base64_encode($data);
     }
 }

@@ -109,18 +109,9 @@ class OfficiallySignedDocument
         return $this->contentUrl;
     }
 
-    /**
-     * For some reason "contentUrlFile" is represented in the context of the response json,
-     * neither normalizationContext nor denormalizationContext seem to prevent this
-     *
-     * @param $contentUrlFile
-     * @return $this
-     */
-    public function setContentUrlFile($contentUrlFile): self
+    public function setContentUrl(string $contentUrl)
     {
-        $this->contentUrl = $contentUrlFile;
-
-        return $this;
+        $this->contentUrl = $contentUrl;
     }
 
     public function getName(): ?string

@@ -118,7 +118,7 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
 
         $document = new OfficiallySignedDocument();
         $document->setIdentifier($requestId);
-        $document->setContentUrlFile($uploadedFile);
+        $document->setContentUrl(PdfAsApi::getDataURI($signedPdfData));
         $document->setName($signedFileName);
         $document->setContentSize(strlen($signedPdfData));
 
