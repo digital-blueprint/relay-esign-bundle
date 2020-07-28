@@ -19,7 +19,7 @@ use DBP\API\ESignBundle\PdfAsSoapClient\VerificationLevel;
 use DBP\API\ESignBundle\PdfAsSoapClient\VerifyRequest;
 use DBP\API\ESignBundle\PdfAsSoapClient\VerifyResponse;
 use DBP\API\ESignBundle\PdfAsSoapClient\VerifyResult;
-use App\Service\AuditLogger;
+use DBP\API\CoreBundle\Service\AuditLogger;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
