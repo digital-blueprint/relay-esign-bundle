@@ -21,9 +21,10 @@ use DBP\API\ESignBundle\PdfAsSoapClient\VerifyResult;
 use DBP\API\CoreBundle\Service\AuditLogger;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use League\Uri\Contracts\UriException;
+use League\Uri\UriTemplate;
 use SoapFault;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use function GuzzleHttp\uri_template;
 
 class PdfAsApi
 {
@@ -364,10 +365,12 @@ class PdfAsApi
     /**
      * @param string $requestId
      * @return string
+     * @throws UriException
      */
     protected function getQualifiedlySignedDocumentUrl(string $requestId) : string
     {
-        return $this->qualifiedUrl . uri_template('/PDFData;jsessionid={requestId}', [
+        $uriTemplate = new UriTemplate('/PDFData;jsessionid={requestId}');
+        return $uriTemplate->expand([
             'requestId' => $requestId,
         ]);
     }
