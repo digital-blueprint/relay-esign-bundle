@@ -2,7 +2,6 @@
 
 namespace DBP\API\ESignBundle\Helpers;
 
-use App\Service\LDAPApi;
 use GuzzleHttp\Psr7\Uri;
 
 class Tools
