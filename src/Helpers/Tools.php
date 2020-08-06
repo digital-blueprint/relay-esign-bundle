@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DBP\API\ESignBundle\Helpers;
 
 use GuzzleHttp\Psr7\Uri;

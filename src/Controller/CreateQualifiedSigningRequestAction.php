@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DBP\API\ESignBundle\Controller;
 
 use DBP\API\ESignBundle\Entity\QualifiedSigningRequest;
@@ -63,20 +65,20 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
         $positionData = [];
 
         if ($request->query->has('x')) {
-            $positionData['x'] = (int) round($request->query->get('x'));
+            $positionData['x'] = (int) round((float) $request->query->get('x'));
         }
 
         if ($request->query->has('y')) {
-            $positionData['y'] = (int) round($request->query->get('y'));
+            $positionData['y'] = (int) round((float) $request->query->get('y'));
         }
 
         // there only is "w", no "h" allowed in PDF-AS
         if ($request->query->has('w')) {
-            $positionData['w'] = (int) round($request->query->get('w'));
+            $positionData['w'] = (int) round((float) $request->query->get('w'));
         }
 
         if ($request->query->has('r')) {
-            $positionData['r'] = (int) round($request->query->get('r'));
+            $positionData['r'] = (int) round((float) $request->query->get('r'));
         }
 
         if ($request->query->has('p')) {

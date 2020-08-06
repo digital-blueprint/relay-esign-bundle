@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * PDF AS service.
  */
@@ -260,7 +262,7 @@ class PdfAsApi
 
             $socketTimeout = ini_get('default_socket_timeout');
             // let's stay well below 60s browser timeouts, so we can catch timeouts ourselves
-            ini_set('default_socket_timeout', 40);
+            ini_set('default_socket_timeout', '40');
 
             // can and will throw a SoapFault "looks like we got no XML document"
             $response = $service->signSingle($request);
@@ -303,7 +305,7 @@ class PdfAsApi
         try {
             $socketTimeout = ini_get('default_socket_timeout');
             // let's stay well below 60s browser timeouts, so we can catch timeouts ourselves
-            ini_set('default_socket_timeout', 40);
+            ini_set('default_socket_timeout', '40');
 
             $wsUri = $this->qualifiedUrl.'/services/wsverify';
             $client = new PDFASVerificationImplService($wsUri);

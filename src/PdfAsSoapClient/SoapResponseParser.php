@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DBP\API\ESignBundle\PdfAsSoapClient;
 
 // https://www.w3.org/TR/soap12-mtom/
