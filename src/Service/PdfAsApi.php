@@ -38,8 +38,8 @@ class PdfAsApi
     private $logger;
 
     // Signature types
-    const SIG_TYPE_OFFICIALLY = 1;
-    const SIG_TYPE_QUALIFIEDLY = 2;
+    public const SIG_TYPE_OFFICIALLY = 1;
+    public const SIG_TYPE_QUALIFIEDLY = 2;
 
     private $officialUrl;
     private $qualifiedUrl;
