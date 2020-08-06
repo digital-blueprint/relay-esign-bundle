@@ -4,12 +4,12 @@ namespace DBP\API\ESignBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use DBP\API\ESignBundle\Controller\CreateElectronicSignatureVerificationReportAction;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
-use DBP\API\ESignBundle\Controller\CreateElectronicSignatureVerificationReportAction;
 
 /**
- * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD
+ * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD.
  *
  * @ApiResource(
  *     attributes={"security"="is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"},
@@ -69,12 +69,14 @@ class ElectronicSignatureVerificationReport
     /**
      * @ApiProperty(iri="http://schema.org/name")
      * @Groups({"ElectronicSignature:output"})
+     *
      * @var string
      */
     private $name;
 
     /**
      * @Groups({"ElectronicSignature:output"})
+     *
      * @var ElectronicSignature[]
      */
     private $signatures;

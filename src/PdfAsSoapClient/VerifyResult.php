@@ -5,86 +5,86 @@ namespace DBP\API\ESignBundle\PdfAsSoapClient;
 class VerifyResult
 {
     /**
-     * @var string $certificate
+     * @var string
      */
     protected $certificate = null;
 
     /**
-     * @var int $certificateCode
+     * @var int
      */
     protected $certificateCode = null;
 
     /**
-     * @var string $certificateMessage
+     * @var string
      */
     protected $certificateMessage = null;
 
     /**
-     * @var string $error
+     * @var string
      */
     protected $error = null;
 
     /**
-     * @var boolean $processed
+     * @var bool
      */
     protected $processed = null;
 
     /**
-     * @var string $requestID
+     * @var string
      */
     protected $requestID = null;
 
     /**
-     * @var int $signatureIndex
+     * @var int
      */
     protected $signatureIndex = null;
 
     /**
-     * @var string $signedBy
+     * @var string
      */
     protected $signedBy = null;
 
     /**
-     * @var string $signedData
+     * @var string
      */
     protected $signedData = null;
 
     /**
-     * @var int $valueCode
+     * @var int
      */
     protected $valueCode = null;
 
     /**
-     * @var string $valueMessage
+     * @var string
      */
     protected $valueMessage = null;
 
     /**
      * @param string $certificate
-     * @param int $certificateCode
+     * @param int    $certificateCode
      * @param string $certificateMessage
      * @param string $error
-     * @param boolean $processed
+     * @param bool   $processed
      * @param string $requestID
-     * @param int $signatureIndex
+     * @param int    $signatureIndex
      * @param string $signedBy
      * @param string $signedData
-     * @param int $valueCode
+     * @param int    $valueCode
      * @param string $valueMessage
      */
     public function __construct($certificate, $certificateCode, $certificateMessage, $error, $processed, $requestID, $signatureIndex, $signedBy, $signedData, $valueCode, $valueMessage)
     {
-      $this->certificate = $certificate;
-      $this->certificateCode = $certificateCode;
-      $this->certificateMessage = $certificateMessage;
-      $this->error = $error;
-      $this->processed = $processed;
-      $this->requestID = $requestID;
-      $this->signatureIndex = $signatureIndex;
-      $this->signedBy = $signedBy;
-      $this->signedData = $signedData;
-      $this->valueCode = $valueCode;
-      $this->valueMessage = $valueMessage;
+        $this->certificate = $certificate;
+        $this->certificateCode = $certificateCode;
+        $this->certificateMessage = $certificateMessage;
+        $this->error = $error;
+        $this->processed = $processed;
+        $this->requestID = $requestID;
+        $this->signatureIndex = $signatureIndex;
+        $this->signedBy = $signedBy;
+        $this->signedData = $signedData;
+        $this->valueCode = $valueCode;
+        $this->valueMessage = $valueMessage;
     }
 
     /**
@@ -92,17 +92,19 @@ class VerifyResult
      */
     public function getCertificate()
     {
-      return $this->certificate;
+        return $this->certificate;
     }
 
     /**
      * @param string $certificate
+     *
      * @return VerifyResult
      */
     public function setCertificate($certificate)
     {
-      $this->certificate = $certificate;
-      return $this;
+        $this->certificate = $certificate;
+
+        return $this;
     }
 
     /**
@@ -110,17 +112,19 @@ class VerifyResult
      */
     public function getCertificateCode()
     {
-      return $this->certificateCode;
+        return $this->certificateCode;
     }
 
     /**
      * @param int $certificateCode
+     *
      * @return VerifyResult
      */
     public function setCertificateCode($certificateCode)
     {
-      $this->certificateCode = $certificateCode;
-      return $this;
+        $this->certificateCode = $certificateCode;
+
+        return $this;
     }
 
     /**
@@ -128,17 +132,19 @@ class VerifyResult
      */
     public function getCertificateMessage()
     {
-      return $this->certificateMessage;
+        return $this->certificateMessage;
     }
 
     /**
      * @param string $certificateMessage
+     *
      * @return VerifyResult
      */
     public function setCertificateMessage($certificateMessage)
     {
-      $this->certificateMessage = $certificateMessage;
-      return $this;
+        $this->certificateMessage = $certificateMessage;
+
+        return $this;
     }
 
     /**
@@ -146,35 +152,39 @@ class VerifyResult
      */
     public function getError()
     {
-      return $this->error;
+        return $this->error;
     }
 
     /**
      * @param string $error
+     *
      * @return VerifyResult
      */
     public function setError($error)
     {
-      $this->error = $error;
-      return $this;
+        $this->error = $error;
+
+        return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getProcessed()
     {
-      return $this->processed;
+        return $this->processed;
     }
 
     /**
-     * @param boolean $processed
+     * @param bool $processed
+     *
      * @return VerifyResult
      */
     public function setProcessed($processed)
     {
-      $this->processed = $processed;
-      return $this;
+        $this->processed = $processed;
+
+        return $this;
     }
 
     /**
@@ -182,17 +192,19 @@ class VerifyResult
      */
     public function getRequestID()
     {
-      return $this->requestID;
+        return $this->requestID;
     }
 
     /**
      * @param string $requestID
+     *
      * @return VerifyResult
      */
     public function setRequestID($requestID)
     {
-      $this->requestID = $requestID;
-      return $this;
+        $this->requestID = $requestID;
+
+        return $this;
     }
 
     /**
@@ -200,17 +212,19 @@ class VerifyResult
      */
     public function getSignatureIndex()
     {
-      return $this->signatureIndex;
+        return $this->signatureIndex;
     }
 
     /**
      * @param int $signatureIndex
+     *
      * @return VerifyResult
      */
     public function setSignatureIndex($signatureIndex)
     {
-      $this->signatureIndex = $signatureIndex;
-      return $this;
+        $this->signatureIndex = $signatureIndex;
+
+        return $this;
     }
 
     /**
@@ -218,17 +232,19 @@ class VerifyResult
      */
     public function getSignedBy()
     {
-      return $this->signedBy;
+        return $this->signedBy;
     }
 
     /**
      * @param string $signedBy
+     *
      * @return VerifyResult
      */
     public function setSignedBy($signedBy)
     {
-      $this->signedBy = $signedBy;
-      return $this;
+        $this->signedBy = $signedBy;
+
+        return $this;
     }
 
     /**
@@ -236,17 +252,19 @@ class VerifyResult
      */
     public function getSignedData()
     {
-      return $this->signedData;
+        return $this->signedData;
     }
 
     /**
      * @param string $signedData
+     *
      * @return VerifyResult
      */
     public function setSignedData($signedData)
     {
-      $this->signedData = $signedData;
-      return $this;
+        $this->signedData = $signedData;
+
+        return $this;
     }
 
     /**
@@ -254,17 +272,19 @@ class VerifyResult
      */
     public function getValueCode()
     {
-      return $this->valueCode;
+        return $this->valueCode;
     }
 
     /**
      * @param int $valueCode
+     *
      * @return VerifyResult
      */
     public function setValueCode($valueCode)
     {
-      $this->valueCode = $valueCode;
-      return $this;
+        $this->valueCode = $valueCode;
+
+        return $this;
     }
 
     /**
@@ -272,17 +292,18 @@ class VerifyResult
      */
     public function getValueMessage()
     {
-      return $this->valueMessage;
+        return $this->valueMessage;
     }
 
     /**
      * @param string $valueMessage
+     *
      * @return VerifyResult
      */
     public function setValueMessage($valueMessage)
     {
-      $this->valueMessage = $valueMessage;
-      return $this;
-    }
+        $this->valueMessage = $valueMessage;
 
+        return $this;
+    }
 }

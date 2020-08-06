@@ -4,7 +4,6 @@ namespace DBP\API\ESignBundle\Controller;
 
 use DBP\API\ESignBundle\Entity\ElectronicSignature;
 use DBP\API\ESignBundle\Entity\ElectronicSignatureVerificationReport;
-use DBP\API\ESignBundle\Service\PdfAsException;
 use DBP\API\ESignBundle\Service\PdfAsApi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -14,7 +13,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
-
 
 final class CreateElectronicSignatureVerificationReportAction extends AbstractController
 {
@@ -26,10 +24,8 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
     }
 
     /**
-     * Also see: https://www.signatur.rtr.at/de/vd/Pruefung.html
+     * Also see: https://www.signatur.rtr.at/de/vd/Pruefung.html.
      *
-     * @param Request $request
-     * @return ElectronicSignatureVerificationReport
      * @throws HttpException
      */
     public function __invoke(Request $request): ElectronicSignatureVerificationReport
@@ -50,7 +46,7 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
         }
 
         // check if file is a pdf
-        if ($uploadedFile->getMimeType() != "application/pdf") {
+        if ($uploadedFile->getMimeType() != 'application/pdf') {
             throw new UnsupportedMediaTypeHttpException('Only PDF files can be verified!');
         }
 
@@ -66,10 +62,8 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
         $results = $this->api->verifyPdfData(file_get_contents($uploadedFile->getPathname()), $requestId);
 
         // we cannot throw exceptions in the service, so we will do it this way
-        if ($this->api->hasLastError())
-        {
-            switch ($this->api->lastErrorStatusCode())
-            {
+        if ($this->api->hasLastError()) {
+            switch ($this->api->lastErrorStatusCode()) {
                 case 503:
                     throw new ServiceUnavailableHttpException(100, $this->api->lastErrorMessage());
                     break;
@@ -80,45 +74,44 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
 
         $signatures = [];
 
-        foreach($results as $result) {
+        foreach ($results as $result) {
             $signature = new ElectronicSignature();
             $signedBy = $result->getSignedBy();
             $signature->setSignedBy($signedBy);
             $signature->setValueMessage($result->getValueMessage());
 
-            $signedByData = preg_split("/,/", $signedBy);
+            $signedByData = preg_split('/,/', $signedBy);
             foreach ($signedByData as $declaration) {
-                if ($declaration == "") {
+                if ($declaration == '') {
                     break;
                 }
 
-                [$variable, $value] = preg_split("/=/", $declaration);
+                [$variable, $value] = preg_split('/=/', $declaration);
 
                 switch ($variable) {
-                    case "serialNumber":
-                        $signature->setIdentifier("sn-" . $value);
+                    case 'serialNumber':
+                        $signature->setIdentifier('sn-'.$value);
                         $signature->setSerialNumber($value);
                         break;
-                    case "givenName":
+                    case 'givenName':
                         $signature->setGivenName($value);
                         break;
-                    case "SN":
+                    case 'SN':
                         $signature->setFamilyName($value);
                         break;
-                    case "C":
+                    case 'C':
                         $signature->setNationality($value);
                         break;
                 }
             }
 
             // use a fallback if no serial number was set (e.g. for official signatures)
-            if ($signature->getIdentifier() == "") {
-                $signature->setIdentifier("ri-" . $requestId . "-" . $result->getSignatureIndex());
+            if ($signature->getIdentifier() == '') {
+                $signature->setIdentifier('ri-'.$requestId.'-'.$result->getSignatureIndex());
             }
 
             $signatures[] = $signature;
         }
-
 
         $report = new ElectronicSignatureVerificationReport();
         $report->setIdentifier($requestId);

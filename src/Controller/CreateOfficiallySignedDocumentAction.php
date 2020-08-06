@@ -23,8 +23,6 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @return OfficiallySignedDocument
      * @throws HttpException
      */
     public function __invoke(Request $request): OfficiallySignedDocument
@@ -47,7 +45,7 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
         }
 
         // check if file is a pdf
-        if ($uploadedFile->getMimeType() != "application/pdf") {
+        if ($uploadedFile->getMimeType() != 'application/pdf') {
             throw new UnsupportedMediaTypeHttpException('Only PDF files can be signed!');
         }
 
@@ -61,25 +59,25 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
 
         $positionData = [];
 
-        if ($request->query->has("x")) {
-            $positionData["x"] = (int) round($request->query->get("x"));
+        if ($request->query->has('x')) {
+            $positionData['x'] = (int) round($request->query->get('x'));
         }
 
-        if ($request->query->has("y")) {
-            $positionData["y"] = (int) round($request->query->get("y"));
+        if ($request->query->has('y')) {
+            $positionData['y'] = (int) round($request->query->get('y'));
         }
 
         // there only is "w", no "h" allowed in PDF-AS
-        if ($request->query->has("w")) {
-            $positionData["w"] = (int) round($request->query->get("w"));
+        if ($request->query->has('w')) {
+            $positionData['w'] = (int) round($request->query->get('w'));
         }
 
-        if ($request->query->has("r")) {
-            $positionData["r"] = (int) round($request->query->get("r"));
+        if ($request->query->has('r')) {
+            $positionData['r'] = (int) round($request->query->get('r'));
         }
 
-        if ($request->query->has("p")) {
-            $positionData["p"] = (int) $request->query->get("p");
+        if ($request->query->has('p')) {
+            $positionData['p'] = (int) $request->query->get('p');
         }
 
         // sign the pdf data
@@ -88,10 +86,8 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
             file_get_contents($uploadedFile->getPathname()), $requestId, $positionData);
 
         // we cannot throw exceptions in the service, so we will do it this way
-        if ($this->api->hasLastError())
-        {
-            switch ($this->api->lastErrorStatusCode())
-            {
+        if ($this->api->hasLastError()) {
+            switch ($this->api->lastErrorStatusCode()) {
                 case 503:
                     throw new ServiceUnavailableHttpException(100, $this->api->lastErrorMessage());
                     break;

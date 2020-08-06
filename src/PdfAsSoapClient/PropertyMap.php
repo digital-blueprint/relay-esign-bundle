@@ -4,9 +4,8 @@ namespace DBP\API\ESignBundle\PdfAsSoapClient;
 
 class PropertyMap
 {
-
     /**
-     * @var PropertyEntry[] $propertyEntries
+     * @var PropertyEntry[]
      */
     protected $propertyEntries = null;
 
@@ -15,7 +14,7 @@ class PropertyMap
      */
     public function __construct(array $propertyEntries)
     {
-      $this->propertyEntries = $propertyEntries;
+        $this->propertyEntries = $propertyEntries;
     }
 
     /**
@@ -23,17 +22,18 @@ class PropertyMap
      */
     public function getPropertyEntries()
     {
-      return $this->propertyEntries;
+        return $this->propertyEntries;
     }
 
     /**
      * @param PropertyEntry[] $propertyEntries
+     *
      * @return PropertyMap
      */
     public function setPropertyEntries(array $propertyEntries)
     {
-      $this->propertyEntries = $propertyEntries;
-      return $this;
-    }
+        $this->propertyEntries = $propertyEntries;
 
+        return $this;
+    }
 }

@@ -4,14 +4,13 @@ namespace DBP\API\ESignBundle\PdfAsSoapClient;
 
 class PropertyEntry
 {
-
     /**
-     * @var string $key
+     * @var string
      */
     protected $key = null;
 
     /**
-     * @var string $value
+     * @var string
      */
     protected $value = null;
 
@@ -21,8 +20,8 @@ class PropertyEntry
      */
     public function __construct($key, $value)
     {
-      $this->key = $key;
-      $this->value = $value;
+        $this->key = $key;
+        $this->value = $value;
     }
 
     /**
@@ -30,17 +29,19 @@ class PropertyEntry
      */
     public function getKey()
     {
-      return $this->key;
+        return $this->key;
     }
 
     /**
      * @param string $key
+     *
      * @return PropertyEntry
      */
     public function setKey($key)
     {
-      $this->key = $key;
-      return $this;
+        $this->key = $key;
+
+        return $this;
     }
 
     /**
@@ -48,17 +49,18 @@ class PropertyEntry
      */
     public function getValue()
     {
-      return $this->value;
+        return $this->value;
     }
 
     /**
      * @param string $value
+     *
      * @return PropertyEntry
      */
     public function setValue($value)
     {
-      $this->value = $value;
-      return $this;
-    }
+        $this->value = $value;
 
+        return $this;
+    }
 }

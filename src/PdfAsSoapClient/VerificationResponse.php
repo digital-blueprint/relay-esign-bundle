@@ -4,19 +4,18 @@ namespace DBP\API\ESignBundle\PdfAsSoapClient;
 
 class VerificationResponse
 {
-
     /**
-     * @var int $certificateCode
+     * @var int
      */
     protected $certificateCode = null;
 
     /**
-     * @var string $signerCertificate
+     * @var string
      */
     protected $signerCertificate = null;
 
     /**
-     * @var int $valueCode
+     * @var int
      */
     protected $valueCode = null;
 
@@ -26,8 +25,8 @@ class VerificationResponse
      */
     public function __construct($certificateCode, $valueCode)
     {
-      $this->certificateCode = $certificateCode;
-      $this->valueCode = $valueCode;
+        $this->certificateCode = $certificateCode;
+        $this->valueCode = $valueCode;
     }
 
     /**
@@ -35,17 +34,19 @@ class VerificationResponse
      */
     public function getCertificateCode()
     {
-      return $this->certificateCode;
+        return $this->certificateCode;
     }
 
     /**
      * @param int $certificateCode
+     *
      * @return VerificationResponse
      */
     public function setCertificateCode($certificateCode)
     {
-      $this->certificateCode = $certificateCode;
-      return $this;
+        $this->certificateCode = $certificateCode;
+
+        return $this;
     }
 
     /**
@@ -53,17 +54,19 @@ class VerificationResponse
      */
     public function getSignerCertificate()
     {
-      return $this->signerCertificate;
+        return $this->signerCertificate;
     }
 
     /**
      * @param string $signerCertificate
+     *
      * @return VerificationResponse
      */
     public function setSignerCertificate($signerCertificate)
     {
-      $this->signerCertificate = $signerCertificate;
-      return $this;
+        $this->signerCertificate = $signerCertificate;
+
+        return $this;
     }
 
     /**
@@ -71,17 +74,18 @@ class VerificationResponse
      */
     public function getValueCode()
     {
-      return $this->valueCode;
+        return $this->valueCode;
     }
 
     /**
      * @param int $valueCode
+     *
      * @return VerificationResponse
      */
     public function setValueCode($valueCode)
     {
-      $this->valueCode = $valueCode;
-      return $this;
-    }
+        $this->valueCode = $valueCode;
 
+        return $this;
+    }
 }

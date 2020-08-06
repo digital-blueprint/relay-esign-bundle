@@ -4,9 +4,8 @@ namespace DBP\API\ESignBundle\PdfAsSoapClient;
 
 class BulkSignRequest
 {
-
     /**
-     * @var SignRequest[] $signRequests
+     * @var SignRequest[]
      */
     protected $signRequests = null;
 
@@ -15,7 +14,7 @@ class BulkSignRequest
      */
     public function __construct(array $signRequests)
     {
-      $this->signRequests = $signRequests;
+        $this->signRequests = $signRequests;
     }
 
     /**
@@ -23,17 +22,18 @@ class BulkSignRequest
      */
     public function getSignRequests()
     {
-      return $this->signRequests;
+        return $this->signRequests;
     }
 
     /**
      * @param SignRequest[] $signRequests
+     *
      * @return BulkSignRequest
      */
     public function setSignRequests(array $signRequests)
     {
-      $this->signRequests = $signRequests;
-      return $this;
-    }
+        $this->signRequests = $signRequests;
 
+        return $this;
+    }
 }

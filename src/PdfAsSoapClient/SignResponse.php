@@ -4,29 +4,28 @@ namespace DBP\API\ESignBundle\PdfAsSoapClient;
 
 class SignResponse
 {
-
     /**
-     * @var string $error
+     * @var string
      */
     protected $error = null;
 
     /**
-     * @var string $redirectUrl
+     * @var string
      */
     protected $redirectUrl = null;
 
     /**
-     * @var string $requestID
+     * @var string
      */
     protected $requestID = null;
 
     /**
-     * @var string $signedPDF
+     * @var string
      */
     protected $signedPDF = null;
 
     /**
-     * @var VerificationResponse $verificationResponse
+     * @var VerificationResponse
      */
     protected $verificationResponse = null;
 
@@ -35,7 +34,7 @@ class SignResponse
      */
     public function __construct($requestID)
     {
-      $this->requestID = $requestID;
+        $this->requestID = $requestID;
     }
 
     /**
@@ -43,17 +42,19 @@ class SignResponse
      */
     public function getError()
     {
-      return $this->error;
+        return $this->error;
     }
 
     /**
      * @param string $error
+     *
      * @return SignResponse
      */
     public function setError($error)
     {
-      $this->error = $error;
-      return $this;
+        $this->error = $error;
+
+        return $this;
     }
 
     /**
@@ -61,17 +62,19 @@ class SignResponse
      */
     public function getRedirectUrl()
     {
-      return $this->redirectUrl;
+        return $this->redirectUrl;
     }
 
     /**
      * @param string $redirectUrl
+     *
      * @return SignResponse
      */
     public function setRedirectUrl($redirectUrl)
     {
-      $this->redirectUrl = $redirectUrl;
-      return $this;
+        $this->redirectUrl = $redirectUrl;
+
+        return $this;
     }
 
     /**
@@ -79,17 +82,19 @@ class SignResponse
      */
     public function getRequestID()
     {
-      return $this->requestID;
+        return $this->requestID;
     }
 
     /**
      * @param string $requestID
+     *
      * @return SignResponse
      */
     public function setRequestID($requestID)
     {
-      $this->requestID = $requestID;
-      return $this;
+        $this->requestID = $requestID;
+
+        return $this;
     }
 
     /**
@@ -97,17 +102,19 @@ class SignResponse
      */
     public function getSignedPDF()
     {
-      return $this->signedPDF;
+        return $this->signedPDF;
     }
 
     /**
      * @param string $signedPDF
+     *
      * @return SignResponse
      */
     public function setSignedPDF($signedPDF)
     {
-      $this->signedPDF = $signedPDF;
-      return $this;
+        $this->signedPDF = $signedPDF;
+
+        return $this;
     }
 
     /**
@@ -115,17 +122,18 @@ class SignResponse
      */
     public function getVerificationResponse()
     {
-      return $this->verificationResponse;
+        return $this->verificationResponse;
     }
 
     /**
      * @param VerificationResponse $verificationResponse
+     *
      * @return SignResponse
      */
     public function setVerificationResponse($verificationResponse)
     {
-      $this->verificationResponse = $verificationResponse;
-      return $this;
-    }
+        $this->verificationResponse = $verificationResponse;
 
+        return $this;
+    }
 }

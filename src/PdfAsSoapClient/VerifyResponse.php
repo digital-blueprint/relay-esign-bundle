@@ -5,7 +5,7 @@ namespace DBP\API\ESignBundle\PdfAsSoapClient;
 class VerifyResponse
 {
     /**
-     * @var VerifyResult[] $verifyResults
+     * @var VerifyResult[]
      */
     protected $verifyResults = null;
 
@@ -14,7 +14,7 @@ class VerifyResponse
      */
     public function __construct(array $verifyResults)
     {
-      $this->verifyResults = $verifyResults;
+        $this->verifyResults = $verifyResults;
     }
 
     /**
@@ -22,19 +22,22 @@ class VerifyResponse
      */
     public function getVerifyResults()
     {
-        if ($this->verifyResults == null)
+        if ($this->verifyResults == null) {
             return [];
+        }
+
         return $this->verifyResults;
     }
 
     /**
      * @param VerifyResult[] $verifyResults
+     *
      * @return VerifyResponse
      */
     public function setVerifyResults(array $verifyResults)
     {
-      $this->verifyResults = $verifyResults;
-      return $this;
-    }
+        $this->verifyResults = $verifyResults;
 
+        return $this;
+    }
 }

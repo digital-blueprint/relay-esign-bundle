@@ -8,7 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class EntityTest extends WebTestCase
 {
-    public function testAll() {
+    public function testAll()
+    {
         $sig = new ElectronicSignature();
         $this->assertNotNull($sig);
 
