@@ -22,7 +22,7 @@ class VerifyResponse
      */
     public function getVerifyResults()
     {
-        if ($this->verifyResults == null) {
+        if ($this->verifyResults === null) {
             return [];
         }
 

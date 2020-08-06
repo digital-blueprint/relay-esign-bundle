@@ -46,12 +46,12 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
         }
 
         // check if file is a pdf
-        if ($uploadedFile->getMimeType() != 'application/pdf') {
+        if ($uploadedFile->getMimeType() !== 'application/pdf') {
             throw new UnsupportedMediaTypeHttpException('Only PDF files can be verified!');
         }
 
         // check if file is empty
-        if ($uploadedFile->getSize() == 0) {
+        if ($uploadedFile->getSize() === 0) {
             throw new BadRequestHttpException('Empty files cannot be verified!');
         }
 
@@ -82,7 +82,7 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
 
             $signedByData = preg_split('/,/', $signedBy);
             foreach ($signedByData as $declaration) {
-                if ($declaration == '') {
+                if ($declaration === '') {
                     break;
                 }
 
@@ -106,7 +106,7 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
             }
 
             // use a fallback if no serial number was set (e.g. for official signatures)
-            if ($signature->getIdentifier() == '') {
+            if ($signature->getIdentifier() === '') {
                 $signature->setIdentifier('ri-'.$requestId.'-'.$result->getSignatureIndex());
             }
 

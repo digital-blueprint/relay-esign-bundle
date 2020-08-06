@@ -68,7 +68,7 @@ class PdfAsApi
 
     public function hasLastError()
     {
-        return $this->lastErrorMessage != '';
+        return $this->lastErrorMessage !== '';
     }
 
     public function lastErrorMessage(): string
@@ -105,7 +105,7 @@ class PdfAsApi
     {
         if ($sigType === self::SIG_TYPE_OFFICIALLY) {
             $wsBaseUri = $this->officialUrl;
-        } elseif ($sigType == self::SIG_TYPE_QUALIFIEDLY) {
+        } elseif ($sigType === self::SIG_TYPE_QUALIFIEDLY) {
             $wsBaseUri = $this->qualifiedUrl;
         } else {
             throw new \RuntimeException('invalid type');
@@ -201,7 +201,7 @@ class PdfAsApi
         $contentSize = strlen($signedPdfData);
 
         // the happens for example if you sign already signed files
-        if ($contentSize == 0) {
+        if ($contentSize === 0) {
             return $this->returnWithErrorMessage('Signing of this file is not possible! Maybe it was already signed?');
         }
 
@@ -224,7 +224,7 @@ class PdfAsApi
      */
     public function doSingleSignRequest(string $data, $sigType = self::SIG_TYPE_OFFICIALLY, string $requestId = '', $positionData = [])
     {
-        if ($requestId == '') {
+        if ($requestId === '') {
             $requestId = self::generateRequestId();
         }
 
@@ -237,13 +237,13 @@ class PdfAsApi
         }
 
         // choose the connector
-        $connector = $sigType == self::SIG_TYPE_OFFICIALLY ? Connector::jks() : Connector::mobilebku();
+        $connector = $sigType === self::SIG_TYPE_OFFICIALLY ? Connector::jks() : Connector::mobilebku();
 
         try {
             $params = new SignParameters($connector);
 
             // add the callback url for the qualified signature process
-            if ($sigType == self::SIG_TYPE_QUALIFIEDLY) {
+            if ($sigType === self::SIG_TYPE_QUALIFIEDLY) {
                 $staticUri = $this->qualifiedStaticUrl;
                 $params->setInvokeurl($staticUri.'/callback.html');
                 // it's important to add the port "443", PDF-AS has a bug that will set the port to "-1" if it isn't set
@@ -251,7 +251,7 @@ class PdfAsApi
             }
 
             // add signature position data if there is any
-            if (count($positionData) != 0) {
+            if (count($positionData) !== 0) {
                 array_walk($positionData, function (&$item, $key) { $item = "$key:$item"; });
                 $params->setPosition(implode(';', $positionData));
             }
@@ -294,7 +294,7 @@ class PdfAsApi
      */
     public function doVerifyRequest(string $data, string $requestId = '')
     {
-        if ($requestId == '') {
+        if ($requestId === '') {
             $requestId = self::generateRequestId();
         }
 
@@ -376,7 +376,7 @@ class PdfAsApi
 //            dump($response);
             $signedPdfData = (string) $response->getBody();
 
-            if ($response->getHeader('Content-Type')[0] != 'application/pdf') {
+            if ($response->getHeader('Content-Type')[0] !== 'application/pdf') {
                 // PDF-AS doesn't use 404 status code when document wasn't found
                 if (strpos($signedPdfData, '<p>No signed pdf document available.</p>') !== false) {
                     throw new PdfAsException(sprintf("QualifiedlySignedDocument with id '%s' was not found!", $requestId));
@@ -395,7 +395,7 @@ class PdfAsApi
 
 //        dump($signedPdfData);
 
-        $signedFileName = self::generateSignedFileName($fileName == '' ? 'document.pdf' : $fileName);
+        $signedFileName = self::generateSignedFileName($fileName === '' ? 'document.pdf' : $fileName);
         $signedPdfDataSize = strlen($signedPdfData);
 
         $this->log('PDF was qualifiedly signed', ['request_id' => $requestId, 'signed_content_size' => $signedPdfDataSize]);
