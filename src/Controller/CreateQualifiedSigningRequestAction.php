@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DBP\API\ESignBundle\Controller;
 
+use DBP\API\CoreBundle\Exception\ApiError;
 use DBP\API\ESignBundle\Entity\QualifiedSigningRequest;
 use DBP\API\ESignBundle\Service\PdfAsApi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -56,7 +57,7 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
 
         // check if file is too large
         if ($uploadedFile->getSize() > 33554432) {
-            throw new HttpException(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'PDF file too large to sign (32MB limit)!');
+            throw new APIError(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'PDF file too large to sign (32MB limit)!');
         }
 
         // generate a request id for the signing process
@@ -96,7 +97,7 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
                     throw new ServiceUnavailableHttpException(100, $this->api->lastErrorMessage());
                     break;
                 default:
-                    throw new HttpException(Response::HTTP_FAILED_DEPENDENCY, $this->api->lastErrorMessage());
+                    throw new ApiError(Response::HTTP_BAD_GATEWAY, $this->api->lastErrorMessage());
             }
         }
 

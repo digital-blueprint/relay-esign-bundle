@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DBP\API\ESignBundle\Controller;
 
+use DBP\API\CoreBundle\Exception\ApiError;
 use DBP\API\ESignBundle\Entity\OfficiallySignedDocument;
 use DBP\API\ESignBundle\Service\PdfAsApi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -94,7 +95,7 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
                     throw new ServiceUnavailableHttpException(100, $this->api->lastErrorMessage());
                     break;
                 default:
-                    throw new HttpException(Response::HTTP_FAILED_DEPENDENCY, $this->api->lastErrorMessage());
+                    throw new ApiError(Response::HTTP_BAD_GATEWAY, $this->api->lastErrorMessage());
             }
         }
 

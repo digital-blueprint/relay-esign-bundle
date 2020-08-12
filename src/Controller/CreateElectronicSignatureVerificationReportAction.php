@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DBP\API\ESignBundle\Controller;
 
+use DBP\API\CoreBundle\Exception\ApiError;
 use DBP\API\ESignBundle\Entity\ElectronicSignature;
 use DBP\API\ESignBundle\Entity\ElectronicSignatureVerificationReport;
 use DBP\API\ESignBundle\Service\PdfAsApi;
@@ -70,7 +71,7 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
                     throw new ServiceUnavailableHttpException(100, $this->api->lastErrorMessage());
                     break;
                 default:
-                    throw new HttpException(Response::HTTP_FAILED_DEPENDENCY, $this->api->lastErrorMessage());
+                    throw new ApiError(Response::HTTP_BAD_GATEWAY, $this->api->lastErrorMessage());
             }
         }
 

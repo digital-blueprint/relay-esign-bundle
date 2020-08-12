@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                    {"name"="fileName", "in"="query", "description"="File name of the original file", "required"="false", "type"="string", "example"="my-document.pdf"}
  *                 },
  *                 "add_responses"={
- *                     "424"={
+ *                     "502"={
  *                         "description"="PDF-AS error"
  *                     },
  *                     "503"={

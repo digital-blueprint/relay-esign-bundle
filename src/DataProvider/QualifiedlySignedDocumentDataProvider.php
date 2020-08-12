@@ -6,6 +6,7 @@ namespace DBP\API\ESignBundle\DataProvider;
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
+use DBP\API\CoreBundle\Exception\ApiError;
 use DBP\API\ESignBundle\Entity\QualifiedlySignedDocument;
 use DBP\API\ESignBundle\Service\PdfAsApi;
 use DBP\API\ESignBundle\Service\PdfAsException;
@@ -42,7 +43,7 @@ final class QualifiedlySignedDocumentDataProvider implements ItemDataProviderInt
         try {
             return $api->fetchQualifiedlySignedDocument($id, $fileName);
         } catch (PdfAsException $e) {
-            throw new HttpException(Response::HTTP_FAILED_DEPENDENCY, $e->getMessage());
+            throw new ApiError(Response::HTTP_BAD_GATEWAY, $e->getMessage());
         }
     }
 }

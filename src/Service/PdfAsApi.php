@@ -89,7 +89,7 @@ class PdfAsApi
         $this->lastErrorStatusCode = 0;
     }
 
-    private function returnWithErrorMessage($message, int $statusCode = 424)
+    private function returnWithErrorMessage($message, int $statusCode = 502)
     {
         $this->lastErrorMessage = $message;
         $this->lastErrorStatusCode = $statusCode;

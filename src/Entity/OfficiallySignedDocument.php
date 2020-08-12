@@ -49,7 +49,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                     "415"={
  *                         "description"="Unsupported Media Type - Only PDF files can be signed!"
  *                     },
- *                     "424"={
+ *                     "502"={
  *                         "description"="PDF-AS error"
  *                     },
  *                     "503"={
