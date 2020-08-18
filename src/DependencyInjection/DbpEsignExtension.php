@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
 class DbpEsignExtension extends ConfigurableExtension
 {
-    public function loadInternal(array $configs, ContainerBuilder $container)
+    public function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
         $this->extendArrayParameter(
             $container, 'api_platform.resource_class_directories', [__DIR__.'/../Entity']);
@@ -38,7 +38,7 @@ class DbpEsignExtension extends ConfigurableExtension
         );
         $loader->load('services.yaml');
 
-        $container->setParameter('dbp_api.esign.config', $configs);
+        $container->setParameter('dbp_api.esign.config', $mergedConfig);
     }
 
     private function extendArrayParameter(ContainerBuilder $container, string $parameter, array $values)
