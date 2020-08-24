@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace DBP\API\ESignBundle\Service;
 
-use DBP\API\ESignBundle\Entity\QualifiedlySignedDocument;
-use DBP\API\ESignBundle\PdfAsSoapClient\VerifyResult;
-
 interface SignatureProviderInterface
 {
     /**
      * @throws SigningException
      */
-    public function fetchQualifiedlySignedDocument(string $requestId, string $fileName = ''): QualifiedlySignedDocument;
+    public function fetchQualifiedlySignedDocument(string $requestId): string;
 
     /**
      * Officially signs $data.
@@ -40,7 +37,7 @@ interface SignatureProviderInterface
      * @param string $data
      * @param string $requestId
      *
-     * @return VerifyResult[]
+     * @return array
      *
      * @throws SigningException
      */

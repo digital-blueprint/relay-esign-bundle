@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace DBP\API\ESignBundle\Service;
 
 use DBP\API\CoreBundle\Service\AuditLogger;
-use DBP\API\ESignBundle\Entity\QualifiedlySignedDocument;
 use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\PdfAsSoapClient\Connector;
 use DBP\API\ESignBundle\PdfAsSoapClient\PDFASSigningImplService;
@@ -20,7 +19,6 @@ use DBP\API\ESignBundle\PdfAsSoapClient\SignResponse;
 use DBP\API\ESignBundle\PdfAsSoapClient\VerificationLevel;
 use DBP\API\ESignBundle\PdfAsSoapClient\VerifyRequest;
 use DBP\API\ESignBundle\PdfAsSoapClient\VerifyResponse;
-use DBP\API\ESignBundle\PdfAsSoapClient\VerifyResult;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use function GuzzleHttp\uri_template;
@@ -113,7 +111,7 @@ class PdfAsApi implements SignatureProviderInterface
      * @param string $data
      * @param string $requestId
      *
-     * @return VerifyResult[]
+     * @return array
      *
      * @throws SigningException
      */
@@ -134,11 +132,9 @@ class PdfAsApi implements SignatureProviderInterface
      * @param string $requestId
      * @param array  $positionData
      *
-     * @return string
-     *
      * @throws SigningException
      */
-    public function officiallySignPdfData($data, $requestId = '', $positionData = [])
+    public function officiallySignPdfData($data, $requestId = '', $positionData = []): string
     {
         $response = $this->doSingleSignRequest($data, self::SIG_TYPE_OFFICIALLY, $requestId, $positionData);
 
@@ -243,15 +239,9 @@ class PdfAsApi implements SignatureProviderInterface
     }
 
     /**
-     * Throwing exceptions in this method causes an exception:.
-     *
-     * Uncaught Exception: Malformed UTF-8 characters, possibly incorrectly encoded
-     * {"exception":"[object] (Symfony\\Component\\Serializer\\Exception\\NotEncodableValueException(code: 0):
-     * Malformed UTF-8 characters, possibly incorrectly encoded at /application/vendor/symfony/serializer/Encoder/JsonEncode.php:63,
-     *
-     * @return VerifyResponse|string
+     * @throws SigningException
      */
-    public function doVerifyRequest(string $data, string $requestId = '')
+    public function doVerifyRequest(string $data, string $requestId = ''): VerifyResponse
     {
         if ($requestId === '') {
             $requestId = Tools::generateRequestId();
@@ -298,7 +288,7 @@ class PdfAsApi implements SignatureProviderInterface
     /**
      * @throws SigningException
      */
-    public function fetchQualifiedlySignedDocument(string $requestId, string $fileName = ''): QualifiedlySignedDocument
+    public function fetchQualifiedlySignedDocument(string $requestId): string
     {
         $client = new Client();
         $url = $this->getQualifiedlySignedDocumentUrl($requestId);
@@ -328,20 +318,9 @@ class PdfAsApi implements SignatureProviderInterface
             throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' could not be loaded! Message: %s", $requestId, $e->getMessage()));
         }
 
-//        dump($signedPdfData);
+        $this->log('PDF was qualifiedly signed', ['request_id' => $requestId, 'signed_content_size' => strlen($signedPdfData)]);
 
-        $signedFileName = Tools::generateSignedFileName($fileName === '' ? 'document.pdf' : $fileName);
-        $signedPdfDataSize = strlen($signedPdfData);
-
-        $this->log('PDF was qualifiedly signed', ['request_id' => $requestId, 'signed_content_size' => $signedPdfDataSize]);
-
-        $document = new QualifiedlySignedDocument();
-        $document->setIdentifier($requestId);
-        $document->setContentUrl(Tools::getDataURI($signedPdfData, 'application/pdf'));
-        $document->setName($signedFileName);
-        $document->setContentSize($signedPdfDataSize);
-
-        return $document;
+        return $signedPdfData;
     }
 
     /**
