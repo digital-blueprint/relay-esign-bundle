@@ -10,7 +10,7 @@ use DBP\API\ESignBundle\PdfAsSoapClient\VerifyResult;
 interface SignatureProviderInterface
 {
     /**
-     * @throws PdfAsException
+     * @throws SigningException
      */
     public function fetchQualifiedlySignedDocument(string $requestId, string $fileName = ''): QualifiedlySignedDocument;
 
@@ -23,14 +23,14 @@ interface SignatureProviderInterface
      *
      * @return string
      *
-     * @throws PdfAsException
+     * @throws SigningException
      */
     public function officiallySignPdfData($data, $requestId = '', $positionData = []);
 
     /**
      * @param array $positionData
      *
-     * @throws PdfAsException
+     * @throws SigningException
      */
     public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = '', $positionData = []): string;
 
@@ -42,7 +42,7 @@ interface SignatureProviderInterface
      *
      * @return VerifyResult[]
      *
-     * @throws PdfAsException
+     * @throws SigningException
      */
     public function verifyPdfData($data, $requestId = '');
 }

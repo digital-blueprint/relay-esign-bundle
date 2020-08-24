@@ -75,7 +75,7 @@ class PdfAsApi implements SignatureProviderInterface
     /**
      * @param array $positionData
      *
-     * @throws PdfAsException
+     * @throws SigningException
      */
     public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = '', $positionData = []): string
     {
@@ -83,7 +83,7 @@ class PdfAsApi implements SignatureProviderInterface
         $response = $this->doSingleSignRequest($data, self::SIG_TYPE_QUALIFIEDLY, $requestId, $positionData);
 
         if ($response->getError() !== null) {
-            throw new PdfAsException('Failed fetching redirectURL: '.$response->getError());
+            throw new SigningException('Failed fetching redirectURL: '.$response->getError());
         }
 
         // get the redirect url
@@ -115,7 +115,7 @@ class PdfAsApi implements SignatureProviderInterface
      *
      * @return VerifyResult[]
      *
-     * @throws PdfAsException
+     * @throws SigningException
      */
     public function verifyPdfData($data, $requestId = '')
     {
@@ -136,14 +136,14 @@ class PdfAsApi implements SignatureProviderInterface
      *
      * @return string
      *
-     * @throws PdfAsException
+     * @throws SigningException
      */
     public function officiallySignPdfData($data, $requestId = '', $positionData = [])
     {
         $response = $this->doSingleSignRequest($data, self::SIG_TYPE_OFFICIALLY, $requestId, $positionData);
 
         if ($response->getError() !== null) {
-            throw new PdfAsException('Signing failed!');
+            throw new SigningException('Signing failed!');
         }
 
         $signedPdfData = $response->getSignedPDF();
@@ -151,7 +151,7 @@ class PdfAsApi implements SignatureProviderInterface
 
         // the happens for example if you sign already signed files
         if ($contentSize === 0) {
-            throw new PdfAsException('Signing of this file is not possible! Maybe it was already signed?');
+            throw new SigningException('Signing of this file is not possible! Maybe it was already signed?');
         }
 
         $this->log('PDF was officially signed', ['request_id' => $requestId, 'signed_content_size' => $contentSize]);
@@ -167,7 +167,7 @@ class PdfAsApi implements SignatureProviderInterface
      *
      * @return SignResponse
      *
-     * @throws PdfAsException
+     * @throws SigningException
      */
     public function doSingleSignRequest(string $data, $sigType = self::SIG_TYPE_OFFICIALLY, string $requestId = '', $positionData = [])
     {
@@ -178,7 +178,7 @@ class PdfAsApi implements SignatureProviderInterface
         try {
             $service = $this->getService($sigType);
         } catch (SoapFault $e) {
-            throw new PdfAsException('Signing soap call failed, wsdl URI cannot be loaded!');
+            throw new SigningException('Signing soap call failed, wsdl URI cannot be loaded!');
         }
 
         // choose the connector
@@ -220,25 +220,25 @@ class PdfAsApi implements SignatureProviderInterface
             return $response;
         } catch (SoapFault $e) {
             $this->handleSoapFault($e);
-            throw new PdfAsException();
+            throw new SigningException();
         }
     }
 
     /**
-     * @throws PdfAsException
-     * @throws PdfAsUnavailableException
+     * @throws SigningException
+     * @throws SigningUnavailableException
      */
     private function handleSoapFault(SoapFault $e)
     {
         switch (strtolower($e->getMessage())) {
             // we get that on a socket timeout
             case 'error fetching http headers':
-                throw new PdfAsUnavailableException("PDF-AS didn't answer in time! Please try again later.");
+                throw new SigningUnavailableException("PDF-AS didn't answer in time! Please try again later.");
             // we get that if the webserver responds with an 503 error
             case 'service unavailable':
-                throw new PdfAsUnavailableException('PDF-AS service unavailable! Please try again later.');
+                throw new SigningUnavailableException('PDF-AS service unavailable! Please try again later.');
             default:
-                throw new PdfAsException('General SOAP error: '.$e->getMessage());
+                throw new SigningException('General SOAP error: '.$e->getMessage());
         }
     }
 
@@ -276,7 +276,7 @@ class PdfAsApi implements SignatureProviderInterface
             return $response;
         } catch (SoapFault $e) {
             $this->handleSoapFault($e);
-            throw new PdfAsException();
+            throw new SigningException();
         }
     }
 
@@ -296,7 +296,7 @@ class PdfAsApi implements SignatureProviderInterface
     }
 
     /**
-     * @throws PdfAsException
+     * @throws SigningException
      */
     public function fetchQualifiedlySignedDocument(string $requestId, string $fileName = ''): QualifiedlySignedDocument
     {
@@ -314,18 +314,18 @@ class PdfAsApi implements SignatureProviderInterface
             if ($response->getHeader('Content-Type')[0] !== 'application/pdf') {
                 // PDF-AS doesn't use 404 status code when document wasn't found
                 if (strpos($signedPdfData, '<p>No signed pdf document available.</p>') !== false) {
-                    throw new PdfAsException(sprintf("QualifiedlySignedDocument with id '%s' was not found!", $requestId));
+                    throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' was not found!", $requestId));
                 }
 
-                throw new PdfAsException(sprintf("QualifiedlySignedDocument with id '%s' could not be loaded!", $requestId));
+                throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' could not be loaded!", $requestId));
             }
         } catch (RequestException $e) {
             switch ($e->getCode()) {
                 case 403:
-                    throw new PdfAsException(sprintf("Access to QualifiedlySignedDocument with id '%s' is not allowed!", $requestId));
+                    throw new SigningException(sprintf("Access to QualifiedlySignedDocument with id '%s' is not allowed!", $requestId));
             }
 
-            throw new PdfAsException(sprintf("QualifiedlySignedDocument with id '%s' could not be loaded! Message: %s", $requestId, $e->getMessage()));
+            throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' could not be loaded! Message: %s", $requestId, $e->getMessage()));
         }
 
 //        dump($signedPdfData);

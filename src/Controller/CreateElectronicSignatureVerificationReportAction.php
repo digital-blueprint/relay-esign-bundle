@@ -8,9 +8,9 @@ use DBP\API\CoreBundle\Exception\ApiError;
 use DBP\API\ESignBundle\Entity\ElectronicSignature;
 use DBP\API\ESignBundle\Entity\ElectronicSignatureVerificationReport;
 use DBP\API\ESignBundle\Helpers\Tools;
-use DBP\API\ESignBundle\Service\PdfAsException;
-use DBP\API\ESignBundle\Service\PdfAsUnavailableException;
 use DBP\API\ESignBundle\Service\SignatureProviderInterface;
+use DBP\API\ESignBundle\Service\SigningException;
+use DBP\API\ESignBundle\Service\SigningUnavailableException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,9 +67,9 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
         // verify the pdf data
         try {
             $results = $this->api->verifyPdfData(file_get_contents($uploadedFile->getPathname()), $requestId);
-        } catch (PdfAsUnavailableException $e) {
+        } catch (SigningUnavailableException $e) {
             throw new ServiceUnavailableHttpException(100, $e->getMessage());
-        } catch (PdfAsException $e) {
+        } catch (SigningException $e) {
             throw new ApiError(Response::HTTP_BAD_GATEWAY, $e->getMessage());
         }
 

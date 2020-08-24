@@ -8,8 +8,8 @@ use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use DBP\API\CoreBundle\Exception\ApiError;
 use DBP\API\ESignBundle\Entity\QualifiedlySignedDocument;
-use DBP\API\ESignBundle\Service\PdfAsException;
 use DBP\API\ESignBundle\Service\SignatureProviderInterface;
+use DBP\API\ESignBundle\Service\SigningException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -42,7 +42,7 @@ final class QualifiedlySignedDocumentDataProvider implements ItemDataProviderInt
 
         try {
             return $api->fetchQualifiedlySignedDocument($id, $fileName);
-        } catch (PdfAsException $e) {
+        } catch (SigningException $e) {
             throw new ApiError(Response::HTTP_BAD_GATEWAY, $e->getMessage());
         }
     }

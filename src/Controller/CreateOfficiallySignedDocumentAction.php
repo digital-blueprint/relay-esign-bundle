@@ -7,9 +7,9 @@ namespace DBP\API\ESignBundle\Controller;
 use DBP\API\CoreBundle\Exception\ApiError;
 use DBP\API\ESignBundle\Entity\OfficiallySignedDocument;
 use DBP\API\ESignBundle\Helpers\Tools;
-use DBP\API\ESignBundle\Service\PdfAsException;
-use DBP\API\ESignBundle\Service\PdfAsUnavailableException;
 use DBP\API\ESignBundle\Service\SignatureProviderInterface;
+use DBP\API\ESignBundle\Service\SigningException;
+use DBP\API\ESignBundle\Service\SigningUnavailableException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -91,9 +91,9 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
         try {
             $signedPdfData = $this->api->officiallySignPdfData(
                 file_get_contents($uploadedFile->getPathname()), $requestId, $positionData);
-        } catch (PdfAsUnavailableException $e) {
+        } catch (SigningUnavailableException $e) {
             throw new ServiceUnavailableHttpException(100, $e->getMessage());
-        } catch (PdfAsException $e) {
+        } catch (SigningException $e) {
             throw new ApiError(Response::HTTP_BAD_GATEWAY, $e->getMessage());
         }
 
