@@ -243,6 +243,10 @@ class PdfAsApi
 
         try {
             $params = new SignParameters($connector);
+            if ($sigType === self::SIG_TYPE_OFFICIALLY) {
+                $params->setKeyIdentifier('tugraz-official');
+                $params->setProfile('SIGNATURBLOCK_TUGRAZ_AMTSSIGNATUR');
+            }
 
             // add the callback url for the qualified signature process
             if ($sigType === self::SIG_TYPE_QUALIFIEDLY) {
