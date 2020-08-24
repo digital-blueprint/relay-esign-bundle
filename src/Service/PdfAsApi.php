@@ -31,12 +31,6 @@ class PdfAsApi
 {
     private $signingService = null;
 
-    private $phpErrorReporting;
-
-    private $lastErrorMessage = '';
-
-    private $lastErrorStatusCode = 0;
-
     private $logger;
 
     // Signature types
@@ -55,47 +49,6 @@ class PdfAsApi
         $this->officialUrl = $config['official_url'] ?? '';
         $this->qualifiedUrl = $config['qualified_url'] ?? '';
         $this->qualifiedStaticUrl = $config['qualified_static_url'] ?? '';
-    }
-
-    private function freezePhpNoticeErrorReporting()
-    {
-        $this->phpErrorReporting = error_reporting();
-        error_reporting($this->phpErrorReporting & ~E_NOTICE);
-    }
-
-    private function unfreezePhpErrorReporting()
-    {
-        error_reporting($this->phpErrorReporting);
-    }
-
-    public function hasLastError()
-    {
-        return $this->lastErrorMessage !== '';
-    }
-
-    public function lastErrorMessage(): string
-    {
-        return $this->lastErrorMessage;
-    }
-
-    public function lastErrorStatusCode(): int
-    {
-        return $this->lastErrorStatusCode;
-    }
-
-    public function resetLastError()
-    {
-        $this->lastErrorMessage = '';
-        $this->lastErrorStatusCode = 0;
-    }
-
-    private function returnWithErrorMessage($message, int $statusCode = 502)
-    {
-        $this->lastErrorMessage = $message;
-        $this->lastErrorStatusCode = $statusCode;
-        $this->unfreezePhpErrorReporting();
-
-        return '';
     }
 
     /**
@@ -121,18 +74,16 @@ class PdfAsApi
 
     /**
      * @param array $positionData
+     *
+     * @throws PdfAsException
      */
     public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = '', $positionData = []): string
     {
         // fetch the redirectUrl
         $response = $this->doSingleSignRequest($data, self::SIG_TYPE_QUALIFIEDLY, $requestId, $positionData);
 
-        if ($this->hasLastError()) {
-            return '';
-        }
-
         if ($response->getError() !== null) {
-            return $this->returnWithErrorMessage('Failed fetching redirectURL: '.$response->getError());
+            throw new PdfAsException('Failed fetching redirectURL: '.$response->getError());
         }
 
         // get the redirect url
@@ -163,14 +114,12 @@ class PdfAsApi
      * @param string $requestId
      *
      * @return VerifyResult[]
+     *
+     * @throws PdfAsException
      */
     public function verifyPdfData($data, $requestId = '')
     {
         $response = $this->doVerifyRequest($data, $requestId);
-
-        if ($this->hasLastError()) {
-            return [];
-        }
 
         $results = $response->getVerifyResults();
         $this->log('PDF was verified', ['request_id' => $requestId]);
@@ -186,17 +135,15 @@ class PdfAsApi
      * @param array  $positionData
      *
      * @return string
+     *
+     * @throws PdfAsException
      */
     public function officiallySignPdfData($data, $requestId = '', $positionData = [])
     {
         $response = $this->doSingleSignRequest($data, self::SIG_TYPE_OFFICIALLY, $requestId, $positionData);
 
-        if ($this->hasLastError()) {
-            return '';
-        }
-
         if ($response->getError() !== null) {
-            return $this->returnWithErrorMessage('Signing failed!');
+            throw new PdfAsException('Signing failed!');
         }
 
         $signedPdfData = $response->getSignedPDF();
@@ -204,7 +151,7 @@ class PdfAsApi
 
         // the happens for example if you sign already signed files
         if ($contentSize === 0) {
-            return $this->returnWithErrorMessage('Signing of this file is not possible! Maybe it was already signed?');
+            throw new PdfAsException('Signing of this file is not possible! Maybe it was already signed?');
         }
 
         $this->log('PDF was officially signed', ['request_id' => $requestId, 'signed_content_size' => $contentSize]);
@@ -215,14 +162,12 @@ class PdfAsApi
     /**
      * Throwing exceptions in this method causes an exception:.
      *
-     * Uncaught Exception: Malformed UTF-8 characters, possibly incorrectly encoded
-     * {"exception":"[object] (Symfony\\Component\\Serializer\\Exception\\NotEncodableValueException(code: 0):
-     * Malformed UTF-8 characters, possibly incorrectly encoded at /application/vendor/symfony/serializer/Encoder/JsonEncode.php:63,
-     *
      * @param int   $sigType
      * @param array $positionData
      *
-     * @return SignResponse|string
+     * @return SignResponse
+     *
+     * @throws PdfAsException
      */
     public function doSingleSignRequest(string $data, $sigType = self::SIG_TYPE_OFFICIALLY, string $requestId = '', $positionData = [])
     {
@@ -230,12 +175,10 @@ class PdfAsApi
             $requestId = self::generateRequestId();
         }
 
-        $this->resetLastError();
-
         try {
             $service = $this->getService($sigType);
         } catch (SoapFault $e) {
-            return $this->returnWithErrorMessage('Signing soap call failed, wsdl URI cannot be loaded!');
+            throw new PdfAsException('Signing soap call failed, wsdl URI cannot be loaded!');
         }
 
         // choose the connector
@@ -276,16 +219,26 @@ class PdfAsApi
 
             return $response;
         } catch (SoapFault $e) {
-            switch (strtolower($e->getMessage())) {
-                // we get that on a socket timeout
-                case 'error fetching http headers':
-                    return $this->returnWithErrorMessage("PDF-AS didn't answer in time! Please try again later.", 503);
-                // we get that if the webserver responds with an 503 error
-                case 'service unavailable':
-                    return $this->returnWithErrorMessage('PDF-AS service unavailable! Please try again later.', 503);
-                default:
-                    return $this->returnWithErrorMessage('General SOAP error: '.$e->getMessage());
-            }
+            $this->handleSoapFault($e);
+            throw new PdfAsException();
+        }
+    }
+
+    /**
+     * @throws PdfAsException
+     * @throws PdfAsUnavailableException
+     */
+    private function handleSoapFault(SoapFault $e)
+    {
+        switch (strtolower($e->getMessage())) {
+            // we get that on a socket timeout
+            case 'error fetching http headers':
+                throw new PdfAsUnavailableException("PDF-AS didn't answer in time! Please try again later.");
+            // we get that if the webserver responds with an 503 error
+            case 'service unavailable':
+                throw new PdfAsUnavailableException('PDF-AS service unavailable! Please try again later.');
+            default:
+                throw new PdfAsException('General SOAP error: '.$e->getMessage());
         }
     }
 
@@ -303,8 +256,6 @@ class PdfAsApi
         if ($requestId === '') {
             $requestId = self::generateRequestId();
         }
-
-        $this->resetLastError();
 
         try {
             $socketTimeout = ini_get('default_socket_timeout');
@@ -324,16 +275,8 @@ class PdfAsApi
 
             return $response;
         } catch (SoapFault $e) {
-            switch (strtolower($e->getMessage())) {
-                // we get that on a socket timeout
-                case 'error fetching http headers':
-                    return $this->returnWithErrorMessage("PDF-AS didn't answer in time! Please try again later.", 503);
-                // we get that if the webserver responds with an 503 error
-                case 'service unavailable':
-                    return $this->returnWithErrorMessage('PDF-AS service unavailable! Please try again later.', 503);
-                default:
-                    return $this->returnWithErrorMessage('General SOAP error: '.$e->getMessage());
-            }
+            $this->handleSoapFault($e);
+            throw new PdfAsException();
         }
     }
 

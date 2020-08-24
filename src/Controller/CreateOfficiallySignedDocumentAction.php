@@ -7,6 +7,8 @@ namespace DBP\API\ESignBundle\Controller;
 use DBP\API\CoreBundle\Exception\ApiError;
 use DBP\API\ESignBundle\Entity\OfficiallySignedDocument;
 use DBP\API\ESignBundle\Service\PdfAsApi;
+use DBP\API\ESignBundle\Service\PdfAsException;
+use DBP\API\ESignBundle\Service\PdfAsUnavailableException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -85,18 +87,13 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
 
         // sign the pdf data
         // Throwing exceptions in officiallySignPdfData causes an exception
-        $signedPdfData = $this->api->officiallySignPdfData(
-            file_get_contents($uploadedFile->getPathname()), $requestId, $positionData);
-
-        // we cannot throw exceptions in the service, so we will do it this way
-        if ($this->api->hasLastError()) {
-            switch ($this->api->lastErrorStatusCode()) {
-                case 503:
-                    throw new ServiceUnavailableHttpException(100, $this->api->lastErrorMessage());
-                    break;
-                default:
-                    throw new ApiError(Response::HTTP_BAD_GATEWAY, $this->api->lastErrorMessage());
-            }
+        try {
+            $signedPdfData = $this->api->officiallySignPdfData(
+                file_get_contents($uploadedFile->getPathname()), $requestId, $positionData);
+        } catch (PdfAsUnavailableException $e) {
+            throw new ServiceUnavailableHttpException(100, $e->getMessage());
+        } catch (PdfAsException $e) {
+            throw new ApiError(Response::HTTP_BAD_GATEWAY, $e->getMessage());
         }
 
         // we cannot actually return a new file because our tmpfile would be gone when its content is converted to an uri string
