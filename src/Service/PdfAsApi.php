@@ -27,7 +27,7 @@ use function GuzzleHttp\uri_template;
 use SoapFault;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class PdfAsApi
+class PdfAsApi implements SignatureProviderInterface
 {
     private $signingService = null;
 
@@ -172,7 +172,7 @@ class PdfAsApi
     public function doSingleSignRequest(string $data, $sigType = self::SIG_TYPE_OFFICIALLY, string $requestId = '', $positionData = [])
     {
         if ($requestId === '') {
-            $requestId = self::generateRequestId();
+            $requestId = Tools::generateRequestId();
         }
 
         try {
@@ -254,7 +254,7 @@ class PdfAsApi
     public function doVerifyRequest(string $data, string $requestId = '')
     {
         if ($requestId === '') {
-            $requestId = self::generateRequestId();
+            $requestId = Tools::generateRequestId();
         }
 
         try {
@@ -278,20 +278,6 @@ class PdfAsApi
             $this->handleSoapFault($e);
             throw new PdfAsException();
         }
-    }
-
-    public static function generateRequestId(): string
-    {
-        return uniqid();
-    }
-
-    public static function generateSignedFileName(string $fileName): string
-    {
-        $pathInfo = pathinfo($fileName);
-        $ext = isset($pathInfo['extension']) ? '.'.$pathInfo['extension'] : '';
-
-        // squash .sig extension
-        return str_replace('.sig', '', $pathInfo['filename']).'.sig'.$ext;
     }
 
     /**
@@ -344,14 +330,14 @@ class PdfAsApi
 
 //        dump($signedPdfData);
 
-        $signedFileName = self::generateSignedFileName($fileName === '' ? 'document.pdf' : $fileName);
+        $signedFileName = Tools::generateSignedFileName($fileName === '' ? 'document.pdf' : $fileName);
         $signedPdfDataSize = strlen($signedPdfData);
 
         $this->log('PDF was qualifiedly signed', ['request_id' => $requestId, 'signed_content_size' => $signedPdfDataSize]);
 
         $document = new QualifiedlySignedDocument();
         $document->setIdentifier($requestId);
-        $document->setContentUrl(self::getDataURI($signedPdfData));
+        $document->setContentUrl(Tools::getDataURI($signedPdfData, 'application/pdf'));
         $document->setName($signedFileName);
         $document->setContentSize($signedPdfDataSize);
 

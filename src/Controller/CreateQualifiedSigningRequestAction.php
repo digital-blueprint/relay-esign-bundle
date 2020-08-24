@@ -6,9 +6,10 @@ namespace DBP\API\ESignBundle\Controller;
 
 use DBP\API\CoreBundle\Exception\ApiError;
 use DBP\API\ESignBundle\Entity\QualifiedSigningRequest;
-use DBP\API\ESignBundle\Service\PdfAsApi;
+use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\Service\PdfAsException;
 use DBP\API\ESignBundle\Service\PdfAsUnavailableException;
+use DBP\API\ESignBundle\Service\SignatureProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,7 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
 {
     protected $api;
 
-    public function __construct(PdfAsApi $api)
+    public function __construct(SignatureProviderInterface $api)
     {
         $this->api = $api;
     }
@@ -63,7 +64,7 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
         }
 
         // generate a request id for the signing process
-        $requestId = $this->api->generateRequestId();
+        $requestId = Tools::generateRequestId();
 
         $positionData = [];
 

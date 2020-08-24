@@ -33,4 +33,26 @@ class Tools
 
         return (string) $result;
     }
+
+    /**
+     * Convert binary data to a data url.
+     */
+    public static function getDataURI(string $data, string $mime): string
+    {
+        return 'data:'.$mime.';base64,'.base64_encode($data);
+    }
+
+    public static function generateRequestId(): string
+    {
+        return uniqid();
+    }
+
+    public static function generateSignedFileName(string $fileName): string
+    {
+        $pathInfo = pathinfo($fileName);
+        $ext = isset($pathInfo['extension']) ? '.'.$pathInfo['extension'] : '';
+
+        // squash .sig extension
+        return str_replace('.sig', '', $pathInfo['filename']).'.sig'.$ext;
+    }
 }

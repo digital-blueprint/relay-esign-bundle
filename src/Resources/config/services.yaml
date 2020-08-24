@@ -3,6 +3,9 @@ services:
         public: false
         autowire: true
 
+    DBP\API\ESignBundle\Service\SignatureProviderInterface:
+        '@DBP\API\ESignBundle\Service\PdfAsApi'
+
     DBP\API\ESignBundle\Controller\:
         resource: '../../Controller'
         tags: ['controller.service_arguments']
