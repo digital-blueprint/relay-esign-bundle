@@ -14,22 +14,14 @@ interface SignatureProviderInterface
     /**
      * Signs $data.
      *
-     * @param string $data
-     * @param string $requestId
-     * @param array  $positionData
-     *
-     * @return string
-     *
      * @throws SigningException
      */
-    public function advancedSignPdfData($data, $requestId = '', $positionData = []);
+    public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = []): string;
 
     /**
-     * @param array $positionData
-     *
      * @throws SigningException
      */
-    public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = '', $positionData = []): string;
+    public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = '', array $positionData = []): string;
 
     /**
      * Verifies pdf $data.

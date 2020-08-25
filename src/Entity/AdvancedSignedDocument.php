@@ -23,11 +23,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "deserialize"=false,
  *             "openapi_context"={
  *                 "parameters"={
- *                    {"name"="x", "in"="path", "description"="Position of the signature from the left", "type"="number", "example"="100"},
- *                    {"name"="y", "in"="path", "description"="Position of the signature from the bottom", "type"="number", "example"="100"},
- *                    {"name"="r", "in"="path", "description"="Rotation of the signature counterclockwise", "type"="number", "example"="90"},
- *                    {"name"="w", "in"="path", "description"="Width of the signature", "type"="number", "example"="240"},
- *                    {"name"="p", "in"="path", "description"="Page number the signature should be placed", "type"="number", "example"="2"}
+ *                    {"name"="profile", "in"="query", "description"="Name of the signature profile", "type"="string", "example"="official", "required"="1"},
+ *                    {"name"="x", "in"="query", "description"="Position of the signature from the left", "type"="number", "example"="100"},
+ *                    {"name"="y", "in"="query", "description"="Position of the signature from the bottom", "type"="number", "example"="100"},
+ *                    {"name"="r", "in"="query", "description"="Rotation of the signature counterclockwise", "type"="number", "example"="90"},
+ *                    {"name"="w", "in"="query", "description"="Width of the signature", "type"="number", "example"="240"},
+ *                    {"name"="p", "in"="query", "description"="Page number the signature should be placed", "type"="number", "example"="2"}
  *                 },
  *                 "requestBody"={
  *                     "content"={

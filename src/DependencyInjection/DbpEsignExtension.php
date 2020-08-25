@@ -18,6 +18,7 @@ class DbpEsignExtension extends ConfigurableExtension
 
         $pathsToHide = [
             '/advanced_signed_documents/{id}',
+            '/advanced_signed_documents',
             '/qualified_signing_requests/{id}',
             '/qualified_signing_requests',
         ];

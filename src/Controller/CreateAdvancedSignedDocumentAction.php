@@ -11,9 +11,11 @@ use DBP\API\ESignBundle\Service\SignatureProviderInterface;
 use DBP\API\ESignBundle\Service\SigningException;
 use DBP\API\ESignBundle\Service\SigningUnavailableException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
@@ -22,10 +24,29 @@ use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 final class CreateAdvancedSignedDocumentAction extends AbstractController
 {
     protected $api;
+    protected $config;
 
-    public function __construct(SignatureProviderInterface $api)
+    public function __construct(ContainerInterface $container, SignatureProviderInterface $api)
     {
+        $this->config = $container->getParameter('dbp_api.esign.config');
         $this->api = $api;
+    }
+
+    public function checkProfilePermissions(string $profileName)
+    {
+        $advancedProfiles = $this->config['advanced_profiles'] ?? [];
+        foreach ($advancedProfiles as $profile) {
+            if ($profile['name'] === $profileName) {
+                if (!isset($profile['role'])) {
+                    throw new \RuntimeException('No role set');
+                }
+                $role = $profile['role'];
+                $this->denyAccessUnlessGranted($role);
+
+                return;
+            }
+        }
+        throw new AccessDeniedHttpException('unknown profile');
     }
 
     /**
@@ -33,7 +54,12 @@ final class CreateAdvancedSignedDocumentAction extends AbstractController
      */
     public function __invoke(Request $request): AdvancedSignedDocument
     {
-        $this->denyAccessUnlessGranted('ROLE_SCOPE_OFFICIAL-SIGNATURE');
+        $profileName = $request->query->get('profile');
+        if ($profileName === null) {
+            throw new BadRequestHttpException('Missing "profile"');
+        }
+
+        $this->checkProfilePermissions($profileName);
 
         /** @var UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');
@@ -88,8 +114,8 @@ final class CreateAdvancedSignedDocumentAction extends AbstractController
 
         // sign the pdf data
         try {
-            $signedPdfData = $this->api->advancedSignPdfData(
-                file_get_contents($uploadedFile->getPathname()), $requestId, $positionData);
+            $signedPdfData = $this->api->advancedlySignPdfData(
+                file_get_contents($uploadedFile->getPathname()), $profileName, $requestId, $positionData);
         } catch (SigningUnavailableException $e) {
             throw new ServiceUnavailableHttpException(100, $e->getMessage());
         } catch (SigningException $e) {
