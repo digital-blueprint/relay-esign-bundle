@@ -17,8 +17,9 @@ class DbpEsignExtension extends ConfigurableExtension
             $container, 'api_platform.resource_class_directories', [__DIR__.'/../Entity']);
 
         $pathsToHide = [
-            '/officially_signed_documents/{id}',
+            '/advanced_signed_documents/{id}',
             '/qualified_signing_requests/{id}',
+            '/qualified_signing_requests',
         ];
 
         if ($_ENV['PDF_AS_VERIFICATION_ENABLE'] !== 'true') {

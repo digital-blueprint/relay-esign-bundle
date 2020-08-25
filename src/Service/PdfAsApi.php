@@ -32,12 +32,12 @@ class PdfAsApi implements SignatureProviderInterface
     private $logger;
 
     // Signature types
-    public const SIG_TYPE_OFFICIALLY = 1;
-    public const SIG_TYPE_QUALIFIEDLY = 2;
+    private const SIG_TYPE_ADVANCED = 1;
+    private const SIG_TYPE_QUALIFIED = 2;
 
     private const PDF_AS_TIMEOUT = 40;
 
-    private $officialUrl;
+    private $advancedUrl;
     private $qualifiedUrl;
     private $qualifiedStaticUrl;
 
@@ -46,7 +46,7 @@ class PdfAsApi implements SignatureProviderInterface
         $this->logger = $logger;
 
         $config = $container->getParameter('dbp_api.esign.config');
-        $this->officialUrl = $config['official_url'] ?? '';
+        $this->advancedUrl = $config['advanced_url'] ?? '';
         $this->qualifiedUrl = $config['qualified_url'] ?? '';
         $this->qualifiedStaticUrl = $config['qualified_static_url'] ?? '';
     }
@@ -56,11 +56,11 @@ class PdfAsApi implements SignatureProviderInterface
      *
      * @throws SoapFault
      */
-    private function getService($sigType = self::SIG_TYPE_OFFICIALLY): PDFASSigningImplService
+    private function getService($sigType = self::SIG_TYPE_ADVANCED): PDFASSigningImplService
     {
-        if ($sigType === self::SIG_TYPE_OFFICIALLY) {
-            $wsBaseUri = $this->officialUrl;
-        } elseif ($sigType === self::SIG_TYPE_QUALIFIEDLY) {
+        if ($sigType === self::SIG_TYPE_ADVANCED) {
+            $wsBaseUri = $this->advancedUrl;
+        } elseif ($sigType === self::SIG_TYPE_QUALIFIED) {
             $wsBaseUri = $this->qualifiedUrl;
         } else {
             throw new \RuntimeException('invalid type');
@@ -80,7 +80,7 @@ class PdfAsApi implements SignatureProviderInterface
     public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = '', $positionData = []): string
     {
         // fetch the redirectUrl
-        $response = $this->doSingleSignRequest($data, self::SIG_TYPE_QUALIFIEDLY, $requestId, $positionData);
+        $response = $this->doSingleSignRequest($data, self::SIG_TYPE_QUALIFIED, $requestId, $positionData);
 
         if ($response->getError() !== null) {
             throw new SigningException('Failed fetching redirectURL: '.$response->getError());
@@ -128,7 +128,7 @@ class PdfAsApi implements SignatureProviderInterface
     }
 
     /**
-     * Officially signs $data.
+     * Signs $data.
      *
      * @param string $data
      * @param string $requestId
@@ -136,9 +136,9 @@ class PdfAsApi implements SignatureProviderInterface
      *
      * @throws SigningException
      */
-    public function officiallySignPdfData($data, $requestId = '', $positionData = []): string
+    public function advancedSignPdfData($data, $requestId = '', $positionData = []): string
     {
-        $response = $this->doSingleSignRequest($data, self::SIG_TYPE_OFFICIALLY, $requestId, $positionData);
+        $response = $this->doSingleSignRequest($data, self::SIG_TYPE_ADVANCED, $requestId, $positionData);
 
         if ($response->getError() !== null) {
             throw new SigningException('Signing failed!');
@@ -152,7 +152,7 @@ class PdfAsApi implements SignatureProviderInterface
             throw new SigningException('Signing of this file is not possible! Maybe it was already signed?');
         }
 
-        $this->log('PDF was officially signed', ['request_id' => $requestId, 'signed_content_size' => $contentSize]);
+        $this->log('PDF was signed', ['request_id' => $requestId, 'signed_content_size' => $contentSize]);
 
         return $signedPdfData;
     }
@@ -167,7 +167,7 @@ class PdfAsApi implements SignatureProviderInterface
      *
      * @throws SigningException
      */
-    public function doSingleSignRequest(string $data, $sigType = self::SIG_TYPE_OFFICIALLY, string $requestId = '', $positionData = [])
+    public function doSingleSignRequest(string $data, $sigType = self::SIG_TYPE_ADVANCED, string $requestId = '', $positionData = [])
     {
         if ($requestId === '') {
             $requestId = Tools::generateRequestId();
@@ -180,17 +180,17 @@ class PdfAsApi implements SignatureProviderInterface
         }
 
         // choose the connector
-        $connector = $sigType === self::SIG_TYPE_OFFICIALLY ? Connector::jks() : Connector::mobilebku();
+        $connector = $sigType === self::SIG_TYPE_ADVANCED ? Connector::jks() : Connector::mobilebku();
 
         try {
             $params = new SignParameters($connector);
-            if ($sigType === self::SIG_TYPE_OFFICIALLY) {
+            if ($sigType === self::SIG_TYPE_ADVANCED) {
                 $params->setKeyIdentifier('tugraz-official');
                 $params->setProfile('SIGNATURBLOCK_TUGRAZ_AMTSSIGNATUR');
             }
 
             // add the callback url for the qualified signature process
-            if ($sigType === self::SIG_TYPE_QUALIFIEDLY) {
+            if ($sigType === self::SIG_TYPE_QUALIFIED) {
                 $staticUri = $this->qualifiedStaticUrl;
                 $params->setInvokeurl($staticUri.'/callback.html');
                 // it's important to add the port "443", PDF-AS has a bug that will set the port to "-1" if it isn't set

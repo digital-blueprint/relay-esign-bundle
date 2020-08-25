@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DBP\API\ESignBundle\Controller;
 
 use DBP\API\CoreBundle\Exception\ApiError;
-use DBP\API\ESignBundle\Entity\OfficiallySignedDocument;
+use DBP\API\ESignBundle\Entity\AdvancedSignedDocument;
 use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\Service\SignatureProviderInterface;
 use DBP\API\ESignBundle\Service\SigningException;
@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
-final class CreateOfficiallySignedDocumentAction extends AbstractController
+final class CreateAdvancedSignedDocumentAction extends AbstractController
 {
     protected $api;
 
@@ -31,7 +31,7 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
     /**
      * @throws HttpException
      */
-    public function __invoke(Request $request): OfficiallySignedDocument
+    public function __invoke(Request $request): AdvancedSignedDocument
     {
         $this->denyAccessUnlessGranted('ROLE_SCOPE_OFFICIAL-SIGNATURE');
 
@@ -87,9 +87,8 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
         }
 
         // sign the pdf data
-        // Throwing exceptions in officiallySignPdfData causes an exception
         try {
-            $signedPdfData = $this->api->officiallySignPdfData(
+            $signedPdfData = $this->api->advancedSignPdfData(
                 file_get_contents($uploadedFile->getPathname()), $requestId, $positionData);
         } catch (SigningUnavailableException $e) {
             throw new ServiceUnavailableHttpException(100, $e->getMessage());
@@ -113,7 +112,7 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
         // add some suffix for signed documents
         $signedFileName = Tools::generateSignedFileName($uploadedFile->getClientOriginalName());
 
-        $document = new OfficiallySignedDocument();
+        $document = new AdvancedSignedDocument();
         $document->setIdentifier($requestId);
         $document->setContentUrl(Tools::getDataURI($signedPdfData, 'application/pdf'));
         $document->setName($signedFileName);

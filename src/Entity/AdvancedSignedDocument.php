@@ -6,21 +6,20 @@ namespace DBP\API\ESignBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use DBP\API\ESignBundle\Controller\CreateOfficiallySignedDocumentAction;
-use Symfony\Component\HttpFoundation\File\File;
+use DBP\API\ESignBundle\Controller\CreateAdvancedSignedDocumentAction;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD.
  *
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_SCOPE_OFFICIAL-SIGNATURE')"},
+
  *     collectionOperations={
  *         "get",
  *         "sign"={
  *             "method"="POST",
- *             "path"="/officially_signed_documents/sign",
- *             "controller"=CreateOfficiallySignedDocumentAction::class,
+ *             "path"="/advanced_signed_documents/sign",
+ *             "controller"=CreateAdvancedSignedDocumentAction::class,
  *             "deserialize"=false,
  *             "openapi_context"={
  *                 "parameters"={
@@ -61,14 +60,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={"get"},
  *     iri="http://schema.org/MediaObject",
- *     description="Officially signed PDF document",
- *     normalizationContext={"jsonld_embed_context"=true, "groups"={"OfficiallySignedDocument:output"}}
+ *     description="Advanced signed PDF document",
+ *     normalizationContext={"jsonld_embed_context"=true, "groups"={"AdvancedSignedDocument:read"}}
  * )
  */
-class OfficiallySignedDocument
+class AdvancedSignedDocument
 {
     /**
-     * @Groups({"OfficiallySignedDocument:output"})
+     * @Groups({"AdvancedSignedDocument:read"})
      * @ApiProperty(identifier=true,iri="https://schema.org/identifier")
      * Note: Every entity needs an identifier!
      */
@@ -76,7 +75,7 @@ class OfficiallySignedDocument
 
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"OfficiallySignedDocument:output"})
+     * @Groups({"AdvancedSignedDocument:read"})
      *
      * @var string
      */
@@ -84,7 +83,7 @@ class OfficiallySignedDocument
 
     /**
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"OfficiallySignedDocument:output"})
+     * @Groups({"AdvancedSignedDocument:read"})
      *
      * @var string
      */
@@ -92,7 +91,7 @@ class OfficiallySignedDocument
 
     /**
      * @ApiProperty(iri="https://schema.org/contentSize")
-     * @Groups({"OfficiallySignedDocument:output"})
+     * @Groups({"AdvancedSignedDocument:read"})
      *
      * @var int
      */

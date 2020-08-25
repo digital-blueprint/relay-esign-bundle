@@ -12,7 +12,7 @@ interface SignatureProviderInterface
     public function fetchQualifiedlySignedDocument(string $requestId): string;
 
     /**
-     * Officially signs $data.
+     * Signs $data.
      *
      * @param string $data
      * @param string $requestId
@@ -22,7 +22,7 @@ interface SignatureProviderInterface
      *
      * @throws SigningException
      */
-    public function officiallySignPdfData($data, $requestId = '', $positionData = []);
+    public function advancedSignPdfData($data, $requestId = '', $positionData = []);
 
     /**
      * @param array $positionData

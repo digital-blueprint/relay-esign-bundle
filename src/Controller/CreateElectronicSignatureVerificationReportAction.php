@@ -106,7 +106,7 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
                 }
             }
 
-            // use a fallback if no serial number was set (e.g. for official signatures)
+            // use a fallback if no serial number was set (e.g. for the advanced signatures)
             if ($signature->getIdentifier() === '') {
                 $signature->setIdentifier('ri-'.$requestId.'-'.$result->getSignatureIndex());
             }
