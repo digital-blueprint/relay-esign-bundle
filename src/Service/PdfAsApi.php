@@ -35,6 +35,8 @@ class PdfAsApi implements SignatureProviderInterface
     public const SIG_TYPE_OFFICIALLY = 1;
     public const SIG_TYPE_QUALIFIEDLY = 2;
 
+    private const PDF_AS_TIMEOUT = 40;
+
     private $officialUrl;
     private $qualifiedUrl;
     private $qualifiedStaticUrl;
@@ -64,7 +66,7 @@ class PdfAsApi implements SignatureProviderInterface
             throw new \RuntimeException('invalid type');
         }
         if ($this->signingService === null) {
-            $this->signingService = new PDFASSigningImplService($wsBaseUri.'/services/wssign');
+            $this->signingService = new PDFASSigningImplService($wsBaseUri.'/services/wssign', self::PDF_AS_TIMEOUT);
         }
 
         return $this->signingService;
@@ -203,17 +205,8 @@ class PdfAsApi implements SignatureProviderInterface
 
             $request = new SignRequest($data, $params, $requestId);
 
-            $socketTimeout = ini_get('default_socket_timeout');
-            // let's stay well below 60s browser timeouts, so we can catch timeouts ourselves
-            ini_set('default_socket_timeout', '40');
-
             // can and will throw a SoapFault "looks like we got no XML document"
-            $response = $service->signSingle($request);
-
-            // restore old timeout
-            ini_set('default_socket_timeout', $socketTimeout);
-
-            return $response;
+            return $service->signSingle($request, self::PDF_AS_TIMEOUT);
         } catch (SoapFault $e) {
             $this->handleSoapFault($e);
             throw new SigningException();
@@ -248,22 +241,14 @@ class PdfAsApi implements SignatureProviderInterface
         }
 
         try {
-            $socketTimeout = ini_get('default_socket_timeout');
-            // let's stay well below 60s browser timeouts, so we can catch timeouts ourselves
-            ini_set('default_socket_timeout', '40');
-
             $wsUri = $this->qualifiedUrl.'/services/wsverify';
             $client = new PDFASVerificationImplService($wsUri);
             $request = new VerifyRequest($data, $requestId);
             $request->setVerificationLevel(VerificationLevel::intOnly());
             $request->setSignatureIndex(-1);
             $request->setPreprocessorArguments(new PropertyMap([]));
-            $response = $client->verify($request);
 
-            // restore old timeout
-            ini_set('default_socket_timeout', $socketTimeout);
-
-            return $response;
+            return $client->verify($request, self::PDF_AS_TIMEOUT);
         } catch (SoapFault $e) {
             $this->handleSoapFault($e);
             throw new SigningException();

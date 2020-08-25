@@ -15,6 +15,22 @@ class PDFASBaseService extends \SoapClient
     }
 
     /**
+     * @return mixed
+     */
+    protected function callWithTimeout(string $function_name, array $arguments, int $timeout)
+    {
+        $socketTimeout = ini_get('default_socket_timeout');
+        if ($timeout >= 0) {
+            ini_set('default_socket_timeout', (string) $timeout);
+        }
+        try {
+            return $this->__soapCall($function_name, $arguments);
+        } finally {
+            ini_set('default_socket_timeout', $socketTimeout);
+        }
+    }
+
+    /**
      * @param string $req
      * @param string $location
      * @param string $action
@@ -30,7 +46,7 @@ class PDFASBaseService extends \SoapClient
     {
         $response = $this->__doParentRequest($req, $location, $action, $version, $one_way);
 
-        // happens for example if the request is denied by the server
+        // happens for example if the request is denied by the server or a timeout happens
         if ($response === null) {
             throw new SoapFault('no-data-returned', 'No data returned by SOAP request!');
         }

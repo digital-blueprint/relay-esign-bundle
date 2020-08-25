@@ -230,4 +230,34 @@ class SoapClientTest extends TestCase
         $parsed = simplexml_load_string($xml);
         $this->assertNotFalse($parsed);
     }
+
+    public function testSingleSignNullResult()
+    {
+        $soapClientMock = $this->getMockBuilder(PDFASSigningImplService::class)
+            ->setConstructorArgs(['nope'])
+            ->onlyMethods(['__doParentRequest'])
+            ->getMock();
+        $soapClientMock->method('__doParentRequest')->will($this->returnValue(null));
+
+        $params = new SignParameters(Connector::jks());
+        $request = new SignRequest('foobar', $params, 'my-id');
+        $this->expectException(\SoapFault::class);
+        /* @var $soapClientMock PDFASSigningImplService */
+        $soapClientMock->signSingle($request);
+    }
+
+    public function testSingleSignWithTimeout()
+    {
+        $soapClientMock = $this->getMockBuilder(PDFASSigningImplService::class)
+            ->setConstructorArgs(['nope', 42])
+            ->onlyMethods(['__doParentRequest'])
+            ->getMock();
+        $soapClientMock->method('__doParentRequest')->will($this->returnValue(self::$FAKE_RESPONSE));
+
+        $params = new SignParameters(Connector::jks());
+        $request = new SignRequest('foobar', $params, 'my-id');
+        /* @var $soapClientMock PDFASSigningImplService */
+        $response = $soapClientMock->signSingle($request, 42);
+        $this->assertNotFalse($response);
+    }
 }
