@@ -307,12 +307,4 @@ class PdfAsApi implements SignatureProviderInterface
 
         return $signedPdfData;
     }
-
-    /**
-     * Convert binary data to a data url.
-     */
-    public static function getDataURI(string $data, string $mime = 'application/pdf'): string
-    {
-        return 'data:'.$mime.';base64,'.base64_encode($data);
-    }
 }
