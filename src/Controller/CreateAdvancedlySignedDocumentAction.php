@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace DBP\API\ESignBundle\Controller;
 
 use DBP\API\CoreBundle\Exception\ApiError;
-use DBP\API\ESignBundle\Entity\AdvancedSignedDocument;
+use DBP\API\ESignBundle\Entity\AdvancedlySignedDocument;
 use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\Service\SignatureProviderInterface;
 use DBP\API\ESignBundle\Service\SigningException;
@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
-final class CreateAdvancedSignedDocumentAction extends AbstractController
+final class CreateAdvancedlySignedDocumentAction extends AbstractController
 {
     protected $api;
     protected $config;
@@ -52,7 +52,7 @@ final class CreateAdvancedSignedDocumentAction extends AbstractController
     /**
      * @throws HttpException
      */
-    public function __invoke(Request $request): AdvancedSignedDocument
+    public function __invoke(Request $request): AdvancedlySignedDocument
     {
         $profileName = $request->query->get('profile');
         if ($profileName === null) {
@@ -138,7 +138,7 @@ final class CreateAdvancedSignedDocumentAction extends AbstractController
         // add some suffix for signed documents
         $signedFileName = Tools::generateSignedFileName($uploadedFile->getClientOriginalName());
 
-        $document = new AdvancedSignedDocument();
+        $document = new AdvancedlySignedDocument();
         $document->setIdentifier($requestId);
         $document->setContentUrl(Tools::getDataURI($signedPdfData, 'application/pdf'));
         $document->setName($signedFileName);

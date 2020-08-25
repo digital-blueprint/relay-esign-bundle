@@ -17,8 +17,8 @@ class DbpEsignExtension extends ConfigurableExtension
             $container, 'api_platform.resource_class_directories', [__DIR__.'/../Entity']);
 
         $pathsToHide = [
-            '/advanced_signed_documents/{id}',
-            '/advanced_signed_documents',
+            '/advancedly_signed_documents/{id}',
+            '/advancedly_signed_documents',
             '/qualified_signing_requests/{id}',
             '/qualified_signing_requests',
         ];

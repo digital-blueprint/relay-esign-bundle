@@ -6,7 +6,7 @@ namespace DBP\API\ESignBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use DBP\API\ESignBundle\Controller\CreateAdvancedSignedDocumentAction;
+use DBP\API\ESignBundle\Controller\CreateAdvancedlySignedDocumentAction;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -18,8 +18,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *         "get",
  *         "sign"={
  *             "method"="POST",
- *             "path"="/advanced_signed_documents/sign",
- *             "controller"=CreateAdvancedSignedDocumentAction::class,
+ *             "path"="/advancedly_signed_documents/sign",
+ *             "controller"=CreateAdvancedlySignedDocumentAction::class,
  *             "deserialize"=false,
  *             "openapi_context"={
  *                 "parameters"={
@@ -62,13 +62,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={"get"},
  *     iri="http://schema.org/MediaObject",
  *     description="Advanced signed PDF document",
- *     normalizationContext={"jsonld_embed_context"=true, "groups"={"AdvancedSignedDocument:read"}}
+ *     normalizationContext={"jsonld_embed_context"=true, "groups"={"AdvancedlySignedDocument:read"}}
  * )
  */
-class AdvancedSignedDocument
+class AdvancedlySignedDocument
 {
     /**
-     * @Groups({"AdvancedSignedDocument:read"})
+     * @Groups({"AdvancedlySignedDocument:read"})
      * @ApiProperty(identifier=true,iri="https://schema.org/identifier")
      * Note: Every entity needs an identifier!
      */
@@ -76,7 +76,7 @@ class AdvancedSignedDocument
 
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"AdvancedSignedDocument:read"})
+     * @Groups({"AdvancedlySignedDocument:read"})
      *
      * @var string
      */
@@ -84,7 +84,7 @@ class AdvancedSignedDocument
 
     /**
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"AdvancedSignedDocument:read"})
+     * @Groups({"AdvancedlySignedDocument:read"})
      *
      * @var string
      */
@@ -92,7 +92,7 @@ class AdvancedSignedDocument
 
     /**
      * @ApiProperty(iri="https://schema.org/contentSize")
-     * @Groups({"AdvancedSignedDocument:read"})
+     * @Groups({"AdvancedlySignedDocument:read"})
      *
      * @var int
      */
