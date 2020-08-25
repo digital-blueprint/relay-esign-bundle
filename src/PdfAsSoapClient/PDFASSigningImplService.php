@@ -63,8 +63,7 @@ class PDFASSigningImplService extends PDFASBaseService
     }
 
     /**
-     * @param float $timeout Timeout in seconds
-     * @param int   $timeout Timeout in seconds
+     * @param int $timeout Timeout in seconds
      *
      * @return BulkSignResponse
      */

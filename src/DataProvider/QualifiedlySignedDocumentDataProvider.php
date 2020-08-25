@@ -37,6 +37,7 @@ final class QualifiedlySignedDocumentDataProvider implements ItemDataProviderInt
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?QualifiedlySignedDocument
     {
+        assert(is_string($id));
         $api = $this->api;
         $filters = $context['filters'] ?? [];
         $fileName = $filters['fileName'] ?? 'document.pdf';
