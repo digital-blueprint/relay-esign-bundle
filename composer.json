@@ -16,6 +16,8 @@
         "friendsofphp/php-cs-fixer": "^2.16",
         "phpstan/phpstan": "^0.12.33",
         "phpstan/phpstan-phpunit": "^0.12.13",
+        "symfony/browser-kit": "^4.4",
+        "symfony/http-client": "^4.4",
         "symfony/phpunit-bridge": "^4.4",
         "vimeo/psalm": "^3.12"
     },
