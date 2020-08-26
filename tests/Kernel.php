@@ -8,6 +8,7 @@ use ApiPlatform\Core\Bridge\Symfony\Bundle\ApiPlatformBundle;
 use DBP\API\CoreBundle\DbpCoreBundle;
 use DBP\API\ESignBundle\DbpEsignBundle;
 use Nelmio\CorsBundle\NelmioCorsBundle;
+use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
@@ -42,5 +43,10 @@ class Kernel extends BaseKernel
         $c->loadFromExtension('framework', [
             'test' => true,
         ]);
+
+        $loader->load(static function (ContainerBuilder $container): void {
+            // Register a NullLogger to avoid getting the stderr default logger of FrameworkBundle
+            $container->register('logger', NullLogger::class);
+        });
     }
 }
