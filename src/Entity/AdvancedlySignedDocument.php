@@ -16,9 +16,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
  *     collectionOperations={
  *         "get",
- *         "sign"={
+ *         "post"={
  *             "method"="POST",
- *             "path"="/advancedly_signed_documents/sign",
+ *             "path"="/advancedly_signed_documents",
  *             "controller"=CreateAdvancedlySignedDocumentAction::class,
  *             "deserialize"=false,
  *             "openapi_context"={

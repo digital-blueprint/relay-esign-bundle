@@ -19,14 +19,14 @@ class ApiTest extends ApiTestCase
     public function testNotAuth()
     {
         $endpoints = [
-            ['POST', '/advancedly_signed_documents/sign?profile=foo', 403],
+            ['POST', '/advancedly_signed_documents?profile=foo', 403],
             ['GET', '/advancedly_signed_documents', 200],
             ['GET', '/advancedly_signed_documents/123', 404],
             ['GET', '/electronic_signature_verification_reports', 403],
             ['POST', '/electronic_signature_verification_reports/create', 403],
             ['GET', '/electronic_signature_verification_reports/123', 404],
             ['GET', '/electronic_signatures/123', 404],
-            ['POST', '/qualified_signing_requests/create', 403],
+            ['POST', '/qualified_signing_requests', 403],
             ['GET', '/qualified_signing_requests', 403],
             ['GET', '/qualified_signing_requests/123', 404],
             ['GET', '/qualifiedly_signed_documents', 403],
