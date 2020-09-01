@@ -370,7 +370,7 @@ class PdfAsApi
     protected function getQualifiedlySignedDocumentUrl(string $requestId) : string
     {
         $uriTemplate = new UriTemplate('/PDFData;jsessionid={requestId}');
-        return $uriTemplate->expand([
+        return $this->qualifiedUrl . $uriTemplate->expand([
             'requestId' => $requestId,
         ]);
     }
