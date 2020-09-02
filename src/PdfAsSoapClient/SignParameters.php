@@ -1,46 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DBP\API\ESignBundle\PdfAsSoapClient;
 
 class SignParameters
 {
     /**
-     * @var Connector $connector
+     * @var Connector
      */
     protected $connector = null;
 
     /**
-     * @var string $keyIdentifier
+     * @var string
      */
     protected $keyIdentifier = null;
 
     /**
-     * @var PropertyMap $configurationOverrides
+     * @var PropertyMap
      */
     protected $configurationOverrides = null;
 
     /**
-     * @var string $position
+     * @var string
      */
     protected $position = null;
 
     /**
-     * @var PropertyMap $preprocessorArguments
+     * @var PropertyMap
      */
     protected $preprocessorArguments = null;
 
     /**
-     * @var string $profile
+     * @var string
      */
     protected $profile = null;
 
     /**
-     * @var string $qrCodeContent
+     * @var string
      */
     protected $qrCodeContent = null;
 
     /**
-     * @var string $transactionId
+     * @var string
      */
     protected $transactionId = null;
 
@@ -62,17 +64,19 @@ class SignParameters
      */
     public function getConnector()
     {
-      return $this->connector;
+        return $this->connector;
     }
 
     /**
      * @param Connector $connector
+     *
      * @return SignParameters
      */
     public function setConnector($connector)
     {
-      $this->connector = $connector;
-      return $this;
+        $this->connector = $connector;
+
+        return $this;
     }
 
     /**
@@ -86,12 +90,14 @@ class SignParameters
 
     /**
      * @param string $invokeerrorurl
+     *
      * @return SignParameters
      * @psalm-suppress UndefinedThisPropertyAssignment
      */
     public function setInvokeerrorurl($invokeerrorurl)
     {
         $this->{'invoke-error-url'} = $invokeerrorurl;
+
         return $this;
     }
 
@@ -106,13 +112,15 @@ class SignParameters
 
     /**
      * @param string $invoketarget
+     *
      * @return SignParameters
      * @psalm-suppress UndefinedThisPropertyAssignment
      */
     public function setInvoketarget($invoketarget)
     {
-      $this->{'invoke-target'} = $invoketarget;
-      return $this;
+        $this->{'invoke-target'} = $invoketarget;
+
+        return $this;
     }
 
     /**
@@ -121,18 +129,20 @@ class SignParameters
      */
     public function getInvokeurl()
     {
-      return $this->{'invoke-url'};
+        return $this->{'invoke-url'};
     }
 
     /**
      * @param string $invokeurl
+     *
      * @return SignParameters
      * @psalm-suppress UndefinedThisPropertyAssignment
      */
     public function setInvokeurl($invokeurl)
     {
-      $this->{'invoke-url'} = $invokeurl;
-      return $this;
+        $this->{'invoke-url'} = $invokeurl;
+
+        return $this;
     }
 
     /**
@@ -140,17 +150,19 @@ class SignParameters
      */
     public function getKeyIdentifier()
     {
-      return $this->keyIdentifier;
+        return $this->keyIdentifier;
     }
 
     /**
      * @param string $keyIdentifier
+     *
      * @return SignParameters
      */
     public function setKeyIdentifier($keyIdentifier)
     {
-      $this->keyIdentifier = $keyIdentifier;
-      return $this;
+        $this->keyIdentifier = $keyIdentifier;
+
+        return $this;
     }
 
     /**
@@ -158,17 +170,19 @@ class SignParameters
      */
     public function getConfigurationOverrides()
     {
-      return $this->configurationOverrides;
+        return $this->configurationOverrides;
     }
 
     /**
      * @param PropertyMap $configurationOverrides
+     *
      * @return SignParameters
      */
     public function setConfigurationOverrides($configurationOverrides)
     {
-      $this->configurationOverrides = $configurationOverrides;
-      return $this;
+        $this->configurationOverrides = $configurationOverrides;
+
+        return $this;
     }
 
     /**
@@ -176,17 +190,19 @@ class SignParameters
      */
     public function getPosition()
     {
-      return $this->position;
+        return $this->position;
     }
 
     /**
      * @param string $position
+     *
      * @return SignParameters
      */
     public function setPosition($position)
     {
-      $this->position = $position;
-      return $this;
+        $this->position = $position;
+
+        return $this;
     }
 
     /**
@@ -194,17 +210,19 @@ class SignParameters
      */
     public function getPreprocessorArguments()
     {
-      return $this->preprocessorArguments;
+        return $this->preprocessorArguments;
     }
 
     /**
      * @param PropertyMap $preprocessorArguments
+     *
      * @return SignParameters
      */
     public function setPreprocessorArguments($preprocessorArguments)
     {
-      $this->preprocessorArguments = $preprocessorArguments;
-      return $this;
+        $this->preprocessorArguments = $preprocessorArguments;
+
+        return $this;
     }
 
     /**
@@ -212,17 +230,19 @@ class SignParameters
      */
     public function getProfile()
     {
-      return $this->profile;
+        return $this->profile;
     }
 
     /**
      * @param string $profile
+     *
      * @return SignParameters
      */
     public function setProfile($profile)
     {
-      $this->profile = $profile;
-      return $this;
+        $this->profile = $profile;
+
+        return $this;
     }
 
     /**
@@ -230,17 +250,19 @@ class SignParameters
      */
     public function getQrCodeContent()
     {
-      return $this->qrCodeContent;
+        return $this->qrCodeContent;
     }
 
     /**
      * @param string $qrCodeContent
+     *
      * @return SignParameters
      */
     public function setQrCodeContent($qrCodeContent)
     {
-      $this->qrCodeContent = $qrCodeContent;
-      return $this;
+        $this->qrCodeContent = $qrCodeContent;
+
+        return $this;
     }
 
     /**
@@ -248,17 +270,18 @@ class SignParameters
      */
     public function getTransactionId()
     {
-      return $this->transactionId;
+        return $this->transactionId;
     }
 
     /**
      * @param string $transactionId
+     *
      * @return SignParameters
      */
     public function setTransactionId($transactionId)
     {
-      $this->transactionId = $transactionId;
-      return $this;
-    }
+        $this->transactionId = $transactionId;
 
+        return $this;
+    }
 }

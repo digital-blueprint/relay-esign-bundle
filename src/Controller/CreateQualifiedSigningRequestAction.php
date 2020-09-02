@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DBP\API\ESignBundle\Controller;
 
+use DBP\API\CoreBundle\Exception\ApiError;
 use DBP\API\ESignBundle\Entity\QualifiedSigningRequest;
 use DBP\API\ESignBundle\Service\PdfAsApi;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,8 +26,6 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
     }
 
     /**
-     * @param Request $request
-     * @return QualifiedSigningRequest
      * @throws HttpException
      */
     public function __invoke(Request $request): QualifiedSigningRequest
@@ -45,18 +46,18 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
         }
 
         // check if file is a pdf
-        if ($uploadedFile->getMimeType() != "application/pdf") {
+        if ($uploadedFile->getMimeType() !== 'application/pdf') {
             throw new UnsupportedMediaTypeHttpException('Only PDF files can be signed!');
         }
 
         // check if file is empty
-        if ($uploadedFile->getSize() == 0) {
+        if ($uploadedFile->getSize() === 0) {
             throw new BadRequestHttpException('Empty files cannot be signed!');
         }
 
         // check if file is too large
         if ($uploadedFile->getSize() > 33554432) {
-            throw new HttpException(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'PDF file too large to sign (32MB limit)!');
+            throw new APIError(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'PDF file too large to sign (32MB limit)!');
         }
 
         // generate a request id for the signing process
@@ -64,25 +65,25 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
 
         $positionData = [];
 
-        if ($request->query->has("x")) {
-            $positionData["x"] = (int) round($request->query->get("x"));
+        if ($request->query->has('x')) {
+            $positionData['x'] = (int) round((float) $request->query->get('x'));
         }
 
-        if ($request->query->has("y")) {
-            $positionData["y"] = (int) round($request->query->get("y"));
+        if ($request->query->has('y')) {
+            $positionData['y'] = (int) round((float) $request->query->get('y'));
         }
 
         // there only is "w", no "h" allowed in PDF-AS
-        if ($request->query->has("w")) {
-            $positionData["w"] = (int) round($request->query->get("w"));
+        if ($request->query->has('w')) {
+            $positionData['w'] = (int) round((float) $request->query->get('w'));
         }
 
-        if ($request->query->has("r")) {
-            $positionData["r"] = (int) round($request->query->get("r"));
+        if ($request->query->has('r')) {
+            $positionData['r'] = (int) round((float) $request->query->get('r'));
         }
 
-        if ($request->query->has("p")) {
-            $positionData["p"] = (int) $request->query->get("p");
+        if ($request->query->has('p')) {
+            $positionData['p'] = (int) $request->query->get('p');
         }
 
         // create redirect url for signing request
@@ -90,15 +91,13 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
             file_get_contents($uploadedFile->getPathname()), $requestId, $positionData);
 
         // we cannot throw exceptions in the service, so we will do it this way
-        if ($this->api->hasLastError())
-        {
-            switch ($this->api->lastErrorStatusCode())
-            {
+        if ($this->api->hasLastError()) {
+            switch ($this->api->lastErrorStatusCode()) {
                 case 503:
                     throw new ServiceUnavailableHttpException(100, $this->api->lastErrorMessage());
                     break;
                 default:
-                    throw new HttpException(Response::HTTP_FAILED_DEPENDENCY, $this->api->lastErrorMessage());
+                    throw new ApiError(Response::HTTP_BAD_GATEWAY, $this->api->lastErrorMessage());
             }
         }
 

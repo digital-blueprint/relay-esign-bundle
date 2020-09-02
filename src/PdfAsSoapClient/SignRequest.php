@@ -1,40 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DBP\API\ESignBundle\PdfAsSoapClient;
 
 class SignRequest
 {
-
     /**
-     * @var string $inputData
+     * @var string
      */
     protected $inputData = null;
 
     /**
-     * @var SignParameters $parameters
+     * @var SignParameters
      */
     protected $parameters = null;
 
     /**
-     * @var string $requestID
+     * @var string
      */
     protected $requestID = null;
 
     /**
-     * @var VerificationLevel $verificationLevel
+     * @var VerificationLevel
      */
     protected $verificationLevel = null;
 
     /**
-     * @param string $inputData
+     * @param string         $inputData
      * @param SignParameters $parameters
-     * @param string $requestID
+     * @param string         $requestID
      */
     public function __construct($inputData, $parameters, $requestID)
     {
-      $this->inputData = $inputData;
-      $this->parameters = $parameters;
-      $this->requestID = $requestID;
+        $this->inputData = $inputData;
+        $this->parameters = $parameters;
+        $this->requestID = $requestID;
     }
 
     /**
@@ -42,17 +43,19 @@ class SignRequest
      */
     public function getInputData()
     {
-      return $this->inputData;
+        return $this->inputData;
     }
 
     /**
      * @param string $inputData
+     *
      * @return SignRequest
      */
     public function setInputData($inputData)
     {
-      $this->inputData = $inputData;
-      return $this;
+        $this->inputData = $inputData;
+
+        return $this;
     }
 
     /**
@@ -60,17 +63,19 @@ class SignRequest
      */
     public function getParameters()
     {
-      return $this->parameters;
+        return $this->parameters;
     }
 
     /**
      * @param SignParameters $parameters
+     *
      * @return SignRequest
      */
     public function setParameters($parameters)
     {
-      $this->parameters = $parameters;
-      return $this;
+        $this->parameters = $parameters;
+
+        return $this;
     }
 
     /**
@@ -78,17 +83,19 @@ class SignRequest
      */
     public function getRequestID()
     {
-      return $this->requestID;
+        return $this->requestID;
     }
 
     /**
      * @param string $requestID
+     *
      * @return SignRequest
      */
     public function setRequestID($requestID)
     {
-      $this->requestID = $requestID;
-      return $this;
+        $this->requestID = $requestID;
+
+        return $this;
     }
 
     /**
@@ -96,17 +103,18 @@ class SignRequest
      */
     public function getVerificationLevel()
     {
-      return $this->verificationLevel;
+        return $this->verificationLevel;
     }
 
     /**
      * @param VerificationLevel $verificationLevel
+     *
      * @return SignRequest
      */
     public function setVerificationLevel($verificationLevel)
     {
-      $this->verificationLevel = $verificationLevel;
-      return $this;
-    }
+        $this->verificationLevel = $verificationLevel;
 
+        return $this;
+    }
 }

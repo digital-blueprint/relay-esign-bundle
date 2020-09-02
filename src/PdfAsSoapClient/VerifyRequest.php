@@ -1,31 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DBP\API\ESignBundle\PdfAsSoapClient;
 
 class VerifyRequest
 {
     /**
-     * @var string $inputData
+     * @var string
      */
     protected $inputData = null;
 
     /**
-     * @var PropertyMap $preprocessorArguments
+     * @var PropertyMap
      */
     protected $preprocessorArguments = null;
 
     /**
-     * @var string $requestID
+     * @var string
      */
     protected $requestID = null;
 
     /**
-     * @var int $signatureIndex
+     * @var int
      */
     protected $signatureIndex = null;
 
     /**
-     * @var VerificationLevel $verificationLevel
+     * @var VerificationLevel
      */
     protected $verificationLevel = null;
 
@@ -35,8 +37,8 @@ class VerifyRequest
      */
     public function __construct($inputData, $requestID)
     {
-      $this->inputData = $inputData;
-      $this->requestID = $requestID;
+        $this->inputData = $inputData;
+        $this->requestID = $requestID;
     }
 
     /**
@@ -44,17 +46,19 @@ class VerifyRequest
      */
     public function getInputData()
     {
-      return $this->inputData;
+        return $this->inputData;
     }
 
     /**
      * @param string $inputData
+     *
      * @return VerifyRequest
      */
     public function setInputData($inputData)
     {
-      $this->inputData = $inputData;
-      return $this;
+        $this->inputData = $inputData;
+
+        return $this;
     }
 
     /**
@@ -62,17 +66,19 @@ class VerifyRequest
      */
     public function getPreprocessorArguments()
     {
-      return $this->preprocessorArguments;
+        return $this->preprocessorArguments;
     }
 
     /**
      * @param PropertyMap $preprocessorArguments
+     *
      * @return VerifyRequest
      */
     public function setPreprocessorArguments($preprocessorArguments)
     {
-      $this->preprocessorArguments = $preprocessorArguments;
-      return $this;
+        $this->preprocessorArguments = $preprocessorArguments;
+
+        return $this;
     }
 
     /**
@@ -80,17 +86,19 @@ class VerifyRequest
      */
     public function getRequestID()
     {
-      return $this->requestID;
+        return $this->requestID;
     }
 
     /**
      * @param string $requestID
+     *
      * @return VerifyRequest
      */
     public function setRequestID($requestID)
     {
-      $this->requestID = $requestID;
-      return $this;
+        $this->requestID = $requestID;
+
+        return $this;
     }
 
     /**
@@ -98,17 +106,19 @@ class VerifyRequest
      */
     public function getSignatureIndex()
     {
-      return $this->signatureIndex;
+        return $this->signatureIndex;
     }
 
     /**
      * @param int $signatureIndex
+     *
      * @return VerifyRequest
      */
     public function setSignatureIndex($signatureIndex)
     {
-      $this->signatureIndex = $signatureIndex;
-      return $this;
+        $this->signatureIndex = $signatureIndex;
+
+        return $this;
     }
 
     /**
@@ -116,17 +126,18 @@ class VerifyRequest
      */
     public function getVerificationLevel()
     {
-      return $this->verificationLevel;
+        return $this->verificationLevel;
     }
 
     /**
      * @param VerificationLevel $verificationLevel
+     *
      * @return VerifyRequest
      */
     public function setVerificationLevel($verificationLevel)
     {
-      $this->verificationLevel = $verificationLevel;
-      return $this;
-    }
+        $this->verificationLevel = $verificationLevel;
 
+        return $this;
+    }
 }

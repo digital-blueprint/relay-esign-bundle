@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DBP\API\ESignBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
+use DBP\API\ESignBundle\Controller\CreateOfficiallySignedDocumentAction;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
-use DBP\API\ESignBundle\Controller\CreateOfficiallySignedDocumentAction;
 
 /**
- * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD
+ * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD.
  *
  * @ApiResource(
  *     attributes={"security"="is_granted('ROLE_SCOPE_OFFICIAL-SIGNATURE')"},
@@ -47,7 +49,7 @@ use DBP\API\ESignBundle\Controller\CreateOfficiallySignedDocumentAction;
  *                     "415"={
  *                         "description"="Unsupported Media Type - Only PDF files can be signed!"
  *                     },
- *                     "424"={
+ *                     "502"={
  *                         "description"="PDF-AS error"
  *                     },
  *                     "503"={
@@ -75,6 +77,7 @@ class OfficiallySignedDocument
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
      * @Groups({"OfficiallySignedDocument:output"})
+     *
      * @var string
      */
     private $contentUrl;
@@ -82,6 +85,7 @@ class OfficiallySignedDocument
     /**
      * @ApiProperty(iri="http://schema.org/name")
      * @Groups({"OfficiallySignedDocument:output"})
+     *
      * @var string
      */
     private $name;
@@ -89,7 +93,8 @@ class OfficiallySignedDocument
     /**
      * @ApiProperty(iri="https://schema.org/contentSize")
      * @Groups({"OfficiallySignedDocument:output"})
-     * @var integer
+     *
+     * @var int
      */
     private $contentSize;
 

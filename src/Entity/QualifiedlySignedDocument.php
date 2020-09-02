@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DBP\API\ESignBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
@@ -8,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD
+ * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD.
  *
  * @ApiResource(
  *     attributes={"security"="is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"},
@@ -21,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                    {"name"="fileName", "in"="query", "description"="File name of the original file", "required"="false", "type"="string", "example"="my-document.pdf"}
  *                 },
  *                 "add_responses"={
- *                     "424"={
+ *                     "502"={
  *                         "description"="PDF-AS error"
  *                     },
  *                     "503"={
@@ -48,6 +50,7 @@ class QualifiedlySignedDocument
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
      * @Groups({"QualifiedlySignedDocument:output"})
+     *
      * @var string
      */
     private $contentUrl;
@@ -55,6 +58,7 @@ class QualifiedlySignedDocument
     /**
      * @ApiProperty(iri="http://schema.org/name")
      * @Groups({"QualifiedlySignedDocument:output"})
+     *
      * @var string
      */
     private $name;
@@ -62,7 +66,8 @@ class QualifiedlySignedDocument
     /**
      * @ApiProperty(iri="https://schema.org/contentSize")
      * @Groups({"QualifiedlySignedDocument:output"})
-     * @var integer
+     *
+     * @var int
      */
     private $contentSize;
 

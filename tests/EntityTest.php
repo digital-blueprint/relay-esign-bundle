@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DBP\API\ESignBundle\Tests;
 
 use DBP\API\ESignBundle\Entity\ElectronicSignature;
@@ -8,7 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class EntityTest extends WebTestCase
 {
-    public function testAll() {
+    public function testAll()
+    {
         $sig = new ElectronicSignature();
         $this->assertNotNull($sig);
 
