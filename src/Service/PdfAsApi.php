@@ -234,13 +234,12 @@ class PdfAsApi implements SignatureProviderInterface
     }
 
     /**
-     * @param string $requestId
-     * @return string
      * @throws UriException
      */
     protected function getQualifiedlySignedDocumentUrl(string $requestId): string
     {
         $uriTemplate = new UriTemplate('/PDFData;jsessionid={requestId}');
+
         return $this->qualifiedUrl.$uriTemplate->expand([
             'requestId' => $requestId,
         ]);
