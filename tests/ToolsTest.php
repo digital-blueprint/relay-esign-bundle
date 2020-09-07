@@ -21,4 +21,23 @@ class ToolsTest extends TestCase
         $this->assertEquals('https://tugraz.at:443/static/error.html',
             Tools::getUriWithPort('https://tugraz.at/static/error.html'));
     }
+
+    public function testGetDataURI()
+    {
+        $this->assertSame('data:text/plain;base64,Zm9vYmFy', Tools::getDataURI('foobar', 'text/plain'));
+    }
+
+    public function testGenerateRequestId()
+    {
+        $this->assertNotSame(Tools::generateRequestId(), Tools::generateRequestId());
+    }
+
+    public function testGenerateSignedFileName()
+    {
+        $this->assertSame('foo.sig.txt', Tools::generateSignedFileName('foo.txt'));
+        $this->assertSame('.sig.git', Tools::generateSignedFileName('.git'));
+        $this->assertSame('.sig.sig', Tools::generateSignedFileName('.sig'));
+        $this->assertSame('.sig', Tools::generateSignedFileName(''));
+        $this->assertSame('foo.tar.sig.gz', Tools::generateSignedFileName('foo.tar.gz'));
+    }
 }

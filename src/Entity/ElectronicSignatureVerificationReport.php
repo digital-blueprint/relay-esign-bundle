@@ -55,7 +55,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={"get"},
  *     iri="https://schema.tugraz.at/ElectronicSignatureVerificationReport",
- *     description="Officially signed PDF document",
  *     normalizationContext={"jsonld_embed_context"=true, "groups"={"ElectronicSignature:output"}}
  * )
  */

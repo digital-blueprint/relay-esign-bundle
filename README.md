@@ -2,7 +2,7 @@
 
 This Symfony 4.4 bundle provides API endpoints for
 
-- official electronic signature
+- advanced electronic signature
 - qualified electronic signature
 - signature verification
 

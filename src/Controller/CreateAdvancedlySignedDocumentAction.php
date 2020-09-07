@@ -5,32 +5,61 @@ declare(strict_types=1);
 namespace DBP\API\ESignBundle\Controller;
 
 use DBP\API\CoreBundle\Exception\ApiError;
-use DBP\API\ESignBundle\Entity\OfficiallySignedDocument;
-use DBP\API\ESignBundle\Service\PdfAsApi;
+use DBP\API\ESignBundle\Entity\AdvancedlySignedDocument;
+use DBP\API\ESignBundle\Helpers\Tools;
+use DBP\API\ESignBundle\Service\SignatureProviderInterface;
+use DBP\API\ESignBundle\Service\SigningException;
+use DBP\API\ESignBundle\Service\SigningUnavailableException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
-final class CreateOfficiallySignedDocumentAction extends AbstractController
+final class CreateAdvancedlySignedDocumentAction extends AbstractController
 {
     protected $api;
+    protected $config;
 
-    public function __construct(PdfAsApi $api)
+    public function __construct(ContainerInterface $container, SignatureProviderInterface $api)
     {
+        $this->config = $container->getParameter('dbp_api.esign.config');
         $this->api = $api;
+    }
+
+    public function checkProfilePermissions(string $profileName)
+    {
+        $advancedProfiles = $this->config['advanced_profiles'] ?? [];
+        foreach ($advancedProfiles as $profile) {
+            if ($profile['name'] === $profileName) {
+                if (!isset($profile['role'])) {
+                    throw new \RuntimeException('No role set');
+                }
+                $role = $profile['role'];
+                $this->denyAccessUnlessGranted($role);
+
+                return;
+            }
+        }
+        throw new AccessDeniedHttpException('unknown profile');
     }
 
     /**
      * @throws HttpException
      */
-    public function __invoke(Request $request): OfficiallySignedDocument
+    public function __invoke(Request $request): AdvancedlySignedDocument
     {
-        $this->denyAccessUnlessGranted('ROLE_SCOPE_OFFICIAL-SIGNATURE');
+        $profileName = $request->query->get('profile');
+        if ($profileName === null) {
+            throw new BadRequestHttpException('Missing "profile"');
+        }
+
+        $this->checkProfilePermissions($profileName);
 
         /** @var UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');
@@ -58,7 +87,7 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
         }
 
         // generate a request id for the signing process
-        $requestId = $this->api->generateRequestId();
+        $requestId = Tools::generateRequestId();
 
         $positionData = [];
 
@@ -84,19 +113,13 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
         }
 
         // sign the pdf data
-        // Throwing exceptions in officiallySignPdfData causes an exception
-        $signedPdfData = $this->api->officiallySignPdfData(
-            file_get_contents($uploadedFile->getPathname()), $requestId, $positionData);
-
-        // we cannot throw exceptions in the service, so we will do it this way
-        if ($this->api->hasLastError()) {
-            switch ($this->api->lastErrorStatusCode()) {
-                case 503:
-                    throw new ServiceUnavailableHttpException(100, $this->api->lastErrorMessage());
-                    break;
-                default:
-                    throw new ApiError(Response::HTTP_BAD_GATEWAY, $this->api->lastErrorMessage());
-            }
+        try {
+            $signedPdfData = $this->api->advancedlySignPdfData(
+                file_get_contents($uploadedFile->getPathname()), $profileName, $requestId, $positionData);
+        } catch (SigningUnavailableException $e) {
+            throw new ServiceUnavailableHttpException(100, $e->getMessage());
+        } catch (SigningException $e) {
+            throw new ApiError(Response::HTTP_BAD_GATEWAY, $e->getMessage());
         }
 
         // we cannot actually return a new file because our tmpfile would be gone when its content is converted to an uri string
@@ -113,11 +136,11 @@ final class CreateOfficiallySignedDocumentAction extends AbstractController
         file_put_contents($uploadedFile->getPathname(), $signedPdfData);
 
         // add some suffix for signed documents
-        $signedFileName = $this->api->generateSignedFileName($uploadedFile->getClientOriginalName());
+        $signedFileName = Tools::generateSignedFileName($uploadedFile->getClientOriginalName());
 
-        $document = new OfficiallySignedDocument();
+        $document = new AdvancedlySignedDocument();
         $document->setIdentifier($requestId);
-        $document->setContentUrl(PdfAsApi::getDataURI($signedPdfData));
+        $document->setContentUrl(Tools::getDataURI($signedPdfData, 'application/pdf'));
         $document->setName($signedFileName);
         $document->setContentSize(strlen($signedPdfData));
 

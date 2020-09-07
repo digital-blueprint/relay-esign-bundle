@@ -17,9 +17,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     attributes={"security"="is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"},
  *     collectionOperations={
  *         "get",
- *         "create"={
+ *         "post"={
  *             "method"="POST",
- *             "path"="/qualified_signing_requests/create",
+ *             "path"="/qualified_signing_requests",
  *             "controller"=CreateQualifiedSigningRequestAction::class,
  *             "deserialize"=false,
  *             "openapi_context"={

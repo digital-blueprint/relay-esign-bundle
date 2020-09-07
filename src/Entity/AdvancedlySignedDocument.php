@@ -6,29 +6,29 @@ namespace DBP\API\ESignBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use DBP\API\ESignBundle\Controller\CreateOfficiallySignedDocumentAction;
-use Symfony\Component\HttpFoundation\File\File;
+use DBP\API\ESignBundle\Controller\CreateAdvancedlySignedDocumentAction;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD.
  *
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_SCOPE_OFFICIAL-SIGNATURE')"},
+
  *     collectionOperations={
  *         "get",
- *         "sign"={
+ *         "post"={
  *             "method"="POST",
- *             "path"="/officially_signed_documents/sign",
- *             "controller"=CreateOfficiallySignedDocumentAction::class,
+ *             "path"="/advancedly_signed_documents",
+ *             "controller"=CreateAdvancedlySignedDocumentAction::class,
  *             "deserialize"=false,
  *             "openapi_context"={
  *                 "parameters"={
- *                    {"name"="x", "in"="path", "description"="Position of the signature from the left", "type"="number", "example"="100"},
- *                    {"name"="y", "in"="path", "description"="Position of the signature from the bottom", "type"="number", "example"="100"},
- *                    {"name"="r", "in"="path", "description"="Rotation of the signature counterclockwise", "type"="number", "example"="90"},
- *                    {"name"="w", "in"="path", "description"="Width of the signature", "type"="number", "example"="240"},
- *                    {"name"="p", "in"="path", "description"="Page number the signature should be placed", "type"="number", "example"="2"}
+ *                    {"name"="profile", "in"="query", "description"="Name of the signature profile", "type"="string", "example"="official", "required"="1"},
+ *                    {"name"="x", "in"="query", "description"="Position of the signature from the left", "type"="number", "example"="100"},
+ *                    {"name"="y", "in"="query", "description"="Position of the signature from the bottom", "type"="number", "example"="100"},
+ *                    {"name"="r", "in"="query", "description"="Rotation of the signature counterclockwise", "type"="number", "example"="90"},
+ *                    {"name"="w", "in"="query", "description"="Width of the signature", "type"="number", "example"="240"},
+ *                    {"name"="p", "in"="query", "description"="Page number the signature should be placed", "type"="number", "example"="2"}
  *                 },
  *                 "requestBody"={
  *                     "content"={
@@ -61,14 +61,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={"get"},
  *     iri="http://schema.org/MediaObject",
- *     description="Officially signed PDF document",
- *     normalizationContext={"jsonld_embed_context"=true, "groups"={"OfficiallySignedDocument:output"}}
+ *     description="Advanced signed PDF document",
+ *     normalizationContext={"jsonld_embed_context"=true, "groups"={"AdvancedlySignedDocument:read"}}
  * )
  */
-class OfficiallySignedDocument
+class AdvancedlySignedDocument
 {
     /**
-     * @Groups({"OfficiallySignedDocument:output"})
+     * @Groups({"AdvancedlySignedDocument:read"})
      * @ApiProperty(identifier=true,iri="https://schema.org/identifier")
      * Note: Every entity needs an identifier!
      */
@@ -76,7 +76,7 @@ class OfficiallySignedDocument
 
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"OfficiallySignedDocument:output"})
+     * @Groups({"AdvancedlySignedDocument:read"})
      *
      * @var string
      */
@@ -84,7 +84,7 @@ class OfficiallySignedDocument
 
     /**
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"OfficiallySignedDocument:output"})
+     * @Groups({"AdvancedlySignedDocument:read"})
      *
      * @var string
      */
@@ -92,7 +92,7 @@ class OfficiallySignedDocument
 
     /**
      * @ApiProperty(iri="https://schema.org/contentSize")
-     * @Groups({"OfficiallySignedDocument:output"})
+     * @Groups({"AdvancedlySignedDocument:read"})
      *
      * @var int
      */

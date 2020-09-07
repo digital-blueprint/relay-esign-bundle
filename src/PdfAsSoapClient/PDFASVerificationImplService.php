@@ -18,17 +18,22 @@ class PDFASVerificationImplService extends PDFASBaseService
     ];
 
     /**
-     * @param string $location The service location
+     * @param string $location           The service location
+     * @param int    $connection_timeout Connection timeout in seconds
      *
      * @throws \SoapFault
      */
-    public function __construct(string $location)
+    public function __construct(string $location, int $connection_timeout = -1)
     {
         $options = [];
         foreach (self::$classmap as $key => $value) {
             if (!isset($options['classmap'][$key])) {
                 $options['classmap'][$key] = $value;
             }
+        }
+
+        if ($connection_timeout >= 0) {
+            $options['connection_timeout'] = $connection_timeout;
         }
 
         $wsdl_path = dirname(__FILE__).DIRECTORY_SEPARATOR.'wsdl.verify.xml';
@@ -45,10 +50,12 @@ class PDFASVerificationImplService extends PDFASBaseService
     /**
      * @throws \SoapFault
      *
+     * @param int $timeout Timeout in seconds
+     *
      * @return VerifyResponse
      */
-    public function verify(VerifyRequest $verifyRequest)
+    public function verify(VerifyRequest $verifyRequest, int $timeout = -1)
     {
-        return $this->__soapCall('verify', [$verifyRequest]);
+        return $this->callWithTimeout('verify', [$verifyRequest], $timeout);
     }
 }

@@ -6,16 +6,19 @@
         "php": "^7.2.24",
         "ext-soap": "*",
         "api-platform/core": "^2.4",
-        "symfony/framework-bundle": "^4.1.12",
-        "myclabs/php-enum": "^1.7",
+        "dbp/api-core-bundle": "@dev",
         "guzzlehttp/guzzle": "^6.0",
-        "dbp/api-core-bundle": "@dev"
+        "league/uri": "^6.3",
+        "myclabs/php-enum": "^1.7",
+        "symfony/framework-bundle": "^4.1.12"
     },
     "require-dev": {
         "composer/semver": "^1.5",
         "friendsofphp/php-cs-fixer": "^2.16",
         "phpstan/phpstan": "^0.12.33",
         "phpstan/phpstan-phpunit": "^0.12.13",
+        "symfony/browser-kit": "^4.4",
+        "symfony/http-client": "^4.4",
         "symfony/phpunit-bridge": "^4.4",
         "vimeo/psalm": "^3.12"
     },

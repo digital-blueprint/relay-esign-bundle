@@ -6,7 +6,10 @@ namespace DBP\API\ESignBundle\Controller;
 
 use DBP\API\CoreBundle\Exception\ApiError;
 use DBP\API\ESignBundle\Entity\QualifiedSigningRequest;
-use DBP\API\ESignBundle\Service\PdfAsApi;
+use DBP\API\ESignBundle\Helpers\Tools;
+use DBP\API\ESignBundle\Service\SignatureProviderInterface;
+use DBP\API\ESignBundle\Service\SigningException;
+use DBP\API\ESignBundle\Service\SigningUnavailableException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +23,7 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
 {
     protected $api;
 
-    public function __construct(PdfAsApi $api)
+    public function __construct(SignatureProviderInterface $api)
     {
         $this->api = $api;
     }
@@ -61,7 +64,7 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
         }
 
         // generate a request id for the signing process
-        $requestId = $this->api->generateRequestId();
+        $requestId = Tools::generateRequestId();
 
         $positionData = [];
 
@@ -87,18 +90,13 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
         }
 
         // create redirect url for signing request
-        $url = $this->api->createQualifiedSigningRequestRedirectUrl(
-            file_get_contents($uploadedFile->getPathname()), $requestId, $positionData);
-
-        // we cannot throw exceptions in the service, so we will do it this way
-        if ($this->api->hasLastError()) {
-            switch ($this->api->lastErrorStatusCode()) {
-                case 503:
-                    throw new ServiceUnavailableHttpException(100, $this->api->lastErrorMessage());
-                    break;
-                default:
-                    throw new ApiError(Response::HTTP_BAD_GATEWAY, $this->api->lastErrorMessage());
-            }
+        try {
+            $url = $this->api->createQualifiedSigningRequestRedirectUrl(
+                file_get_contents($uploadedFile->getPathname()), $requestId, $positionData);
+        } catch (SigningUnavailableException $e) {
+            throw new ServiceUnavailableHttpException(100, $e->getMessage());
+        } catch (SigningException $e) {
+            throw new ApiError(Response::HTTP_BAD_GATEWAY, $e->getMessage());
         }
 
         $request = new QualifiedSigningRequest();
