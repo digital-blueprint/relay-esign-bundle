@@ -62,13 +62,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={"get"},
  *     iri="http://schema.org/MediaObject",
  *     description="Advanced signed PDF document",
- *     normalizationContext={"jsonld_embed_context"=true, "groups"={"AdvancedlySignedDocument:read"}}
+ *     normalizationContext={"jsonld_embed_context"=true, "groups"={"AdvancedlySignedDocument:output"}}
  * )
  */
 class AdvancedlySignedDocument
 {
     /**
-     * @Groups({"AdvancedlySignedDocument:read"})
+     * @Groups({"AdvancedlySignedDocument:output"})
      * @ApiProperty(identifier=true,iri="https://schema.org/identifier")
      * Note: Every entity needs an identifier!
      */
@@ -76,7 +76,7 @@ class AdvancedlySignedDocument
 
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"AdvancedlySignedDocument:read"})
+     * @Groups({"AdvancedlySignedDocument:output"})
      *
      * @var string
      */
@@ -84,7 +84,7 @@ class AdvancedlySignedDocument
 
     /**
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"AdvancedlySignedDocument:read"})
+     * @Groups({"AdvancedlySignedDocument:output"})
      *
      * @var string
      */
@@ -92,7 +92,7 @@ class AdvancedlySignedDocument
 
     /**
      * @ApiProperty(iri="https://schema.org/contentSize")
-     * @Groups({"AdvancedlySignedDocument:read"})
+     * @Groups({"AdvancedlySignedDocument:output"})
      *
      * @var int
      */

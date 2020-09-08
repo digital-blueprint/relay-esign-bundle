@@ -55,13 +55,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={"get"},
  *     iri="https://schema.tugraz.at/ElectronicSignatureVerificationReport",
- *     normalizationContext={"jsonld_embed_context"=true, "groups"={"ElectronicSignature:output"}}
+ *     normalizationContext={"jsonld_embed_context"=true, "groups"={"ElectronicSignatureVerificationReport:output", "ElectronicSignature:output"}}
  * )
  */
 class ElectronicSignatureVerificationReport
 {
     /**
-     * @Groups({"ElectronicSignature:output"})
+     * @Groups({"ElectronicSignatureVerificationReport:output"})
      * @ApiProperty(identifier=true,iri="https://schema.org/identifier")
      * Note: Every entity needs an identifier!
      */
@@ -69,14 +69,14 @@ class ElectronicSignatureVerificationReport
 
     /**
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"ElectronicSignature:output"})
+     * @Groups({"ElectronicSignatureVerificationReport:output"})
      *
      * @var string
      */
     private $name;
 
     /**
-     * @Groups({"ElectronicSignature:output"})
+     * @Groups({"ElectronicSignatureVerificationReport:output"})
      *
      * @var ElectronicSignature[]
      */
