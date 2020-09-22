@@ -17,6 +17,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('qualified_url')->end()
                 ->scalarNode('qualified_static_url')->end()
+                ->scalarNode('qualified_profile_id')->end()
                 ->scalarNode('advanced_url')->end()
                 ->arrayNode('advanced_profiles')
                     ->arrayPrototype()

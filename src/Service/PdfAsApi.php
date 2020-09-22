@@ -35,6 +35,7 @@ class PdfAsApi implements SignatureProviderInterface
     private $qualifiedUrl;
     private $qualifiedStaticUrl;
     private $advancedProfiles;
+    private $qualifiedProfileId;
 
     public function __construct(ContainerInterface $container, AuditLogger $logger)
     {
@@ -44,6 +45,7 @@ class PdfAsApi implements SignatureProviderInterface
         $this->advancedUrl = $config['advanced_url'] ?? '';
         $this->qualifiedUrl = $config['qualified_url'] ?? '';
         $this->qualifiedStaticUrl = $config['qualified_static_url'] ?? '';
+        $this->qualifiedProfileId = $config['qualified_profile_id'] ?? '';
         $this->advancedProfiles = $config['advanced_profiles'] ?? [];
     }
 
@@ -63,6 +65,7 @@ class PdfAsApi implements SignatureProviderInterface
         }
 
         $params = new SignParameters(Connector::mobilebku());
+        $params->setProfile($this->qualifiedProfileId);
 
         $staticUri = $this->qualifiedStaticUrl;
         $params->setInvokeurl($staticUri.'/callback.html');
