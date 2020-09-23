@@ -3,7 +3,7 @@
     "type": "symfony-bundle",
     "license": "AGPL-3.0-or-later",
     "require": {
-        "php": "^7.2.24",
+        "php": "^7.3",
         "ext-soap": "*",
         "api-platform/core": "^2.4",
         "dbp/api-core-bundle": "@dev",
@@ -41,7 +41,7 @@
     "config": {
         "sort-packages": true,
         "platform": {
-          "php": "7.2.24"
+          "php": "7.3"
         }
     },
     "scripts": {
