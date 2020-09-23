@@ -54,7 +54,7 @@ final class CreateAdvancedlySignedDocumentAction extends AbstractController
      */
     public function __invoke(Request $request): AdvancedlySignedDocument
     {
-        $profileName = $request->query->get('profile');
+        $profileName = $request->get('profile');
         if ($profileName === null) {
             throw new BadRequestHttpException('Missing "profile"');
         }
@@ -91,25 +91,25 @@ final class CreateAdvancedlySignedDocumentAction extends AbstractController
 
         $positionData = [];
 
-        if ($request->query->has('x')) {
-            $positionData['x'] = (int) round((float) $request->query->get('x'));
+        if ($request->get('x', '') !== '') {
+            $positionData['x'] = (int) round((float) $request->get('x'));
         }
 
-        if ($request->query->has('y')) {
-            $positionData['y'] = (int) round((float) $request->query->get('y'));
+        if ($request->get('y', '') !== '') {
+            $positionData['y'] = (int) round((float) $request->get('y'));
         }
 
         // there only is "w", no "h" allowed in PDF-AS
-        if ($request->query->has('w')) {
-            $positionData['w'] = (int) round((float) $request->query->get('w'));
+        if ($request->get('w', '') !== '') {
+            $positionData['w'] = (int) round((float) $request->get('w'));
         }
 
-        if ($request->query->has('r')) {
-            $positionData['r'] = (int) round((float) $request->query->get('r'));
+        if ($request->get('r', '') !== '') {
+            $positionData['r'] = (int) round((float) $request->get('r'));
         }
 
-        if ($request->query->has('p')) {
-            $positionData['p'] = (int) $request->query->get('p');
+        if ($request->get('p', '') !== '') {
+            $positionData['p'] = (int) $request->get('p');
         }
 
         // sign the pdf data
