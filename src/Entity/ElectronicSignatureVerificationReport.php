@@ -17,9 +17,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     attributes={"security"="is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"},
  *     collectionOperations={
  *         "get",
- *         "sign"={
+ *         "post"={
  *             "method"="POST",
- *             "path"="/electronic_signature_verification_reports/create",
+ *             "path"="/electronic_signature_verification_reports",
  *             "controller"=CreateElectronicSignatureVerificationReportAction::class,
  *             "deserialize"=false,
  *             "openapi_context"={

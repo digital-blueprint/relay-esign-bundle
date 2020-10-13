@@ -21,13 +21,12 @@ class DbpEsignExtension extends ConfigurableExtension
             '/advancedly_signed_documents',
             '/qualified_signing_requests/{id}',
             '/qualified_signing_requests',
+            '/electronic_signature_verification_reports',
+            '/electronic_signature_verification_reports/{id}',
         ];
 
         if (($_ENV['PDF_AS_VERIFICATION_ENABLE'] ?? 'true') !== 'true') {
             $pathsToHide = array_merge($pathsToHide, [
-                '/electronic_signature_verification_reports',
-                '/electronic_signature_verification_reports/create',
-                '/electronic_signature_verification_reports/{id}',
                 '/electronic_signatures/{id}',
             ]);
         }

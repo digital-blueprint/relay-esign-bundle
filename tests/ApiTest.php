@@ -23,7 +23,7 @@ class ApiTest extends ApiTestCase
             ['GET', '/advancedly_signed_documents', 200],
             ['GET', '/advancedly_signed_documents/123', 404],
             ['GET', '/electronic_signature_verification_reports', 403],
-            ['POST', '/electronic_signature_verification_reports/create', 403],
+            ['POST', '/electronic_signature_verification_reports', 403],
             ['GET', '/electronic_signature_verification_reports/123', 404],
             ['GET', '/electronic_signatures/123', 404],
             ['POST', '/qualified_signing_requests', 403],
