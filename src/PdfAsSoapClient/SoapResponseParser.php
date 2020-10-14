@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace DBP\API\ESignBundle\PdfAsSoapClient;
 
-// https://www.w3.org/TR/soap12-mtom/
 // https://en.wikipedia.org/wiki/Message_Transmission_Optimization_Mechanism
+// https://www.w3.org/TR/SOAP-attachments/#RFC2557
+// https://www.ietf.org/rfc/rfc2045.txt
+
+use ZBateson\MailMimeParser\MailMimeParser;
 
 class SoapResponseParser
 {
@@ -19,8 +22,24 @@ class SoapResponseParser
      */
     public function parse(string $inputData): string
     {
-        $parts = $this->parseMultiPart($inputData);
+        $rootID = 'root.message@cxf.apache.org';
 
+        // First we try to create a valid mime multipart input and parse it
+        $inputData = $this->fixupHeader($inputData, $rootID);
+        $mailParser = new MailMimeParser();
+        $result = $mailParser->parse($inputData);
+        $parts = [];
+        foreach ($result->getChildParts() as $part) {
+            $parsed_part = [
+                'content-type' => $part->getContentType(),
+                'content-transfer-encoding' => $part->getContentTransferEncoding(),
+                'content-id' => $part->getContentId(),
+                'content' => $part->getBinaryContentStream()->getContents(),
+            ];
+            $parts[] = $parsed_part;
+        }
+
+        // Then we inject the attachments into the main XML response
         $byID = [];
         foreach ($parts as $part) {
             if (!array_key_exists('content-id', $part) || !array_key_exists('content', $part)) {
@@ -29,7 +48,6 @@ class SoapResponseParser
             $byID[$part['content-id']] = $part['content'];
         }
 
-        $rootID = '<root.message@cxf.apache.org>';
         if (!array_key_exists($rootID, $byID)) {
             throw new SoapResponseParserError('Missing root ID: '.$rootID);
         }
@@ -47,7 +65,7 @@ class SoapResponseParser
             if ($res === false || $res === 0) {
                 throw new SoapResponseParserError('Failed to find cid');
             }
-            $cid = '<'.$cid[1].'>';
+            $cid = $cid[1];
 
             if (!array_key_exists($cid, $byID)) {
                 throw new SoapResponseParserError('Missing ID: '.$cid);
@@ -62,82 +80,34 @@ class SoapResponseParser
     }
 
     /**
-     * Splits up the response into parts and parses them, returns a list of parsed parts.
+     * PHP doesn't give us the MIME header, so try to generate one.
+     *
+     * @throws SoapResponseParserError
      */
-    private function parseMultiPart(string $inputData): array
+    private function fixupHeader(string $inputData, string $startId): string
     {
-        $fp = fopen('php://memory', 'r+');
-        fputs($fp, $inputData);
-        rewind($fp);
+        $boundary = $this->findBoundary($inputData);
 
-        $parts = [];
-        $current = [];
-        $startBoundary = null;
-        $endBoundary = null;
-        while ($line = fgets($fp)) {
-            $stripped = rtrim($line);
-            if ($startBoundary === null) {
-                $startBoundary = $stripped;
-                $endBoundary = $startBoundary.'--';
-                continue;
-            }
+        $new = "MIME-Version: 1.0\r\n";
+        $new .= 'Content-Type: Multipart/Related; boundary='.$boundary.';type=text/xml;start="<'.$startId.">\"\r\n";
+        $new .= "\r\n";
+        $new .= $inputData;
 
-            if ($stripped === $startBoundary || $stripped === $endBoundary) {
-                $parts[] = $this->parsePart($current);
-                $current = [];
-            }
-
-            if ($stripped === $startBoundary) {
-                continue;
-            }
-
-            if ($stripped === $endBoundary) {
-                break;
-            }
-
-            $current[] = $line;
-        }
-        fclose($fp);
-
-        if (count($current)) {
-            throw new SoapResponseParserError('missing end boundary');
-        }
-
-        return $parts;
+        return $new;
     }
 
     /**
-     * Parses a part and returns an array with the headers and a special "content" key with the content.
+     * Try to figure out a boundary ID, or null if not found.
      *
-     * @param string[] $lines
+     * @throws SoapResponseParserError
      */
-    private function parsePart(array $lines): array
+    private function findBoundary(string $inputData): string
     {
-        $headers = [];
-        $body = '';
-        $inHeader = true;
-        foreach ($lines as $line) {
-            if ($inHeader && rtrim($line) === '') {
-                $inHeader = false;
-                continue;
-            }
-
-            if ($inHeader) {
-                $headerParts = explode(':', $line, 2);
-                if (count($headerParts) !== 2) {
-                    throw new SoapResponseParserError('Invalid header: '.$line);
-                }
-                [$key, $value] = $headerParts;
-                $value = trim($value);
-                $key = strtolower($key);
-                $headers[$key] = $value;
-            } else {
-                $body .= $line;
-            }
+        $sub = strstr($inputData, "\r\n", true);
+        if ($sub === false) {
+            throw new SoapResponseParserError('Failed to find boundary');
         }
 
-        $headers['content'] = $body;
-
-        return $headers;
+        return trim($sub, '-');
     }
 }

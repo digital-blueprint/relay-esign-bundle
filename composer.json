@@ -10,7 +10,8 @@
         "guzzlehttp/guzzle": "^6.0",
         "league/uri": "^6.3",
         "myclabs/php-enum": "^1.7",
-        "symfony/framework-bundle": "^4.1.12"
+        "symfony/framework-bundle": "^4.1.12",
+        "zbateson/mail-mime-parser": "^1.2"
     },
     "require-dev": {
         "composer/semver": "^1.5",

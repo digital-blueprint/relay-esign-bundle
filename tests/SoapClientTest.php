@@ -220,6 +220,7 @@ class SoapClientTest extends TestCase
         $response = $soapClientMock->signSingle($request);
         $pdf = $response->getSignedPDF();
         $this->assertEquals('%PDF-1.5', substr($pdf, 0, strlen('%PDF-1.5')));
+        $this->assertEquals("%EOF\n", substr($pdf, strlen($pdf) - 5));
     }
 
     public function testMTOMXMLParser()
