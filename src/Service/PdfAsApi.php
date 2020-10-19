@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace DBP\API\ESignBundle\Service;
 
-use DBP\API\CoreBundle\Service\AuditLogger;
+use DBP\API\CoreBundle\Service\DBPLogger;
 use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\PdfAsSoapClient\Connector;
 use DBP\API\ESignBundle\PdfAsSoapClient\PDFASSigningImplService;
@@ -37,7 +37,7 @@ class PdfAsApi implements SignatureProviderInterface
     private $advancedProfiles;
     private $qualifiedProfileId;
 
-    public function __construct(ContainerInterface $container, AuditLogger $logger)
+    public function __construct(ContainerInterface $container, DBPLogger $logger)
     {
         $this->logger = $logger;
 
@@ -229,11 +229,12 @@ class PdfAsApi implements SignatureProviderInterface
     }
 
     /**
-     * @param mixed $data
+     * @param mixed[] $context
      */
-    private function log(string $message, $data = null)
+    private function log(string $message, array $context = [])
     {
-        $this->logger->log('PdfAs', $message, $data);
+        $context['service'] = 'PdfAs';
+        $this->logger->notice('[{service}] '. $message, $context);
     }
 
     /**
