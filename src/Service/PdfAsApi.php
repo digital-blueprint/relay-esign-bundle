@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace DBP\API\ESignBundle\Service;
 
-use DBP\API\CoreBundle\Service\DBPLogger;
 use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\PdfAsSoapClient\Connector;
 use DBP\API\ESignBundle\PdfAsSoapClient\PDFASSigningImplService;
@@ -22,6 +21,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use League\Uri\Contracts\UriException;
 use League\Uri\UriTemplate;
+use Psr\Log\LoggerInterface;
 use SoapFault;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -37,7 +37,7 @@ class PdfAsApi implements SignatureProviderInterface
     private $advancedProfiles;
     private $qualifiedProfileId;
 
-    public function __construct(ContainerInterface $container, DBPLogger $logger)
+    public function __construct(ContainerInterface $container, LoggerInterface $logger)
     {
         $this->logger = $logger;
 
