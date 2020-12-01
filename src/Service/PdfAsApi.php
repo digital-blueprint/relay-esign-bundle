@@ -234,7 +234,7 @@ class PdfAsApi implements SignatureProviderInterface
     private function log(string $message, array $context = [])
     {
         $context['service'] = 'PdfAs';
-        $this->logger->notice('[{service}] '. $message, $context);
+        $this->logger->notice('[{service}] '.$message, $context);
     }
 
     /**

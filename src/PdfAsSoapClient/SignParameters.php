@@ -54,9 +54,9 @@ class SignParameters
     {
         $this->connector = $connector;
 
-        $this->{'invoke-error-url'} = null;
-        $this->{'invoke-target'} = null;
-        $this->{'invoke-url'} = null;
+        $this->{'invoke-error-url'} = null; // @phpstan-ignore-line
+        $this->{'invoke-target'} = null;  // @phpstan-ignore-line
+        $this->{'invoke-url'} = null;  // @phpstan-ignore-line
     }
 
     /**
@@ -85,7 +85,7 @@ class SignParameters
      */
     public function getInvokeerrorurl()
     {
-        return $this->{'invoke-error-url'};
+        return $this->{'invoke-error-url'};  // @phpstan-ignore-line
     }
 
     /**
@@ -96,7 +96,7 @@ class SignParameters
      */
     public function setInvokeerrorurl($invokeerrorurl)
     {
-        $this->{'invoke-error-url'} = $invokeerrorurl;
+        $this->{'invoke-error-url'} = $invokeerrorurl;  // @phpstan-ignore-line
 
         return $this;
     }
@@ -107,7 +107,7 @@ class SignParameters
      */
     public function getInvoketarget()
     {
-        return $this->{'invoke-target'};
+        return $this->{'invoke-target'};  // @phpstan-ignore-line
     }
 
     /**
@@ -118,7 +118,7 @@ class SignParameters
      */
     public function setInvoketarget($invoketarget)
     {
-        $this->{'invoke-target'} = $invoketarget;
+        $this->{'invoke-target'} = $invoketarget;  // @phpstan-ignore-line
 
         return $this;
     }
@@ -129,7 +129,7 @@ class SignParameters
      */
     public function getInvokeurl()
     {
-        return $this->{'invoke-url'};
+        return $this->{'invoke-url'};  // @phpstan-ignore-line
     }
 
     /**
@@ -140,7 +140,7 @@ class SignParameters
      */
     public function setInvokeurl($invokeurl)
     {
-        $this->{'invoke-url'} = $invokeurl;
+        $this->{'invoke-url'} = $invokeurl;  // @phpstan-ignore-line
 
         return $this;
     }
