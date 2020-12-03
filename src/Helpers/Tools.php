@@ -31,7 +31,7 @@ class Tools
             throw new \RuntimeException('preg failed');
         }
 
-        return (string) $result;
+        return $result;
     }
 
     /**

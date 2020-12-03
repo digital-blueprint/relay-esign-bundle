@@ -14,7 +14,6 @@
         "zbateson/mail-mime-parser": "^1.2"
     },
     "require-dev": {
-        "composer/semver": "^1.5",
         "friendsofphp/php-cs-fixer": "^2.16",
         "phpstan/phpstan": "^0.12.33",
         "phpstan/phpstan-phpunit": "^0.12.13",
