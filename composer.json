@@ -11,6 +11,7 @@
         "league/uri": "^6.3",
         "myclabs/php-enum": "^1.7",
         "symfony/framework-bundle": "^4.1.12",
+        "symfony/polyfill-php80": "^1.20",
         "zbateson/mail-mime-parser": "^1.2"
     },
     "require-dev": {
