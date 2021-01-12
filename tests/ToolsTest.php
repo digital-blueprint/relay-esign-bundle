@@ -34,10 +34,14 @@ class ToolsTest extends TestCase
 
     public function testGenerateSignedFileName()
     {
-        $this->assertSame('foo.sig.txt', Tools::generateSignedFileName('foo.txt'));
-        $this->assertSame('.sig.git', Tools::generateSignedFileName('.git'));
-        $this->assertSame('.sig.sig', Tools::generateSignedFileName('.sig'));
-        $this->assertSame('.sig', Tools::generateSignedFileName(''));
-        $this->assertSame('foo.tar.sig.gz', Tools::generateSignedFileName('foo.tar.gz'));
+        $this->assertSame('foo-sig.pdf', Tools::generateSignedFileName('foo.pdf'));
+        $this->assertSame('-sig.pdf', Tools::generateSignedFileName('.pdf'));
+        $this->assertSame('-sig.pdf', Tools::generateSignedFileName('-sig.pdf'));
+        $this->assertSame('-sig', Tools::generateSignedFileName(''));
+        $this->assertSame('foo-sig.tar.gz', Tools::generateSignedFileName('foo.tar.gz'));
+
+        // we used to add ".sig", convert it to the new format
+        $this->assertSame('foo-sig.pdf', Tools::generateSignedFileName('foo.sig.pdf'));
+        $this->assertSame('foo-sig.sig', Tools::generateSignedFileName('foo.sig'));
     }
 }

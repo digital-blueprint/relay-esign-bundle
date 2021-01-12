@@ -49,10 +49,19 @@ class Tools
 
     public static function generateSignedFileName(string $fileName): string
     {
-        $pathInfo = pathinfo($fileName);
-        $ext = isset($pathInfo['extension']) ? '.'.$pathInfo['extension'] : '';
+        $parts = explode('.', $fileName, 2);
+        if (count($parts) < 2) {
+            [$name, $ext] = [$parts[0], ''];
+        } else {
+            [$name, $ext] = [$parts[0], '.'.$parts[1]];
+        }
 
-        // squash .sig extension
-        return str_replace('.sig', '', $pathInfo['filename']).'.sig'.$ext;
+        if (str_ends_with($name, '-sig')) {
+            return $name.$ext;
+        } elseif (str_starts_with($ext, '.sig.')) {
+            return $name.'-sig'.substr($ext, 4);
+        } else {
+            return $name.'-sig'.$ext;
+        }
     }
 }
