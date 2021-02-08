@@ -19,8 +19,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *         "get"={
  *             "openapi_context"={
  *                 "parameters"={
- *                    {"name"="id", "in"="path", "description"="Id of document to fetch", "required"="true", "type"="string", "example"="28DbA8052CE1410AF5985E"},
- *                    {"name"="fileName", "in"="query", "description"="File name of the original file", "required"="false", "type"="string", "example"="my-document.pdf"}
+ *                    {"name"="id", "in"="path", "description"="Id of document to fetch", "required"=true, "type"="string", "example"="28DbA8052CE1410AF5985E"},
+ *                    {"name"="fileName", "in"="query", "description"="File name of the original file", "required"=false, "type"="string", "example"="my-document.pdf"}
  *                 },
  *                 "add_responses"={
  *                     "502"={
