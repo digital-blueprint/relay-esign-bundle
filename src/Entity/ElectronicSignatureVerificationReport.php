@@ -14,55 +14,62 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD.
  *
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"},
+ *     attributes={
+ *         "security" = "is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"
+ *     },
  *     collectionOperations={
  *         "get",
- *         "post"={
- *             "method"="POST",
- *             "path"="/electronic_signature_verification_reports",
- *             "controller"=CreateElectronicSignatureVerificationReportAction::class,
- *             "deserialize"=false,
- *             "openapi_context"={
- *                 "summary"="Retrieves a ElectronicSignatureVerificationReport resource with a collection of ElectronicSignature resources of a signed document.",
- *                 "requestBody"={
- *                     "content"={
- *                         "multipart/form-data"={
- *                             "schema"={
- *                                 "type"="object",
- *                                 "properties"={
- *                                     "file"={
- *                                         "type"="string",
- *                                         "format"="binary"
+ *         "post" = {
+ *             "method" = "POST",
+ *             "path" = "/electronic_signature_verification_reports",
+ *             "controller" = CreateElectronicSignatureVerificationReportAction::class,
+ *             "deserialize" = false,
+ *             "openapi_context" = {
+ *                 "summary" = "Retrieves a ElectronicSignatureVerificationReport resource with a collection of ElectronicSignature resources of a signed document.",
+ *                 "requestBody" = {
+ *                     "content" = {
+ *                         "multipart/form-data" = {
+ *                             "schema" = {
+ *                                 "type" = "object",
+ *                                 "properties" = {
+ *                                     "file" = {
+ *                                         "type" = "string",
+ *                                         "format" = "binary"
  *                                     }
  *                                 }
  *                             }
  *                         }
  *                     }
  *                 },
- *                 "add_responses"={
- *                     "415"={
- *                         "description"="Unsupported Media Type - Only PDF files can be verified!"
+ *                 "add_responses" = {
+ *                     "415" = {
+ *                         "description" = "Unsupported Media Type - Only PDF files can be verified!"
  *                     },
- *                     "502"={
- *                         "description"="PDF-AS error"
+ *                     "502" = {
+ *                         "description" = "PDF-AS error"
  *                     },
- *                     "503"={
- *                         "description"="PDF-AS service unavailable"
+ *                     "503" = {
+ *                         "description" = "PDF-AS service unavailable"
  *                     }
  *                 }
  *             }
  *         },
  *     },
- *     itemOperations={"get"},
+ *     itemOperations={
+ *         "get"
+ *     },
  *     iri="https://schema.tugraz.at/ElectronicSignatureVerificationReport",
- *     normalizationContext={"jsonld_embed_context"=true, "groups"={"ElectronicSignatureVerificationReport:output", "ElectronicSignature:output"}}
+ *     normalizationContext={
+ *         "jsonld_embed_context" = true,
+ *         "groups" = {"ElectronicSignatureVerificationReport:output", "ElectronicSignature:output"}
+ *     }
  * )
  */
 class ElectronicSignatureVerificationReport
 {
     /**
      * @Groups({"ElectronicSignatureVerificationReport:output"})
-     * @ApiProperty(identifier=true,iri="https://schema.org/identifier")
+     * @ApiProperty(identifier=true, iri="https://schema.org/identifier")
      * Note: Every entity needs an identifier!
      */
     private $identifier;

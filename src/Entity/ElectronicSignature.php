@@ -10,12 +10,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"},
- *     collectionOperations={},
- *     itemOperations={"get"},
+ *     attributes={
+ *         "security" = "is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"
+ *     },
+ *     collectionOperations={
+ *     },
+ *     itemOperations={
+ *         "get"
+ *     },
  *     iri="http://schema.tugraz.at/ElectronicSignature",
  *     description="An electronic signature of a signed document",
- *     normalizationContext={"groups"={"ElectronicSignature:output"}, "jsonld_embed_context"=true}
+ *     normalizationContext={
+ *         "groups" = {"ElectronicSignature:output"},
+ *         "jsonld_embed_context" = true
+ *     }
  * )
  */
 class ElectronicSignature

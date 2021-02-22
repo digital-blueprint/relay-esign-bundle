@@ -13,21 +13,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD.
  *
  * @ApiResource(
- *     attributes={"security"="is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"},
- *     collectionOperations={"get"},
+ *     attributes={
+ *         "security" = "is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"
+ *     },
+ *     collectionOperations={
+ *         "get"
+ *     },
  *     itemOperations={
- *         "get"={
- *             "openapi_context"={
- *                 "parameters"={
- *                    {"name"="id", "in"="path", "description"="Id of document to fetch", "required"=true, "type"="string", "example"="28DbA8052CE1410AF5985E"},
- *                    {"name"="fileName", "in"="query", "description"="File name of the original file", "required"=false, "type"="string", "example"="my-document.pdf"}
+ *         "get" = {
+ *             "openapi_context" = {
+ *                 "parameters" = {
+ *                     {"name" = "id", "in" = "path", "description" = "Id of document to fetch", "required" = true, "type" = "string", "example" = "28DbA8052CE1410AF5985E"},
+ *                     {"name" = "fileName", "in" = "query", "description" = "File name of the original file", "required" = false, "type" = "string", "example" = "my-document.pdf"}
  *                 },
- *                 "add_responses"={
- *                     "502"={
- *                         "description"="PDF-AS error"
+ *                 "add_responses" = {
+ *                     "502" = {
+ *                         "description" = "PDF-AS error"
  *                     },
- *                     "503"={
- *                         "description"="PDF-AS service unavailable"
+ *                     "503" = {
+ *                         "description" = "PDF-AS service unavailable"
  *                     }
  *                 }
  *             }
@@ -35,14 +39,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     iri="http://schema.org/MediaObject",
  *     description="Qualifiedly signed PDF document",
- *     normalizationContext={"jsonld_embed_context"=true, "groups"={"QualifiedlySignedDocument:output"}}
+ *     normalizationContext={
+ *         "jsonld_embed_context" = true,
+ *         "groups" = {"QualifiedlySignedDocument:output"}
+ *     }
  * )
  */
 class QualifiedlySignedDocument
 {
     /**
      * @Groups({"QualifiedlySignedDocument:output"})
-     * @ApiProperty(identifier=true,iri="https://schema.org/identifier")
+     * @ApiProperty(identifier=true, iri="https://schema.org/identifier")
      * Note: Every entity needs an identifier!
      */
     private $identifier;
