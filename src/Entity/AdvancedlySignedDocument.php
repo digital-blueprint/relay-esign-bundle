@@ -13,8 +13,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Note: We need a "collectionOperations" setting for "get" to get an "entryPoint" in JSONLD.
  *
  * @ApiResource(
+ *     attributes={
+ *         "security" = "is_granted('IS_AUTHENTICATED_FULLY')"
+ *     },
  *     collectionOperations={
- *         "get",
+ *         "get" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')"
+ *         },
  *         "post" = {
  *             "method" = "POST",
  *             "path" = "/advancedly_signed_documents",
@@ -55,7 +60,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *         },
  *     },
  *     itemOperations={
- *         "get"
+ *         "get" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')"
+ *         }
  *     },
  *     iri="http://schema.org/MediaObject",
  *     description="Advanced signed PDF document",

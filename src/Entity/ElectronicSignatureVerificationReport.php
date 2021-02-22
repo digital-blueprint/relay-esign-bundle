@@ -15,11 +15,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ApiResource(
  *     attributes={
- *         "security" = "is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"
+ *         "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"
  *     },
  *     collectionOperations={
- *         "get",
+ *         "get" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"
+ *         },
  *         "post" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
  *             "method" = "POST",
  *             "path" = "/electronic_signature_verification_reports",
  *             "controller" = CreateElectronicSignatureVerificationReportAction::class,
@@ -56,7 +59,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *         },
  *     },
  *     itemOperations={
- *         "get"
+ *         "get" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"
+ *         }
  *     },
  *     iri="https://schema.tugraz.at/ElectronicSignatureVerificationReport",
  *     normalizationContext={

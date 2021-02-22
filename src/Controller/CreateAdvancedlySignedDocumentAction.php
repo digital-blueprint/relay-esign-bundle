@@ -54,6 +54,8 @@ final class CreateAdvancedlySignedDocumentAction extends AbstractController
      */
     public function __invoke(Request $request): AdvancedlySignedDocument
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $profileName = $request->get('profile');
         if ($profileName === null) {
             throw new BadRequestHttpException('Missing "profile"');

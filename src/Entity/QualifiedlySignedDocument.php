@@ -14,13 +14,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ApiResource(
  *     attributes={
- *         "security" = "is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"
+ *         "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"
  *     },
  *     collectionOperations={
- *         "get"
+ *         "get" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"
+ *         }
  *     },
  *     itemOperations={
  *         "get" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
  *             "openapi_context" = {
  *                 "parameters" = {
  *                     {"name" = "id", "in" = "path", "description" = "Id of document to fetch", "required" = true, "type" = "string", "example" = "28DbA8052CE1410AF5985E"},

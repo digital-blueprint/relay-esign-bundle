@@ -15,11 +15,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ApiResource(
  *     attributes={
- *         "security" = "is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"
+ *         "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"
  *     },
  *     collectionOperations={
- *         "get",
+ *         "get" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"
+ *         },
  *         "post" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
  *             "method" = "POST",
  *             "path" = "/qualified_signing_requests",
  *             "controller" = CreateQualifiedSigningRequestAction::class,
@@ -61,7 +64,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *         },
  *     },
  *     itemOperations={
- *         "get"
+ *         "get" = {
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"
+ *         }
  *     },
  *     iri="http://schema.org/EntryPoint",
  *     description="Qualified signing request",

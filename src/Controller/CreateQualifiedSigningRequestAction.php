@@ -33,6 +33,7 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
      */
     public function __invoke(Request $request): QualifiedSigningRequest
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessUnlessGranted('ROLE_SCOPE_QUALIFIED-SIGNATURE');
 
         /** @var UploadedFile $uploadedFile */
