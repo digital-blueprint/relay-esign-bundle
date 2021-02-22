@@ -6,7 +6,7 @@
         "php": "^7.3",
         "ext-soap": "*",
         "api-platform/core": "^2.4",
-        "dbp/api-core-bundle": "@dev",
+        "dbp/api-core-bundle": "dev-main",
         "guzzlehttp/guzzle": "^7.0",
         "league/uri": "^6.3",
         "myclabs/php-enum": "^1.7",
