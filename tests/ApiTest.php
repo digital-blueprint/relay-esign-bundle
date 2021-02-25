@@ -30,7 +30,7 @@ class ApiTest extends ApiTestCase
             ['GET', '/qualified_signing_requests', 403],
             ['GET', '/qualified_signing_requests/123', 404],
             ['GET', '/qualifiedly_signed_documents', 403],
-            ['GET', '/qualifiedly_signed_documents/123', 502],
+            ['GET', '/qualifiedly_signed_documents/123', 403],
         ];
 
         foreach ($endpoints as $ep) {
@@ -39,7 +39,11 @@ class ApiTest extends ApiTestCase
             $response = $client->request($method, $path, ['headers' => [
                 'Authorization' => 'Bearer 42',
             ]]);
-            $this->assertEquals($status, $response->getStatusCode());
+            $this->assertEquals($status, $response->getStatusCode(), $path);
+
+            // Without any token
+            $response = $client->request($method, $path);
+            $this->assertEquals(401, $response->getStatusCode(), $path);
         }
     }
 }

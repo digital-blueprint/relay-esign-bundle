@@ -11,10 +11,11 @@ use DBP\API\ESignBundle\Entity\QualifiedlySignedDocument;
 use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\Service\SignatureProviderInterface;
 use DBP\API\ESignBundle\Service\SigningException;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-final class QualifiedlySignedDocumentDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
+final class QualifiedlySignedDocumentDataProvider extends AbstractController implements ItemDataProviderInterface, RestrictedDataProviderInterface
 {
     private $api;
 
@@ -37,6 +38,9 @@ final class QualifiedlySignedDocumentDataProvider implements ItemDataProviderInt
      */
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?QualifiedlySignedDocument
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('ROLE_SCOPE_QUALIFIED-SIGNATURE');
+
         assert(is_string($id));
         $api = $this->api;
         $filters = $context['filters'] ?? [];

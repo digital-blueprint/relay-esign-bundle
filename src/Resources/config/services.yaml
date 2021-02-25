@@ -2,15 +2,19 @@ services:
     DBP\API\ESignBundle\Service\PdfAsApi:
         public: false
         autowire: true
+        autoconfigure: true
 
     DBP\API\ESignBundle\Service\SignatureProviderInterface:
         '@DBP\API\ESignBundle\Service\PdfAsApi'
 
     DBP\API\ESignBundle\Controller\:
-        resource: '../../Controller'
         tags: ['controller.service_arguments']
+        resource: '../../Controller'
         autowire: true
+        autoconfigure: true
 
-    DBP\API\ESignBundle\DataProvider\QualifiedlySignedDocumentDataProvider:
-        tags: ['api_platform.item_data_provider']
+    DBP\API\ESignBundle\DataProvider\:
+        tags: ['controller.service_arguments']
+        resource: '../../DataProvider'
         autowire: true
+        autoconfigure: true
