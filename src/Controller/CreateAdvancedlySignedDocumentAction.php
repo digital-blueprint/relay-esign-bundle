@@ -124,15 +124,6 @@ final class CreateAdvancedlySignedDocumentAction extends AbstractController
             throw new ApiError(Response::HTTP_BAD_GATEWAY, $e->getMessage());
         }
 
-        // we cannot actually return a new file because our tmpfile would be gone when its content is converted to an uri string
-//        $tmpFile = tmpfile();
-//        fwrite($tmpFile, $signedPdfData);
-//        $metaData = stream_get_meta_data($tmpFile);
-//        $tmpFilename = $metaData['uri'];
-//        dump($metaData);
-//        $file = new File($tmpFilename);
-//        dump($file);
-
         // we cannot return the text directly neither because it can't be output in the json
         // but we can hijack the uploaded file, it will stay alive until the php process is closed
         file_put_contents($uploadedFile->getPathname(), $signedPdfData);
