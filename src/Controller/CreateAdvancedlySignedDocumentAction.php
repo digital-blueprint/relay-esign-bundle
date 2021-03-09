@@ -124,10 +124,6 @@ final class CreateAdvancedlySignedDocumentAction extends AbstractController
             throw new ApiError(Response::HTTP_BAD_GATEWAY, $e->getMessage());
         }
 
-        // we cannot return the text directly neither because it can't be output in the json
-        // but we can hijack the uploaded file, it will stay alive until the php process is closed
-        file_put_contents($uploadedFile->getPathname(), $signedPdfData);
-
         // add some suffix for signed documents
         $signedFileName = Tools::generateSignedFileName($uploadedFile->getClientOriginalName());
 
