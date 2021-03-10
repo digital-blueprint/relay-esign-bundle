@@ -11,6 +11,7 @@ use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\PdfAsSoapClient\Connector;
 use DBP\API\ESignBundle\PdfAsSoapClient\PDFASSigningImplService;
 use DBP\API\ESignBundle\PdfAsSoapClient\PDFASVerificationImplService;
+use DBP\API\ESignBundle\PdfAsSoapClient\PropertyEntry;
 use DBP\API\ESignBundle\PdfAsSoapClient\PropertyMap;
 use DBP\API\ESignBundle\PdfAsSoapClient\SignParameters;
 use DBP\API\ESignBundle\PdfAsSoapClient\SignRequest;
@@ -35,7 +36,7 @@ class PdfAsApi implements SignatureProviderInterface
     private $qualifiedUrl;
     private $qualifiedStaticUrl;
     private $advancedProfiles;
-    private $qualifiedProfileId;
+    private $qualifiedProfile;
 
     public function __construct(ContainerInterface $container, LoggerInterface $logger)
     {
@@ -45,14 +46,14 @@ class PdfAsApi implements SignatureProviderInterface
         $this->advancedUrl = $config['advanced_url'] ?? '';
         $this->qualifiedUrl = $config['qualified_url'] ?? '';
         $this->qualifiedStaticUrl = $config['qualified_static_url'] ?? '';
-        $this->qualifiedProfileId = $config['qualified_profile_id'] ?? '';
+        $this->qualifiedProfile = $config['qualified_profile'] ?? [];
         $this->advancedProfiles = $config['advanced_profiles'] ?? [];
     }
 
     /**
      * @throws SigningException
      */
-    public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = '', array $positionData = []): string
+    public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = '', array $positionData = [], array $userText = []): string
     {
         if ($requestId === '') {
             $requestId = Tools::generateRequestId();
@@ -64,8 +65,16 @@ class PdfAsApi implements SignatureProviderInterface
             throw new SigningException('Signing soap call failed, wsdl URI cannot be loaded!');
         }
 
+        $profile = $this->qualifiedProfile;
         $params = new SignParameters(Connector::mobilebku());
-        $params->setProfile($this->qualifiedProfileId);
+        $params->setProfile($profile['profile_id'] ?? '');
+
+        // Add custom user defined text if needed
+        $overrides = $this->buildUserTextConfigOverride($profile, $userText);
+        if (count($overrides) > 0) {
+            $configurationOverrides = new PropertyMap($overrides);
+            $params->setConfigurationOverrides($configurationOverrides);
+        }
 
         $staticUri = $this->qualifiedStaticUrl;
         $params->setInvokeurl($staticUri.'/callback.html');
@@ -132,11 +141,68 @@ class PdfAsApi implements SignatureProviderInterface
     }
 
     /**
+     * @param UserDefinedText[] $userText
+     *
+     * @return PropertyEntry[]
+     */
+    public function buildUserTextConfigOverride(array $profile, array $userText): array
+    {
+        if (count($userText) === 0) {
+            return [];
+        }
+
+        $parentTable = $profile['profile_user_text_parent_table'] ?? '';
+        /* @var int $parentTableRow */
+        $parentTableRow = $profile['profile_user_text_parent_table_row'] ?? 0;
+        $table = $profile['profile_user_text_table'] ?? '';
+        $profileId = $profile['profile_id'];
+
+        if ($table === '') {
+            throw new SigningException('user_text not available/implemented for this profile');
+        }
+
+        // validate the config, so we don't write out invalid config lines
+        if (!preg_match('/[^.-]+/', $table) || !preg_match('/[^.-]+/', $parentTable)) {
+            throw new \RuntimeException('invalid table id');
+        }
+        if ($parentTableRow < 0) {
+            throw new \RuntimeException('invalid table row');
+        }
+        if (!preg_match('/[^.-]+/', $profileId)) {
+            throw new \RuntimeException('invalid profile id');
+        }
+
+        // If the parent and user text table are the same, we just append rows to it at the end,
+        // otherwise we append rows to the user table and append the user table to the parent one at the end
+        $isSameTable = ($table === $parentTable);
+
+        $overrides = [];
+        $tableRow = $isSameTable ? $parentTableRow : 1;
+        foreach ($userText as $entry) {
+            $desc = $entry->getDescription();
+            $value = $entry->getValue();
+
+            $entryId = 'SIG_USER_TEXT_'.$table.'_'.$tableRow;
+            $overrides[] = new PropertyEntry("sig_obj.$profileId.key.$entryId", $desc);
+            $overrides[] = new PropertyEntry("sig_obj.$profileId.value.$entryId", $value);
+            $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$table.$tableRow", $entryId.'-cv');
+            ++$tableRow;
+        }
+
+        if (count($overrides) && !$isSameTable) {
+            // pdf-as fails on empty tables, so we have to attach it only when there are rows to add
+            $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$parentTable.$parentTableRow", 'TABLE-'.$table);
+        }
+
+        return $overrides;
+    }
+
+    /**
      * Signs $data.
      *
      * @throws SigningException
      */
-    public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = []): string
+    public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = []): string
     {
         $profile = $this->getProfileData($profileName);
 
@@ -153,6 +219,13 @@ class PdfAsApi implements SignatureProviderInterface
         $params = new SignParameters(Connector::jks());
         $params->setKeyIdentifier($profile['key_id']);
         $params->setProfile($profile['profile_id']);
+
+        // Add custom user defined text if needed
+        $overrides = $this->buildUserTextConfigOverride($profile, $userText);
+        if (count($overrides) > 0) {
+            $configurationOverrides = new PropertyMap($overrides);
+            $params->setConfigurationOverrides($configurationOverrides);
+        }
 
         // add signature position data if there is any
         if (count($positionData) !== 0) {
@@ -174,12 +247,11 @@ class PdfAsApi implements SignatureProviderInterface
         }
 
         $signedPdfData = $response->getSignedPDF();
-        $contentSize = strlen($signedPdfData);
-
-        // the happens for example if you sign already signed files
-        if ($contentSize === 0) {
-            throw new SigningException('Signing of this file is not possible! Maybe it was already signed?');
+        if ($signedPdfData === null) {
+            // This likely means pdf-as failed uncontrolled (check the logs)
+            throw new SigningException('Signing failed!');
         }
+        $contentSize = strlen($signedPdfData);
 
         $this->log('PDF was signed', ['request_id' => $requestId, 'signed_content_size' => $contentSize]);
 

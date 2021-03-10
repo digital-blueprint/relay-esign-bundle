@@ -10,7 +10,6 @@ use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\Service\SignatureProviderInterface;
 use DBP\API\ESignBundle\Service\SigningException;
 use DBP\API\ESignBundle\Service\SigningUnavailableException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +18,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
-final class CreateQualifiedSigningRequestAction extends AbstractController
+final class CreateQualifiedSigningRequestAction extends BaseSigningController
 {
     protected $api;
 
@@ -90,10 +89,16 @@ final class CreateQualifiedSigningRequestAction extends AbstractController
             $positionData['p'] = (int) $request->get('p');
         }
 
+        $userText = [];
+        if ($request->request->has('user_text')) {
+            $data = $request->request->all()['user_text'];
+            $userText = $this->parseUserText($data);
+        }
+
         // create redirect url for signing request
         try {
             $url = $this->api->createQualifiedSigningRequestRedirectUrl(
-                file_get_contents($uploadedFile->getPathname()), $requestId, $positionData);
+                file_get_contents($uploadedFile->getPathname()), $requestId, $positionData, $userText);
         } catch (SigningUnavailableException $e) {
             throw new ServiceUnavailableHttpException(100, $e->getMessage());
         } catch (SigningException $e) {

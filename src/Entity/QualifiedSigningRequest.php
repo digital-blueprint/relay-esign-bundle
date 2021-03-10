@@ -35,11 +35,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                                 "type" = "object",
  *                                 "properties" = {
  *                                     "file" = {"type" = "string", "format" = "binary"},
- *                                     "x" = {"description" = "Position of the signature from the left", "type" = "number", "example" = "100"},
- *                                     "y" = {"description" = "Position of the signature from the bottom", "type" = "number", "example" = "100"},
- *                                     "r" = {"description" = "Rotation of the signature counterclockwise", "type" = "number", "example" = "90"},
- *                                     "w" = {"description" = "Width of the signature", "type" = "number", "example" = "240"},
+ *                                     "x" = {"description" = "Position of the signature from the left", "type" = "number", "example" = "300"},
+ *                                     "y" = {"description" = "Position of the signature from the bottom", "type" = "number", "example" = "300"},
+ *                                     "r" = {"description" = "Rotation of the signature counterclockwise", "type" = "number", "example" = "0"},
+ *                                     "w" = {"description" = "Width of the signature", "type" = "number", "example" = "340"},
  *                                     "p" = {"description" = "Page number the signature should be placed", "type" = "number", "example" = "2"},
+ *                                     "user_text" = {"description" = "User defined text. JSON list of objects with description/value", "type" = "string", "example" = "[{""description"": ""Some ID"", ""value"": ""123456""}]"},
  *                                 },
  *                                 "required" = {"file"},
  *                             }

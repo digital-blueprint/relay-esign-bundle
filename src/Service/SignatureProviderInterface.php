@@ -16,12 +16,12 @@ interface SignatureProviderInterface
      *
      * @throws SigningException
      */
-    public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = []): string;
+    public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = []): string;
 
     /**
      * @throws SigningException
      */
-    public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = '', array $positionData = []): string;
+    public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = '', array $positionData = [], array $userText = []): string;
 
     /**
      * Verifies pdf $data.

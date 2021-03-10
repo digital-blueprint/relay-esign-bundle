@@ -10,7 +10,6 @@ use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\Service\SignatureProviderInterface;
 use DBP\API\ESignBundle\Service\SigningException;
 use DBP\API\ESignBundle\Service\SigningUnavailableException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +20,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
-final class CreateAdvancedlySignedDocumentAction extends AbstractController
+final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
 {
     protected $api;
     protected $config;
@@ -114,10 +113,16 @@ final class CreateAdvancedlySignedDocumentAction extends AbstractController
             $positionData['p'] = (int) $request->get('p');
         }
 
+        $userText = [];
+        if ($request->request->has('user_text')) {
+            $data = $request->request->all()['user_text'];
+            $userText = $this->parseUserText($data);
+        }
+
         // sign the pdf data
         try {
             $signedPdfData = $this->api->advancedlySignPdfData(
-                file_get_contents($uploadedFile->getPathname()), $profileName, $requestId, $positionData);
+                file_get_contents($uploadedFile->getPathname()), $profileName, $requestId, $positionData, $userText);
         } catch (SigningUnavailableException $e) {
             throw new ServiceUnavailableHttpException(100, $e->getMessage());
         } catch (SigningException $e) {
