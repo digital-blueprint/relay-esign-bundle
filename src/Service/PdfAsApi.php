@@ -151,47 +151,56 @@ class PdfAsApi implements SignatureProviderInterface
             return [];
         }
 
-        $parentTable = $profile['profile_user_text_parent_table'] ?? '';
-        /* @var int $parentTableRow */
-        $parentTableRow = $profile['profile_user_text_parent_table_row'] ?? 0;
-        $table = $profile['profile_user_text_table'] ?? '';
         $profileId = $profile['profile_id'];
 
-        if ($table === '') {
+        // User text specific placement config
+        $userTable = $profile['user_text_table'] ?? '';
+        /* @var int $userRow */
+        $userRow = $profile['user_text_row'] ?? 1;
+        $attachParent = $profile['user_text_attach_parent'] ?? '';
+        $attachChild = $profile['user_text_attach_child'] ?? '';
+        /* @var int $attachRow */
+        $attachRow = $profile['user_text_attach_row'] ?? 1;
+
+        if ($userTable === '') {
             throw new SigningException('user_text not available/implemented for this profile');
         }
 
+        $checkID = function ($name) {
+            return preg_match('/[^.-]*/', $name);
+        };
+
         // validate the config, so we don't write out invalid config lines
-        if (!preg_match('/[^.-]+/', $table) || !preg_match('/[^.-]+/', $parentTable)) {
+        if (!$checkID($userTable) || !$checkID($attachParent) || !$checkID($attachChild)) {
             throw new \RuntimeException('invalid table id');
         }
-        if ($parentTableRow < 0) {
+
+        if ($userRow <= 0 || $attachRow <= 0) {
             throw new \RuntimeException('invalid table row');
         }
-        if (!preg_match('/[^.-]+/', $profileId)) {
+        if (!$checkID($profileId)) {
             throw new \RuntimeException('invalid profile id');
         }
 
-        // If the parent and user text table are the same, we just append rows to it at the end,
-        // otherwise we append rows to the user table and append the user table to the parent one at the end
-        $isSameTable = ($table === $parentTable);
-
-        $overrides = [];
-        $tableRow = $isSameTable ? $parentTableRow : 1;
+        // First we insert the user content into the table
         foreach ($userText as $entry) {
             $desc = $entry->getDescription();
             $value = $entry->getValue();
 
-            $entryId = 'SIG_USER_TEXT_'.$table.'_'.$tableRow;
+            $entryId = 'SIG_USER_TEXT_'.$userTable.'_'.$userRow;
             $overrides[] = new PropertyEntry("sig_obj.$profileId.key.$entryId", $desc);
             $overrides[] = new PropertyEntry("sig_obj.$profileId.value.$entryId", $value);
-            $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$table.$tableRow", $entryId.'-cv');
-            ++$tableRow;
+            $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$userTable.$userRow", $entryId.'-cv');
+            ++$userRow;
         }
 
-        if (count($overrides) && !$isSameTable) {
-            // pdf-as fails on empty tables, so we have to attach it only when there are rows to add
-            $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$parentTable.$parentTableRow", 'TABLE-'.$table);
+        // In case we added something we optionally attach a "child" table to a "parent" one at a specific "row"
+        // This can be the table we filled above, or some parent table.
+        // This is needed because pdf-as doesn't allow empty tables and we need to attach it only when it has at least
+        // one row. But it also allows us to show extra images for example if there are >0 extra rows
+        if (count($overrides) > 0 && $attachParent !== '' && $attachChild !== '') {
+            $overrides[] = new PropertyEntry(
+                "sig_obj.$profileId.table.$attachParent.$attachRow", 'TABLE-'.$attachChild);
         }
 
         return $overrides;

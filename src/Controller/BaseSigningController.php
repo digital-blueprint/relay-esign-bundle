@@ -24,7 +24,7 @@ abstract class BaseSigningController extends AbstractController
         } catch (JsonException $e) {
             throw new ApiError(Response::HTTP_BAD_REQUEST, 'invalid JSON');
         }
-        if (!$parsed instanceof \Traversable) {
+        if (!is_array($parsed)) {
             throw new ApiError(Response::HTTP_BAD_REQUEST, 'invalid content');
         }
         foreach ($parsed as $entry) {
