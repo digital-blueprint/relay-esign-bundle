@@ -29,12 +29,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                     {"name" = "identifier", "in" = "path", "description" = "Id of document to fetch", "required" = true, "type" = "string", "example" = "28DbA8052CE1410AF5985E"},
  *                     {"name" = "fileName", "in" = "query", "description" = "File name of the original file", "required" = false, "type" = "string", "example" = "my-document.pdf"}
  *                 },
- *                 "add_responses" = {
+ *                 "responses" = {
  *                     "502" = {
- *                         "description" = "PDF-AS error"
+ *                         "description" = "PDF-AS error",
+ *                         "content" = {}
  *                     },
  *                     "503" = {
- *                         "description" = "PDF-AS service unavailable"
+ *                         "description" = "PDF-AS service unavailable",
+ *                         "content" = {}
  *                     }
  *                 }
  *             }

@@ -47,18 +47,22 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                         }
  *                     }
  *                 },
- *                 "add_responses" = {
+ *                 "responses" = {
  *                     "413" = {
- *                         "description" = "Payload Too Large - PDF file too large to sign!"
+ *                         "description" = "Payload Too Large - PDF file too large to sign!",
+ *                         "content" = {}
  *                     },
  *                     "415" = {
- *                         "description" = "Unsupported Media Type - Only PDF files can be signed!"
+ *                         "description" = "Unsupported Media Type - Only PDF files can be signed!",
+ *                         "content" = {}
  *                     },
  *                     "502" = {
- *                         "description" = "PDF-AS error"
+ *                         "description" = "PDF-AS error",
+ *                         "content" = {}
  *                     },
  *                     "503" = {
- *                         "description" = "PDF-AS service unavailable"
+ *                         "description" = "PDF-AS service unavailable",
+ *                         "content" = {}
  *                     }
  *                 }
  *             }

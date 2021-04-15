@@ -44,15 +44,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                         }
  *                     }
  *                 },
- *                 "add_responses" = {
+ *                 "responses" = {
  *                     "415" = {
- *                         "description" = "Unsupported Media Type - Only PDF files can be verified!"
+ *                         "description" = "Unsupported Media Type - Only PDF files can be verified!",
+ *                         "content" = {}
  *                     },
  *                     "502" = {
- *                         "description" = "PDF-AS error"
+ *                         "description" = "PDF-AS error",
+ *                         "content" = {}
  *                     },
  *                     "503" = {
- *                         "description" = "PDF-AS service unavailable"
+ *                         "description" = "PDF-AS service unavailable",
+ *                         "content" = {}
  *                     }
  *                 }
  *             }
