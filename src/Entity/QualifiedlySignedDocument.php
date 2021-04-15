@@ -26,7 +26,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
  *             "openapi_context" = {
  *                 "parameters" = {
- *                     {"name" = "id", "in" = "path", "description" = "Id of document to fetch", "required" = true, "type" = "string", "example" = "28DbA8052CE1410AF5985E"},
+ *                     {"name" = "identifier", "in" = "path", "description" = "Id of document to fetch", "required" = true, "type" = "string", "example" = "28DbA8052CE1410AF5985E"},
  *                     {"name" = "fileName", "in" = "query", "description" = "File name of the original file", "required" = false, "type" = "string", "example" = "my-document.pdf"}
  *                 },
  *                 "add_responses" = {

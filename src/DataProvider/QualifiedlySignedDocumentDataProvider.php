@@ -30,8 +30,6 @@ final class QualifiedlySignedDocumentDataProvider extends AbstractController imp
     }
 
     /**
-     * @param array|int|string $id
-     *
      * @return QualifiedlySignedDocument
      *
      * @throws HttpException
