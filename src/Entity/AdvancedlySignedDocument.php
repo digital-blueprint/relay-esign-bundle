@@ -77,7 +77,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             },
  *         }
  *     },
- *     iri="http = /schema.org/MediaObject",
+ *     iri="http://schema.org/MediaObject",
  *     description="Advanced signed PDF document",
  *     normalizationContext={
  *         "jsonld_embed_context" = true,
