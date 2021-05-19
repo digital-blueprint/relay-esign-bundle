@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
+ *             "path" = "/electronic_signatures/{identifier}",
  *             "openapi_context" = {
  *                 "tags" = {"ESign"},
  *             },

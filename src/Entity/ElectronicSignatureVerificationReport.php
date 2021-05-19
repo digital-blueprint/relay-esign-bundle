@@ -20,6 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
+ *             "path" = "/electronic_signature_verification_reports",
  *             "openapi_context" = {
  *                 "tags" = {"ESign"},
  *             },
@@ -68,6 +69,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
+ *             "path" = "/electronic_signature_verification_reports/{identifier}",
  *             "openapi_context" = {
  *                 "tags" = {"ESign"},
  *             },
