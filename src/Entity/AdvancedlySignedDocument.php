@@ -18,7 +18,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     collectionOperations={
  *         "get" = {
- *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')"
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
+ *             "openapi_context" = {
+ *                 "tags" = {"ESign"},
+ *             },
  *         },
  *         "post" = {
  *             "method" = "POST",
@@ -26,6 +29,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "controller" = CreateAdvancedlySignedDocumentAction::class,
  *             "deserialize" = false,
  *             "openapi_context" = {
+ *                 "tags" = {"ESign"},
  *                 "requestBody" = {
  *                     "content" = {
  *                         "multipart/form-data" = {
@@ -65,10 +69,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *         "get" = {
- *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')"
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
+ *             "openapi_context" = {
+ *                 "tags" = {"ESign"},
+ *             },
  *         }
  *     },
- *     iri="http://schema.org/MediaObject",
+ *     iri="http = /schema.org/MediaObject",
  *     description="Advanced signed PDF document",
  *     normalizationContext={
  *         "jsonld_embed_context" = true,

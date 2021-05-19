@@ -19,7 +19,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     collectionOperations={
  *         "get" = {
- *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
+ *             "openapi_context" = {
+ *                 "tags" = {"ESign"},
+ *             },
  *         },
  *         "post" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
@@ -28,6 +31,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "controller" = CreateElectronicSignatureVerificationReportAction::class,
  *             "deserialize" = false,
  *             "openapi_context" = {
+ *                 "tags" = {"ESign"},
  *                 "summary" = "Retrieves a ElectronicSignatureVerificationReport resource with a collection of ElectronicSignature resources of a signed document.",
  *                 "requestBody" = {
  *                     "content" = {
@@ -63,7 +67,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *         "get" = {
- *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
+ *             "openapi_context" = {
+ *                 "tags" = {"ESign"},
+ *             },
  *         }
  *     },
  *     iri="https://schema.tugraz.at/ElectronicSignatureVerificationReport",

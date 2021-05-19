@@ -19,7 +19,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     collectionOperations={
  *         "get" = {
- *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
+ *             "openapi_context" = {
+ *                 "tags" = {"ESign"},
+ *             },
  *         },
  *         "post" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
@@ -28,6 +31,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "controller" = CreateQualifiedSigningRequestAction::class,
  *             "deserialize" = false,
  *             "openapi_context" = {
+ *                 "tags" = {"ESign"},
  *                 "requestBody" = {
  *                     "content" = {
  *                         "multipart/form-data" = {
@@ -70,7 +74,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *         "get" = {
- *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
+ *             "openapi_context" = {
+ *                 "tags" = {"ESign"},
+ *             },
  *         }
  *     },
  *     iri="http://schema.org/EntryPoint",

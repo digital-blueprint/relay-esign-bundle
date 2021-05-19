@@ -17,7 +17,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *         "get" = {
- *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')"
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
+ *             "openapi_context" = {
+ *                 "tags" = {"ESign"},
+ *             },
  *         }
  *     },
  *     iri="http://schema.tugraz.at/ElectronicSignature",
