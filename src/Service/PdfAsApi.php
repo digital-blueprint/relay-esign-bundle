@@ -104,6 +104,11 @@ class PdfAsApi implements SignatureProviderInterface
         // get the redirect url
         $redirectUrl = $response->getRedirectUrl();
 
+        // Sometimes pdf-as just returns nothing and also no error
+        if ($redirectUrl === null) {
+            throw new SigningException('Invalid signing response');
+        }
+
         $this->log('QualifiedSigningRequest redirectUrl was created', ['request_id' => $requestId]);
 
         // return html of extracted form
