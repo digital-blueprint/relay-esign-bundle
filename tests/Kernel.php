@@ -42,6 +42,7 @@ class Kernel extends BaseKernel
     {
         $c->loadFromExtension('framework', [
             'test' => true,
+            'secret' => '',
         ]);
 
         $loader->load(static function (ContainerBuilder $container): void {
