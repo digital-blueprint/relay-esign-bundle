@@ -10,42 +10,33 @@ use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\Service\SignatureProviderInterface;
 use DBP\API\ESignBundle\Service\SigningException;
 use DBP\API\ESignBundle\Service\SigningUnavailableException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
 {
     protected $api;
-    protected $config;
 
-    public function __construct(ContainerInterface $container, SignatureProviderInterface $api)
+    public function __construct(SignatureProviderInterface $api)
     {
-        $this->config = $container->getParameter('dbp_api.esign.config');
         $this->api = $api;
     }
 
     public function checkProfilePermissions(string $profileName)
     {
-        $advancedProfiles = $this->config['advanced_profiles'] ?? [];
-        foreach ($advancedProfiles as $profile) {
-            if ($profile['name'] === $profileName) {
-                if (!isset($profile['role'])) {
-                    throw new \RuntimeException('No role set');
-                }
-                $role = $profile['role'];
-                $this->denyAccessUnlessGranted($role);
-
-                return;
-            }
+        try {
+            $role = $this->api->getAdvancedlySignRequiredRole($profileName);
+        } catch (SigningException $e) {
+            throw new AccessDeniedException($e->getMessage());
         }
-        throw new AccessDeniedHttpException('unknown profile');
+
+        $this->denyAccessUnlessGranted($role);
     }
 
     /**

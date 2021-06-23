@@ -22,13 +22,13 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use League\Uri\Contracts\UriException;
 use League\Uri\UriTemplate;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 use SoapFault;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class PdfAsApi implements SignatureProviderInterface
+class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 {
-    private $logger;
+    use LoggerAwareTrait;
 
     private const PDF_AS_TIMEOUT = 40;
 
@@ -38,11 +38,17 @@ class PdfAsApi implements SignatureProviderInterface
     private $advancedProfiles;
     private $qualifiedProfile;
 
-    public function __construct(ContainerInterface $container, LoggerInterface $logger)
+    public function __construct()
     {
-        $this->logger = $logger;
+        $this->advancedUrl = '';
+        $this->qualifiedUrl = '';
+        $this->qualifiedStaticUrl = '';
+        $this->qualifiedProfile = [];
+        $this->advancedProfiles = [];
+    }
 
-        $config = $container->getParameter('dbp_api.esign.config');
+    public function setConfig(array $config)
+    {
         $this->advancedUrl = $config['advanced_url'] ?? '';
         $this->qualifiedUrl = $config['qualified_url'] ?? '';
         $this->qualifiedStaticUrl = $config['qualified_static_url'] ?? '';
@@ -135,7 +141,7 @@ class PdfAsApi implements SignatureProviderInterface
         return $results;
     }
 
-    private function getProfileData(string $profileName)
+    private function getAdvancedProfileData(string $profileName)
     {
         foreach ($this->advancedProfiles as $profile) {
             if ($profile['name'] === $profileName) {
@@ -218,7 +224,7 @@ class PdfAsApi implements SignatureProviderInterface
      */
     public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = []): string
     {
-        $profile = $this->getProfileData($profileName);
+        $profile = $this->getAdvancedProfileData($profileName);
 
         if ($requestId === '') {
             $requestId = Tools::generateRequestId();
@@ -320,7 +326,9 @@ class PdfAsApi implements SignatureProviderInterface
     private function log(string $message, array $context = [])
     {
         $context['service'] = 'PdfAs';
-        $this->logger->notice('[{service}] '.$message, $context);
+        if ($this->logger !== null) {
+            $this->logger->notice('[{service}] '.$message, $context);
+        }
     }
 
     /**
@@ -371,5 +379,15 @@ class PdfAsApi implements SignatureProviderInterface
         $this->log('PDF was qualifiedly signed', ['request_id' => $requestId, 'signed_content_size' => strlen($signedPdfData)]);
 
         return $signedPdfData;
+    }
+
+    public function getAdvancedlySignRequiredRole(string $profileName): string
+    {
+        $profile = $this->getAdvancedProfileData($profileName);
+        if (!isset($profile['role'])) {
+            throw new SigningException('No role set');
+        }
+
+        return $profile['role'];
     }
 }

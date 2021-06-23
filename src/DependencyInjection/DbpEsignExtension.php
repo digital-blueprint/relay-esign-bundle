@@ -39,7 +39,8 @@ class DbpEsignExtension extends ConfigurableExtension
         );
         $loader->load('services.yaml');
 
-        $container->setParameter('dbp_api.esign.config', $mergedConfig);
+        $definition = $container->getDefinition('DBP\API\ESignBundle\Service\PdfAsApi');
+        $definition->addMethodCall('setConfig', [$mergedConfig]);
     }
 
     private function extendArrayParameter(ContainerBuilder $container, string $parameter, array $values)

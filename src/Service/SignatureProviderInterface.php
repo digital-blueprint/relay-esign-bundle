@@ -19,6 +19,13 @@ interface SignatureProviderInterface
     public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = []): string;
 
     /**
+     * The role required for signing with the given profile.
+     *
+     * @throws SigningException
+     */
+    public function getAdvancedlySignRequiredRole(string $profileName): string;
+
+    /**
      * @throws SigningException
      */
     public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = '', array $positionData = [], array $userText = []): string;
