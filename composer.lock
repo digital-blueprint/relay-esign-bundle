@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "eec2f2269988b4d795fdc5cbeb437c13",
+    "content-hash": "81ed18e09ff9ed1b0d69866d0c04d3a0",
     "packages": [
         {
             "name": "api-platform/core",
@@ -223,17 +223,11 @@
         },
         {
             "name": "dbp/api-core-bundle",
-            "version": "dev-main",
+            "version": "v0.1.4",
             "source": {
                 "type": "git",
                 "url": "git@gitlab.tugraz.at:dbp/dbp-api/api-core-bundle.git",
-                "reference": "8ab8f7ead5aa41f1378da1de16b2870b2f81b676"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://gitlab.tugraz.at/api/v4/projects/dbp%2Fdbp-api%2Fapi-core-bundle/repository/archive.zip?sha=8ab8f7ead5aa41f1378da1de16b2870b2f81b676",
-                "reference": "8ab8f7ead5aa41f1378da1de16b2870b2f81b676",
-                "shasum": ""
+                "reference": "c05273c2313eb90ac5d1868097ba45c6ca0e7b0e"
             },
             "require": {
                 "api-platform/core": "^2.6.3",
@@ -267,7 +261,6 @@
                 "symfony/phpunit-bridge": "^5.2",
                 "vimeo/psalm": "^4.4"
             },
-            "default-branch": true,
             "type": "symfony-bundle",
             "autoload": {
                 "psr-4": {
@@ -309,10 +302,7 @@
             "license": [
                 "AGPL-3.0-or-later"
             ],
-            "support": {
-                "issues": "https://gitlab.tugraz.at/api/v4/projects/8296/issues"
-            },
-            "time": "2021-07-03T14:09:30+02:00"
+            "time": "2021-07-06T13:58:53+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -8444,9 +8434,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "dbp/api-core-bundle": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
