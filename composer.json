@@ -2,11 +2,12 @@
     "name": "dbp/api-esign-bundle",
     "type": "symfony-bundle",
     "license": "AGPL-3.0-or-later",
+    "version": "0.1.0",
     "require": {
         "php": "^7.3",
         "ext-soap": "*",
         "api-platform/core": "^2.6.4",
-        "dbp/api-core-bundle": "dev-main",
+        "dbp/api-core-bundle": "^0.1",
         "guzzlehttp/guzzle": "^7.0",
         "league/uri": "^6.3",
         "myclabs/php-enum": "^1.7",
