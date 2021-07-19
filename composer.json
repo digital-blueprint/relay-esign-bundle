@@ -15,14 +15,15 @@
         "zbateson/mail-mime-parser": "^1.2"
     },
     "require-dev": {
+        "ext-simplexml": "*",
         "friendsofphp/php-cs-fixer": "^3.0",
         "phpstan/phpstan": "^0.12.33",
         "phpstan/phpstan-phpunit": "^0.12.13",
         "symfony/browser-kit": "^5.2",
         "symfony/http-client": "^5.2",
+        "symfony/monolog-bundle": "^3.7",
         "symfony/phpunit-bridge": "^5.2",
-        "vimeo/psalm": "^4.0",
-        "ext-simplexml": "*"
+        "vimeo/psalm": "^4.0"
     },
     "repositories": [
         {

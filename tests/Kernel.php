@@ -8,9 +8,9 @@ use ApiPlatform\Core\Bridge\Symfony\Bundle\ApiPlatformBundle;
 use DBP\API\CoreBundle\DbpCoreBundle;
 use DBP\API\ESignBundle\DbpEsignBundle;
 use Nelmio\CorsBundle\NelmioCorsBundle;
-use Psr\Log\NullLogger;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -28,6 +28,7 @@ class Kernel extends BaseKernel
         yield new SecurityBundle();
         yield new TwigBundle();
         yield new NelmioCorsBundle();
+        yield new MonologBundle();
         yield new ApiPlatformBundle();
         yield new DbpCoreBundle();
         yield new DbpEsignBundle();
@@ -44,10 +45,5 @@ class Kernel extends BaseKernel
             'test' => true,
             'secret' => '',
         ]);
-
-        $loader->load(static function (ContainerBuilder $container): void {
-            // Register a NullLogger to avoid getting the stderr default logger of FrameworkBundle
-            $container->register('logger', NullLogger::class);
-        });
     }
 }
