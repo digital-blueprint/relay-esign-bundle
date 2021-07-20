@@ -52,13 +52,16 @@ class Tools
     {
         $parts = explode('.', $fileName);
 
-        $ext = end($parts);
-        $name = prev($parts);
+        if (count($parts) < 2) {
+            [$name, $ext] = [$parts[0], ''];
+        } else {
+            $ext = end($parts);
+            $name = prev($parts);
+        }
         $parts = explode('.', $fileName);
 
         $prevName = array_slice($parts, 0, -2);
-
-
+        
         if (str_ends_with($name, '-sig')) {
             return $fileName;
         } else {
@@ -79,6 +82,7 @@ class Tools
 
         if (str_ends_with($name, '-sig')) {
             return $name.$ext;
+        // -> we shouldn't do this, cause we can't be sure that another application uses '.sig'
         } elseif (str_starts_with($ext, '.sig.')) {
             return $name.'-sig'.substr($ext, 4);
         } else {
