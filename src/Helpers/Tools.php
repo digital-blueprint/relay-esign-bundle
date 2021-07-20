@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DBP\API\ESignBundle\Helpers;
 
 use GuzzleHttp\Psr7\Uri;
+use function Amp\Promise\rethrow;
 
 class Tools
 {
@@ -49,7 +50,25 @@ class Tools
 
     public static function generateSignedFileName(string $fileName): string
     {
-        $parts = explode('.', $fileName, 2);
+        $parts = explode('.', $fileName);
+
+        $ext = end($parts);
+        $name = prev($parts);
+        $parts = explode('.', $fileName);
+
+        $prevName = array_slice($parts, 0, -2);
+
+
+        if (str_ends_with($name, '-sig')) {
+            return $fileName;
+        } else {
+            $prefix = "";
+            if (count($prevName) > 0)
+                $prefix = implode(".", $prevName).".";
+            return $prefix.$name.'-sig'.".".$ext;
+        }
+
+        /*
         if (count($parts) < 2) {
             [$name, $ext] = [$parts[0], ''];
         } else {
@@ -62,6 +81,6 @@ class Tools
             return $name.'-sig'.substr($ext, 4);
         } else {
             return $name.'-sig'.$ext;
-        }
+        }*/
     }
 }
