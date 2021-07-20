@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DBP\API\ESignBundle\Helpers;
 
 use GuzzleHttp\Psr7\Uri;
+use Symfony\Component\Uid\Uuid;
 
 class Tools
 {
@@ -44,7 +45,8 @@ class Tools
 
     public static function generateRequestId(): string
     {
-        return uniqid();
+        $uuid = Uuid::v4();
+        return $uuid->toRfc4122();
     }
 
     public static function generateSignedFileName(string $fileName): string
