@@ -65,7 +65,9 @@ class Tools
             $prefix = "";
             if (count($prevName) > 0)
                 $prefix = implode(".", $prevName).".";
-            return $prefix.$name.'-sig'.".".$ext;
+            if (!empty($ext))
+                $ext = ".".$ext;
+            return $prefix.$name.'-sig'.$ext;
         }
 
         /*
