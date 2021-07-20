@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DBP\API\ESignBundle\Helpers;
 
 use GuzzleHttp\Psr7\Uri;
-use function Amp\Promise\rethrow;
 
 class Tools
 {
@@ -61,15 +60,18 @@ class Tools
         $parts = explode('.', $fileName);
 
         $prevName = array_slice($parts, 0, -2);
-        
+
         if (str_ends_with($name, '-sig')) {
             return $fileName;
         } else {
-            $prefix = "";
-            if (count($prevName) > 0)
-                $prefix = implode(".", $prevName).".";
-            if (!empty($ext))
-                $ext = ".".$ext;
+            $prefix = '';
+            if (count($prevName) > 0) {
+                $prefix = implode('.', $prevName).'.';
+            }
+            if (!empty($ext)) {
+                $ext = '.'.$ext;
+            }
+
             return $prefix.$name.'-sig'.$ext;
         }
 
