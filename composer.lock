@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e1b6c9ec1663d6786040576077ce130",
+    "content-hash": "acda925abaab13efe911a647573ead15",
     "packages": [
         {
             "name": "api-platform/core",
@@ -226,14 +226,8 @@
             "version": "v0.1.6",
             "source": {
                 "type": "git",
-                "url": "https://gitlab.tugraz.at/dbp/dbp-api/api-core-bundle.git",
+                "url": "git@gitlab.tugraz.at:dbp/dbp-api/api-core-bundle.git",
                 "reference": "00152673fe78d63feeea06e9d24a2a5c991bbe9e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://gitlab.tugraz.at/api/v4/projects/dbp%2Fdbp-api%2Fapi-core-bundle/repository/archive.zip?sha=00152673fe78d63feeea06e9d24a2a5c991bbe9e",
-                "reference": "00152673fe78d63feeea06e9d24a2a5c991bbe9e",
-                "shasum": ""
             },
             "require": {
                 "api-platform/core": "^2.6.3",
@@ -308,9 +302,6 @@
             "license": [
                 "AGPL-3.0-or-later"
             ],
-            "support": {
-                "issues": "https://gitlab.tugraz.at/api/v4/projects/8296/issues"
-            },
             "time": "2021-07-12T00:17:21+00:00"
         },
         {
@@ -8762,7 +8753,8 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^7.3",
-        "ext-soap": "*"
+        "ext-soap": "*",
+        "ext-json": "*"
     },
     "platform-dev": {
         "ext-simplexml": "*"

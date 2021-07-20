@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace DBP\API\ESignBundle\Controller;
 
 use DBP\API\CoreBundle\Exception\ApiError;
-use DBP\API\CoreBundle\Helpers\JsonException;
-use DBP\API\CoreBundle\Helpers\Tools as CoreTools;
+use DBP\API\ESignBundle\Helpers\Tools;
 use DBP\API\ESignBundle\Service\UserDefinedText;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,8 +19,8 @@ abstract class BaseSigningController extends AbstractController
     {
         // Parse and validate the basics
         try {
-            $parsed = CoreTools::decodeJSON($data, true);
-        } catch (JsonException $e) {
+            $parsed = Tools::decodeJSON($data, true);
+        } catch (\JsonException $e) {
             throw new ApiError(Response::HTTP_BAD_REQUEST, 'invalid JSON');
         }
         if (!is_array($parsed)) {

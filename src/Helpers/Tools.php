@@ -10,6 +10,24 @@ use Symfony\Component\Uid\Uuid;
 class Tools
 {
     /**
+     * Like json_decode but throws on invalid json data.
+     *
+     * @throws \JsonException
+     *
+     * @return mixed
+     */
+    public static function decodeJSON(string $json, bool $assoc = false)
+    {
+        $result = json_decode($json, $assoc);
+        $json_error = json_last_error();
+        if ($json_error !== JSON_ERROR_NONE) {
+            throw new \JsonException(sprintf('%s: "%s"', json_last_error_msg(), print_r($json, true)));
+        }
+
+        return $result;
+    }
+
+    /**
      * Returns the same uri but with the default port included
      * unless it already contains a port, then it is returned unchanged.
      */
@@ -46,6 +64,7 @@ class Tools
     public static function generateRequestId(): string
     {
         $uuid = Uuid::v4();
+
         return $uuid->toRfc4122();
     }
 
