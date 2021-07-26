@@ -95,21 +95,5 @@ class Tools
 
             return $prefix.$name.'-sig'.$ext;
         }
-
-        /*
-        if (count($parts) < 2) {
-            [$name, $ext] = [$parts[0], ''];
-        } else {
-            [$name, $ext] = [$parts[0], '.'.$parts[1]];
-        }
-
-        if (str_ends_with($name, '-sig')) {
-            return $name.$ext;
-        // -> we shouldn't do this, cause we can't be sure that another application uses '.sig'
-        } elseif (str_starts_with($ext, '.sig.')) {
-            return $name.'-sig'.substr($ext, 4);
-        } else {
-            return $name.'-sig'.$ext;
-        }*/
     }
 }
