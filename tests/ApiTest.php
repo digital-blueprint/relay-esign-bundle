@@ -35,7 +35,7 @@ class ApiTest extends ApiTestCase
 
         foreach ($endpoints as $ep) {
             [$method, $path, $status] = $ep;
-            [$client, $user] = $this->withUser('foobar', '42');
+            $client = $this->withUser('foobar', [], '42');
             $response = $client->request($method, $path, ['headers' => [
                 'Authorization' => 'Bearer 42',
             ]]);
