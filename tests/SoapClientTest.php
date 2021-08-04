@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests;
 
-use DBP\API\ESignBundle\PdfAsSoapClient\Connector;
-use DBP\API\ESignBundle\PdfAsSoapClient\PDFASSigningImplService;
-use DBP\API\ESignBundle\PdfAsSoapClient\PDFASVerificationImplService;
-use DBP\API\ESignBundle\PdfAsSoapClient\PropertyMap;
-use DBP\API\ESignBundle\PdfAsSoapClient\SignParameters;
-use DBP\API\ESignBundle\PdfAsSoapClient\SignRequest;
-use DBP\API\ESignBundle\PdfAsSoapClient\SoapResponseParser;
-use DBP\API\ESignBundle\PdfAsSoapClient\VerificationLevel;
-use DBP\API\ESignBundle\PdfAsSoapClient\VerifyRequest;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\Connector;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASSigningImplService;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASVerificationImplService;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyMap;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignParameters;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignRequest;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SoapResponseParser;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\VerificationLevel;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\VerifyRequest;
 use PHPUnit\Framework\TestCase;
 
 class SoapClientTest extends TestCase

@@ -5,19 +5,19 @@ declare(strict_types=1);
  * PDF AS service.
  */
 
-namespace DBP\API\ESignBundle\Service;
+namespace Dbp\Relay\EsignBundle\Service;
 
-use DBP\API\ESignBundle\Helpers\Tools;
-use DBP\API\ESignBundle\PdfAsSoapClient\Connector;
-use DBP\API\ESignBundle\PdfAsSoapClient\PDFASSigningImplService;
-use DBP\API\ESignBundle\PdfAsSoapClient\PDFASVerificationImplService;
-use DBP\API\ESignBundle\PdfAsSoapClient\PropertyEntry;
-use DBP\API\ESignBundle\PdfAsSoapClient\PropertyMap;
-use DBP\API\ESignBundle\PdfAsSoapClient\SignParameters;
-use DBP\API\ESignBundle\PdfAsSoapClient\SignRequest;
-use DBP\API\ESignBundle\PdfAsSoapClient\VerificationLevel;
-use DBP\API\ESignBundle\PdfAsSoapClient\VerifyRequest;
-use DBP\API\ESignBundle\PdfAsSoapClient\VerifyResponse;
+use Dbp\Relay\EsignBundle\Helpers\Tools;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\Connector;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASSigningImplService;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASVerificationImplService;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyEntry;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyMap;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignParameters;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignRequest;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\VerificationLevel;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\VerifyRequest;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\VerifyResponse;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use League\Uri\Contracts\UriException;

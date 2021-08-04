@@ -1,19 +1,19 @@
 services:
-    DBP\API\ESignBundle\Service\PdfAsApi:
+    Dbp\Relay\EsignBundle\Service\PdfAsApi:
         public: false
         autowire: true
         autoconfigure: true
 
-    DBP\API\ESignBundle\Service\SignatureProviderInterface:
-        '@DBP\API\ESignBundle\Service\PdfAsApi'
+    Dbp\Relay\EsignBundle\Service\SignatureProviderInterface:
+        '@Dbp\Relay\EsignBundle\Service\PdfAsApi'
 
-    DBP\API\ESignBundle\Controller\:
+    Dbp\Relay\EsignBundle\Controller\:
         tags: ['controller.service_arguments']
         resource: '../../Controller'
         autowire: true
         autoconfigure: true
 
-    DBP\API\ESignBundle\DataProvider\:
+    Dbp\Relay\EsignBundle\DataProvider\:
         tags: ['controller.service_arguments']
         resource: '../../DataProvider'
         autowire: true

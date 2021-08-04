@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Entity;
+namespace Dbp\Relay\EsignBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use DBP\API\ESignBundle\Controller\CreateQualifiedSigningRequestAction;
+use Dbp\Relay\EsignBundle\Controller\CreateQualifiedSigningRequestAction;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
  *             "path" = "/qualified_signing_requests",
  *             "openapi_context" = {
- *                 "tags" = {"ESign"},
+ *                 "tags" = {"Electronic Signatures"},
  *             },
  *         },
  *         "post" = {
@@ -32,7 +32,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "controller" = CreateQualifiedSigningRequestAction::class,
  *             "deserialize" = false,
  *             "openapi_context" = {
- *                 "tags" = {"ESign"},
+ *                 "tags" = {"Electronic Signatures"},
  *                 "requestBody" = {
  *                     "content" = {
  *                         "multipart/form-data" = {
@@ -78,7 +78,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "path" = "/qualified_signing_requests/{identifier}",
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
  *             "openapi_context" = {
- *                 "tags" = {"ESign"},
+ *                 "tags" = {"Electronic Signatures"},
  *             },
  *         }
  *     },
@@ -86,7 +86,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     description="Qualified signing request",
  *     normalizationContext={
  *         "jsonld_embed_context" = true,
- *         "groups" = {"QualifiedSigningRequest:output"}
+ *         "groups" = {"EsignQualifiedSigningRequest:output"}
  *     }
  * )
  */
@@ -94,14 +94,14 @@ class QualifiedSigningRequest
 {
     /**
      * @ApiProperty(identifier=true, iri="https://schema.org/identifier")
-     * @Groups({"QualifiedSigningRequest:output"})
+     * @Groups({"EsignQualifiedSigningRequest:output"})
      * Note: Every entity needs an identifier!
      */
     private $identifier;
 
     /**
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"QualifiedSigningRequest:output"})
+     * @Groups({"EsignQualifiedSigningRequest:output"})
      *
      * @var string
      */
@@ -109,7 +109,7 @@ class QualifiedSigningRequest
 
     /**
      * @ApiProperty(iri="http://schema.org/url")
-     * @Groups({"QualifiedSigningRequest:output"})
+     * @Groups({"EsignQualifiedSigningRequest:output"})
      *
      * @var string
      */

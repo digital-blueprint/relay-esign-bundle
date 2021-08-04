@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Entity;
+namespace Dbp\Relay\EsignBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -20,14 +20,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
  *             "path" = "/electronic_signatures/{identifier}",
  *             "openapi_context" = {
- *                 "tags" = {"ESign"},
+ *                 "tags" = {"Electronic Signatures"},
  *             },
  *         }
  *     },
  *     iri="http://schema.tugraz.at/ElectronicSignature",
  *     description="An electronic signature of a signed document",
  *     normalizationContext={
- *         "groups" = {"ElectronicSignature:output"},
+ *         "groups" = {"EsignElectronicSignature:output"},
  *         "jsonld_embed_context" = true
  *     }
  * )
@@ -36,46 +36,46 @@ class ElectronicSignature
 {
     /**
      * @ApiProperty(identifier=true)
-     * @Groups({"ElectronicSignature:output"})
+     * @Groups({"EsignElectronicSignature:output"})
      */
     private $identifier;
 
     /**
      * @ApiProperty(iri="http://schema.org/givenName")
-     * @Groups({"ElectronicSignature:output"})
+     * @Groups({"EsignElectronicSignature:output"})
      */
     private $givenName;
 
     /**
      * @var string
      * @ApiProperty(iri="http://schema.org/familyName")
-     * @Groups({"ElectronicSignature:output"})
+     * @Groups({"EsignElectronicSignature:output"})
      */
     private $familyName;
 
     /**
      * @var string
      * @ApiProperty(iri="http://schema.org/serialNumber")
-     * @Groups({"ElectronicSignature:output"})
+     * @Groups({"EsignElectronicSignature:output"})
      */
     private $serialNumber;
 
     /**
      * @var string
      * @ApiProperty(iri="http://schema.org/Text")
-     * @Groups({"ElectronicSignature:output"})
+     * @Groups({"EsignElectronicSignature:output"})
      */
     private $signedBy;
 
     /**
      * @ApiProperty(iri="http://schema.org/nationality")
-     * @Groups({"ElectronicSignature:output"})
+     * @Groups({"EsignElectronicSignature:output"})
      */
     private $nationality;
 
     /**
      * @ApiProperty(iri="http://schema.org/Text")
-     * @Groups({"ElectronicSignature:output"})
+     * @Groups({"EsignElectronicSignature:output"})
      */
     private $valueMessage;
 

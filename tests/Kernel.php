@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\ApiPlatformBundle;
-use DBP\API\CoreBundle\DbpCoreBundle;
-use DBP\API\ESignBundle\DbpEsignBundle;
+use Dbp\Relay\CoreBundle\DbpRelayCoreBundle;
+use Dbp\Relay\EsignBundle\DbpRelayEsignBundle;
 use Nelmio\CorsBundle\NelmioCorsBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -29,18 +29,18 @@ class Kernel extends BaseKernel
         yield new NelmioCorsBundle();
         yield new MonologBundle();
         yield new ApiPlatformBundle();
-        yield new DbpCoreBundle();
-        yield new DbpEsignBundle();
+        yield new DbpRelayCoreBundle();
+        yield new DbpRelayEsignBundle();
     }
 
     protected function configureRoutes(RoutingConfigurator $routes)
     {
-        $routes->import('@DbpCoreBundle/Resources/config/routing.yaml');
+        $routes->import('@DbpRelayCoreBundle/Resources/config/routing.yaml');
     }
 
     protected function configureContainer(ContainerConfigurator $container)
     {
-        $container->import('@DbpCoreBundle/Resources/config/services_test.yaml');
+        $container->import('@DbpRelayCoreBundle/Resources/config/services_test.yaml');
         $container->extension('framework', [
             'test' => true,
             'secret' => '',

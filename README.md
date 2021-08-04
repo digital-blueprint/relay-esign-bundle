@@ -27,7 +27,7 @@ Enable this bundle in `./config/bundles.php` by adding this element to the array
 ...
     return [
         ...
-        DBP\API\ESignBundle\ESignBundle::class => ['all' => true],
+        Dbp\Relay\EsignBundle\ESignBundle::class => ['all' => true],
     ];
 }
 ```

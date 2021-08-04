@@ -1,12 +1,12 @@
 {
-    "name": "dbp/api-esign-bundle",
+    "name": "dbp/relay-esign-bundle",
     "type": "symfony-bundle",
     "license": "AGPL-3.0-or-later",
     "require": {
         "php": "^7.3",
         "ext-soap": "*",
         "api-platform/core": "^2.6.4",
-        "dbp/api-core-bundle": "^0.1",
+        "dbp/relay-core-bundle": "^0.1",
         "guzzlehttp/guzzle": "^7.0",
         "league/uri": "^6.3",
         "myclabs/php-enum": "^1.7",
@@ -27,20 +27,14 @@
         "symfony/phpunit-bridge": "^5.2",
         "vimeo/psalm": "^4.0"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@gitlab.tugraz.at:dbp/dbp-api/api-core-bundle.git"
-        }
-    ],
     "autoload": {
         "psr-4": {
-            "DBP\\API\\ESignBundle\\": "src/"
+            "Dbp\\Relay\\EsignBundle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-          "DBP\\API\\ESignBundle\\Tests\\": "tests/"
+          "Dbp\\Relay\\EsignBundle\\Tests\\": "tests/"
         }
     },
     "config": {

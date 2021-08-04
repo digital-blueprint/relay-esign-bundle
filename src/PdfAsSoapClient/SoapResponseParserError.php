@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\PdfAsSoapClient;
+namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 
 final class SoapResponseParserError extends \Exception
 {

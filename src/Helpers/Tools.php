@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Helpers;
+namespace Dbp\Relay\EsignBundle\Helpers;
 
 use GuzzleHttp\Psr7\Uri;
 use Symfony\Component\Uid\Uuid;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\PdfAsSoapClient;
+namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 
 // https://en.wikipedia.org/wiki/Message_Transmission_Optimization_Mechanism
 // https://www.w3.org/TR/SOAP-attachments/#RFC2557

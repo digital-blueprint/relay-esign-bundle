@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\DataProvider;
+namespace Dbp\Relay\EsignBundle\DataProvider;
 
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
-use DBP\API\CoreBundle\Exception\ApiError;
-use DBP\API\ESignBundle\Entity\QualifiedlySignedDocument;
-use DBP\API\ESignBundle\Helpers\Tools;
-use DBP\API\ESignBundle\Service\SignatureProviderInterface;
-use DBP\API\ESignBundle\Service\SigningException;
+use Dbp\Relay\CoreBundle\Exception\ApiError;
+use Dbp\Relay\EsignBundle\Entity\QualifiedlySignedDocument;
+use Dbp\Relay\EsignBundle\Helpers\Tools;
+use Dbp\Relay\EsignBundle\Service\SignatureProviderInterface;
+use Dbp\Relay\EsignBundle\Service\SigningException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle;
+namespace Dbp\Relay\EsignBundle;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class DbpEsignBundle extends Bundle
+class DbpRelayEsignBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {

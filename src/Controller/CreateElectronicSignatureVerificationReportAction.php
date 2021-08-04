@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Controller;
+namespace Dbp\Relay\EsignBundle\Controller;
 
-use DBP\API\CoreBundle\Exception\ApiError;
-use DBP\API\ESignBundle\Entity\ElectronicSignature;
-use DBP\API\ESignBundle\Entity\ElectronicSignatureVerificationReport;
-use DBP\API\ESignBundle\Helpers\Tools;
-use DBP\API\ESignBundle\Service\SignatureProviderInterface;
-use DBP\API\ESignBundle\Service\SigningException;
-use DBP\API\ESignBundle\Service\SigningUnavailableException;
+use Dbp\Relay\CoreBundle\Exception\ApiError;
+use Dbp\Relay\EsignBundle\Entity\ElectronicSignature;
+use Dbp\Relay\EsignBundle\Entity\ElectronicSignatureVerificationReport;
+use Dbp\Relay\EsignBundle\Helpers\Tools;
+use Dbp\Relay\EsignBundle\Service\SignatureProviderInterface;
+use Dbp\Relay\EsignBundle\Service\SigningException;
+use Dbp\Relay\EsignBundle\Service\SigningUnavailableException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;

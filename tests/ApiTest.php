@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
-use DBP\API\CoreBundle\TestUtils\UserAuthTrait;
+use Dbp\Relay\CoreBundle\TestUtils\UserAuthTrait;
 
 class ApiTest extends ApiTestCase
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests;
 
-use DBP\API\ESignBundle\Helpers\Tools;
+use Dbp\Relay\EsignBundle\Helpers\Tools;
 use PHPUnit\Framework\TestCase;
 
 class ToolsTest extends TestCase

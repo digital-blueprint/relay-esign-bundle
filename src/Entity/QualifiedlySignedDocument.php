@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Entity;
+namespace Dbp\Relay\EsignBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
  *             "path" = "/qualifiedly_signed_documents",
  *             "openapi_context" = {
- *                 "tags" = {"ESign"},
+ *                 "tags" = {"Electronic Signatures"},
  *             },
  *         }
  *     },
@@ -30,7 +30,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "path" = "/qualifiedly_signed_documents/{identifier}",
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
  *             "openapi_context" = {
- *                 "tags" = {"ESign"},
+ *                 "tags" = {"Electronic Signatures"},
  *                 "parameters" = {
  *                     {"name" = "identifier", "in" = "path", "description" = "Id of document to fetch", "required" = true, "type" = "string", "example" = "28DbA8052CE1410AF5985E"},
  *                     {"name" = "fileName", "in" = "query", "description" = "File name of the original file", "required" = false, "type" = "string", "example" = "my-document.pdf"}
@@ -52,14 +52,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     description="Qualifiedly signed PDF document",
  *     normalizationContext={
  *         "jsonld_embed_context" = true,
- *         "groups" = {"QualifiedlySignedDocument:output"}
+ *         "groups" = {"EsignQualifiedlySignedDocument:output"}
  *     }
  * )
  */
 class QualifiedlySignedDocument
 {
     /**
-     * @Groups({"QualifiedlySignedDocument:output"})
+     * @Groups({"EsignQualifiedlySignedDocument:output"})
      * @ApiProperty(identifier=true, iri="https://schema.org/identifier")
      * Note: Every entity needs an identifier!
      */
@@ -67,7 +67,7 @@ class QualifiedlySignedDocument
 
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"QualifiedlySignedDocument:output"})
+     * @Groups({"EsignQualifiedlySignedDocument:output"})
      *
      * @var string
      */
@@ -75,7 +75,7 @@ class QualifiedlySignedDocument
 
     /**
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"QualifiedlySignedDocument:output"})
+     * @Groups({"EsignQualifiedlySignedDocument:output"})
      *
      * @var string
      */
@@ -83,7 +83,7 @@ class QualifiedlySignedDocument
 
     /**
      * @ApiProperty(iri="https://schema.org/contentSize")
-     * @Groups({"QualifiedlySignedDocument:output"})
+     * @Groups({"EsignQualifiedlySignedDocument:output"})
      *
      * @var int
      */

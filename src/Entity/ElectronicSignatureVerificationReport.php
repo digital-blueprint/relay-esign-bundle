@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Entity;
+namespace Dbp\Relay\EsignBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use DBP\API\ESignBundle\Controller\CreateElectronicSignatureVerificationReportAction;
+use Dbp\Relay\EsignBundle\Controller\CreateElectronicSignatureVerificationReportAction;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
  *             "path" = "/electronic_signature_verification_reports",
  *             "openapi_context" = {
- *                 "tags" = {"ESign"},
+ *                 "tags" = {"Electronic Signatures"},
  *             },
  *         },
  *         "post" = {
@@ -32,7 +32,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "controller" = CreateElectronicSignatureVerificationReportAction::class,
  *             "deserialize" = false,
  *             "openapi_context" = {
- *                 "tags" = {"ESign"},
+ *                 "tags" = {"Electronic Signatures"},
  *                 "summary" = "Retrieves a ElectronicSignatureVerificationReport resource with a collection of ElectronicSignature resources of a signed document.",
  *                 "requestBody" = {
  *                     "content" = {
@@ -71,21 +71,21 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
  *             "path" = "/electronic_signature_verification_reports/{identifier}",
  *             "openapi_context" = {
- *                 "tags" = {"ESign"},
+ *                 "tags" = {"Electronic Signatures"},
  *             },
  *         }
  *     },
  *     iri="https://schema.tugraz.at/ElectronicSignatureVerificationReport",
  *     normalizationContext={
  *         "jsonld_embed_context" = true,
- *         "groups" = {"ElectronicSignatureVerificationReport:output", "ElectronicSignature:output"}
+ *         "groups" = {"EsignElectronicSignatureVerificationReport:output", "ElectronicSignature:output"}
  *     }
  * )
  */
 class ElectronicSignatureVerificationReport
 {
     /**
-     * @Groups({"ElectronicSignatureVerificationReport:output"})
+     * @Groups({"EsignElectronicSignatureVerificationReport:output"})
      * @ApiProperty(identifier=true, iri="https://schema.org/identifier")
      * Note: Every entity needs an identifier!
      */
@@ -93,14 +93,14 @@ class ElectronicSignatureVerificationReport
 
     /**
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"ElectronicSignatureVerificationReport:output"})
+     * @Groups({"EsignElectronicSignatureVerificationReport:output"})
      *
      * @var string
      */
     private $name;
 
     /**
-     * @Groups({"ElectronicSignatureVerificationReport:output"})
+     * @Groups({"EsignElectronicSignatureVerificationReport:output"})
      *
      * @var ElectronicSignature[]
      */

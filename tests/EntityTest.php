@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests;
 
-use DBP\API\ESignBundle\Entity\ElectronicSignature;
-use DBP\API\ESignBundle\Entity\ElectronicSignatureVerificationReport;
+use Dbp\Relay\EsignBundle\Entity\ElectronicSignature;
+use Dbp\Relay\EsignBundle\Entity\ElectronicSignatureVerificationReport;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class EntityTest extends WebTestCase

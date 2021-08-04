@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Entity;
+namespace Dbp\Relay\EsignBundle\Entity;
 
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
-use DBP\API\ESignBundle\Controller\CreateAdvancedlySignedDocumentAction;
+use Dbp\Relay\EsignBundle\Controller\CreateAdvancedlySignedDocumentAction;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *             "path" = "/advancedly_signed_documents",
  *             "openapi_context" = {
- *                 "tags" = {"ESign"},
+ *                 "tags" = {"Electronic Signatures"},
  *             },
  *         },
  *         "post" = {
@@ -30,7 +30,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "controller" = CreateAdvancedlySignedDocumentAction::class,
  *             "deserialize" = false,
  *             "openapi_context" = {
- *                 "tags" = {"ESign"},
+ *                 "tags" = {"Electronic Signatures"},
  *                 "requestBody" = {
  *                     "content" = {
  *                         "multipart/form-data" = {
@@ -73,7 +73,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *             "path" = "/advancedly_signed_documents/{identifier}",
  *             "openapi_context" = {
- *                 "tags" = {"ESign"},
+ *                 "tags" = {"Electronic Signatures"},
  *             },
  *         }
  *     },
@@ -81,14 +81,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     description="Advanced signed PDF document",
  *     normalizationContext={
  *         "jsonld_embed_context" = true,
- *         "groups" = {"AdvancedlySignedDocument:output"}
+ *         "groups" = {"EsignAdvancedlySignedDocument:output"}
  *     }
  * )
  */
 class AdvancedlySignedDocument
 {
     /**
-     * @Groups({"AdvancedlySignedDocument:output"})
+     * @Groups({"EsignAdvancedlySignedDocument:output"})
      * @ApiProperty(identifier=true, iri="https://schema.org/identifier")
      * Note: Every entity needs an identifier!
      */
@@ -96,7 +96,7 @@ class AdvancedlySignedDocument
 
     /**
      * @ApiProperty(iri="http://schema.org/contentUrl")
-     * @Groups({"AdvancedlySignedDocument:output"})
+     * @Groups({"EsignAdvancedlySignedDocument:output"})
      *
      * @var string
      */
@@ -104,7 +104,7 @@ class AdvancedlySignedDocument
 
     /**
      * @ApiProperty(iri="http://schema.org/name")
-     * @Groups({"AdvancedlySignedDocument:output"})
+     * @Groups({"EsignAdvancedlySignedDocument:output"})
      *
      * @var string
      */
@@ -112,7 +112,7 @@ class AdvancedlySignedDocument
 
     /**
      * @ApiProperty(iri="https://schema.org/contentSize")
-     * @Groups({"AdvancedlySignedDocument:output"})
+     * @Groups({"EsignAdvancedlySignedDocument:output"})
      *
      * @var int
      */

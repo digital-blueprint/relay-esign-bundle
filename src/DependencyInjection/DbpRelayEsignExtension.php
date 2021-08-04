@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\DependencyInjection;
+namespace Dbp\Relay\EsignBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
-class DbpEsignExtension extends ConfigurableExtension
+class DbpRelayEsignExtension extends ConfigurableExtension
 {
     public function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
@@ -39,7 +39,7 @@ class DbpEsignExtension extends ConfigurableExtension
         );
         $loader->load('services.yaml');
 
-        $definition = $container->getDefinition('DBP\API\ESignBundle\Service\PdfAsApi');
+        $definition = $container->getDefinition('Dbp\Relay\EsignBundle\Service\PdfAsApi');
         $definition->addMethodCall('setConfig', [$mergedConfig]);
     }
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Service;
+namespace Dbp\Relay\EsignBundle\Service;
 
 interface SignatureProviderInterface
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace DBP\API\ESignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
-use DBP\API\ESignBundle\Service\PdfAsApi;
-use DBP\API\ESignBundle\Service\SigningException;
+use Dbp\Relay\EsignBundle\Service\PdfAsApi;
+use Dbp\Relay\EsignBundle\Service\SigningException;
 
 class PdfAsApiTest extends ApiTestCase
 {
