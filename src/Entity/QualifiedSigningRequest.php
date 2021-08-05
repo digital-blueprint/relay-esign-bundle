@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
- *             "path" = "/esign/qualified_signing_requests",
+ *             "path" = "/qualified_signing_requests",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },
@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *         "post" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
  *             "method" = "POST",
- *             "path" = "/esign/qualified_signing_requests",
+ *             "path" = "/qualified_signing_requests",
  *             "controller" = CreateQualifiedSigningRequestAction::class,
  *             "deserialize" = false,
  *             "openapi_context" = {
@@ -75,7 +75,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *         "get" = {
- *             "path" = "/esign/qualified_signing_requests/{identifier}",
+ *             "path" = "/qualified_signing_requests/{identifier}",
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
@@ -83,7 +83,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *         }
  *     },
  *     iri="http://schema.org/EntryPoint",
- *     shortName="EsignQualifiedSigningRequest",
  *     description="Qualified signing request",
  *     normalizationContext={
  *         "jsonld_embed_context" = true,

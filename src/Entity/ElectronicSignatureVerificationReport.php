@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
- *             "path" = "/esign/electronic_signature_verification_reports",
+ *             "path" = "/electronic_signature_verification_reports",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },
@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *         "post" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
  *             "method" = "POST",
- *             "path" = "/esign/electronic_signature_verification_reports",
+ *             "path" = "/electronic_signature_verification_reports",
  *             "controller" = CreateElectronicSignatureVerificationReportAction::class,
  *             "deserialize" = false,
  *             "openapi_context" = {
@@ -69,14 +69,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
- *             "path" = "/esign/electronic_signature_verification_reports/{identifier}",
+ *             "path" = "/electronic_signature_verification_reports/{identifier}",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },
  *         }
  *     },
  *     iri="https://schema.tugraz.at/ElectronicSignatureVerificationReport",
- *     shortName="EsignElectronicSignatureVerificationReport",
  *     normalizationContext={
  *         "jsonld_embed_context" = true,
  *         "groups" = {"EsignElectronicSignatureVerificationReport:output", "ElectronicSignature:output"}
