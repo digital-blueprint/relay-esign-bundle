@@ -18,13 +18,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_VERIFY-SIGNATURE')",
- *             "path" = "/electronic_signatures/{identifier}",
+ *             "path" = "/esign/electronic_signatures/{identifier}",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },
  *         }
  *     },
  *     iri="http://schema.tugraz.at/ElectronicSignature",
+ *     shortName="EsignElectronicSignature",
  *     description="An electronic signature of a signed document",
  *     normalizationContext={
  *         "groups" = {"EsignElectronicSignature:output"},

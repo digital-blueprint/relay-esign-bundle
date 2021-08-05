@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
- *             "path" = "/qualifiedly_signed_documents",
+ *             "path" = "/esign/qualifiedly_signed_documents",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },
@@ -27,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *         "get" = {
- *             "path" = "/qualifiedly_signed_documents/{identifier}",
+ *             "path" = "/esign/qualifiedly_signed_documents/{identifier}",
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
@@ -49,6 +49,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *         }
  *     },
  *     iri="http://schema.org/MediaObject",
+ *     shortName="EsignQualifiedlySignedDocument",
  *     description="Qualifiedly signed PDF document",
  *     normalizationContext={
  *         "jsonld_embed_context" = true,
