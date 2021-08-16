@@ -19,14 +19,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
- *             "path" = "/advancedly_signed_documents",
+ *             "path" = "/esign/advancedly_signed_documents",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },
  *         },
  *         "post" = {
  *             "method" = "POST",
- *             "path" = "/advancedly_signed_documents",
+ *             "path" = "/esign/advancedly_signed_documents",
  *             "controller" = CreateAdvancedlySignedDocumentAction::class,
  *             "deserialize" = false,
  *             "openapi_context" = {
@@ -71,7 +71,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
- *             "path" = "/advancedly_signed_documents/{identifier}",
+ *             "path" = "/esign/advancedly_signed_documents/{identifier}",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },
@@ -79,6 +79,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     iri="http://schema.org/MediaObject",
  *     description="Advanced signed PDF document",
+ *     shortName="EsignAdvancedlySignedDocument",
  *     normalizationContext={
  *         "jsonld_embed_context" = true,
  *         "groups" = {"EsignAdvancedlySignedDocument:output"}
