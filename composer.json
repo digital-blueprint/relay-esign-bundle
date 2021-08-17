@@ -18,6 +18,7 @@
     },
     "require-dev": {
         "ext-simplexml": "*",
+        "brainmaestro/composer-git-hooks": "^2.8",
         "friendsofphp/php-cs-fixer": "^3.0",
         "phpstan/phpstan": "^0.12.33",
         "phpstan/phpstan-phpunit": "^0.12.13",
@@ -43,7 +44,16 @@
           "php": "7.3"
         }
     },
+    "extra": {
+        "hooks": {
+            "pre-commit": [
+                "composer lint"
+            ]
+        }
+    },
     "scripts": {
+        "post-install-cmd": "cghooks add --ignore-lock",
+        "post-update-cmd": "cghooks update",
         "test": [
             "@php vendor/bin/simple-phpunit"
         ],
