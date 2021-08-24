@@ -17,17 +17,17 @@ class DbpRelayEsignExtension extends ConfigurableExtension
             $container, 'api_platform.resource_class_directories', [__DIR__.'/../Entity']);
 
         $pathsToHide = [
-            '/advancedly_signed_documents/{identifier}',
-            '/advancedly_signed_documents',
-            '/qualified_signing_requests/{identifier}',
-            '/qualified_signing_requests',
-            '/electronic_signature_verification_reports',
-            '/electronic_signature_verification_reports/{identifier}',
+            '/esign/advancedly_signed_documents/{identifier}',
+            '/esign/advancedly_signed_documents',
+            '/esign/qualified_signing_requests/{identifier}',
+            '/esign/qualified_signing_requests',
+            '/esign/electronic_signature_verification_reports',
+            '/esign/electronic_signature_verification_reports/{identifier}',
         ];
 
         if (($_ENV['PDF_AS_VERIFICATION_ENABLE'] ?? 'true') !== 'true') {
             $pathsToHide = array_merge($pathsToHide, [
-                '/electronic_signatures/{id}',
+                '/esign/electronic_signatures/{id}',
             ]);
         }
 
