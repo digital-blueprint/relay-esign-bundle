@@ -36,14 +36,14 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     private $qualifiedUrl;
     private $qualifiedStaticUrl;
     private $advancedProfiles;
-    private $qualifiedProfile;
+    private $qualifiedProfiles;
 
     public function __construct()
     {
         $this->advancedUrl = '';
         $this->qualifiedUrl = '';
         $this->qualifiedStaticUrl = '';
-        $this->qualifiedProfile = [];
+        $this->qualifiedProfiles = [];
         $this->advancedProfiles = [];
     }
 
@@ -52,18 +52,16 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         $this->advancedUrl = $config['advanced_url'] ?? '';
         $this->qualifiedUrl = $config['qualified_url'] ?? '';
         $this->qualifiedStaticUrl = $config['qualified_static_url'] ?? '';
-        $this->qualifiedProfile = $config['qualified_profile'] ?? [];
+        $this->qualifiedProfiles = $config['qualified_profiles'] ?? [];
         $this->advancedProfiles = $config['advanced_profiles'] ?? [];
     }
 
     /**
      * @throws SigningException
      */
-    public function createQualifiedSigningRequestRedirectUrl(string $data, string $requestId = '', array $positionData = [], array $userText = []): string
+    public function createQualifiedSigningRequestRedirectUrl(string $data, string $profileName, string $requestId, array $positionData = [], array $userText = []): string
     {
-        if ($requestId === '') {
-            $requestId = Tools::generateRequestId();
-        }
+        $profile = $this->getQualifiedProfileData($profileName);
 
         try {
             $service = new PDFASSigningImplService($this->qualifiedUrl.'/services/wssign', self::PDF_AS_TIMEOUT);
@@ -71,7 +69,6 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
             throw new SigningException('Signing soap call failed, wsdl URI cannot be loaded!');
         }
 
-        $profile = $this->qualifiedProfile;
         $params = new SignParameters(Connector::mobilebku());
         $params->setProfile($profile['profile_id'] ?? '');
 
@@ -139,6 +136,16 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         $this->log('PDF was verified', ['request_id' => $requestId]);
 
         return $results;
+    }
+
+    private function getQualifiedProfileData(string $profileName)
+    {
+        foreach ($this->qualifiedProfiles as $profile) {
+            if ($profile['name'] === $profileName) {
+                return $profile;
+            }
+        }
+        throw new SigningException('Unknown profile');
     }
 
     private function getAdvancedProfileData(string $profileName)
@@ -384,6 +391,16 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     public function getAdvancedlySignRequiredRole(string $profileName): string
     {
         $profile = $this->getAdvancedProfileData($profileName);
+        if (!isset($profile['role'])) {
+            throw new SigningException('No role set');
+        }
+
+        return $profile['role'];
+    }
+
+    public function getQualifiedlySignRequiredRole(string $profileName): string
+    {
+        $profile = $this->getQualifiedProfileData($profileName);
         if (!isset($profile['role'])) {
             throw new SigningException('No role set');
         }

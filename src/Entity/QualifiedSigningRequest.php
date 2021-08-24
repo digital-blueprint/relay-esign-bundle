@@ -15,18 +15,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ApiResource(
  *     attributes={
- *         "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"
+ *         "security" = "is_granted('IS_AUTHENTICATED_FULLY')"
  *     },
  *     collectionOperations={
  *         "get" = {
- *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *             "path" = "/esign/qualified_signing_requests",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },
  *         },
  *         "post" = {
- *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *             "method" = "POST",
  *             "path" = "/esign/qualified_signing_requests",
  *             "controller" = CreateQualifiedSigningRequestAction::class,
@@ -39,6 +39,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                             "schema" = {
  *                                 "type" = "object",
  *                                 "properties" = {
+ *                                     "profile" = {"description" = "Name of the signature profile", "type" = "string", "example" = "default"},
  *                                     "file" = {"type" = "string", "format" = "binary"},
  *                                     "x" = {"description" = "Position of the signature from the left", "type" = "number", "example" = "300"},
  *                                     "y" = {"description" = "Position of the signature from the bottom", "type" = "number", "example" = "300"},
@@ -47,7 +48,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                                     "p" = {"description" = "Page number the signature should be placed", "type" = "number", "example" = "2"},
  *                                     "user_text" = {"description" = "User defined text. JSON list of objects with description/value", "type" = "string", "example" = "[{""description"": ""Some ID"", ""value"": ""123456""}]"},
  *                                 },
- *                                 "required" = {"file"},
+ *                                 "required" = {"file", "profile"},
  *                             }
  *                         }
  *                     }
@@ -76,7 +77,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *         "get" = {
  *             "path" = "/esign/qualified_signing_requests/{identifier}",
- *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },

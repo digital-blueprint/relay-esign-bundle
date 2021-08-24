@@ -37,7 +37,6 @@ final class QualifiedlySignedDocumentDataProvider extends AbstractController imp
     public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?QualifiedlySignedDocument
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessUnlessGranted('ROLE_SCOPE_QUALIFIED-SIGNATURE');
 
         assert(is_string($id));
         $api = $this->api;

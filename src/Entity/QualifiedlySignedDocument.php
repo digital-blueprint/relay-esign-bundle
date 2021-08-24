@@ -14,11 +14,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ApiResource(
  *     attributes={
- *         "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')"
+ *         "security" = "is_granted('IS_AUTHENTICATED_FULLY')"
  *     },
  *     collectionOperations={
  *         "get" = {
- *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *             "path" = "/esign/qualifiedly_signed_documents",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *         "get" = {
  *             "path" = "/esign/qualifiedly_signed_documents/{identifier}",
- *             "security" = "is_granted('IS_AUTHENTICATED_FULLY') and is_granted('ROLE_SCOPE_QUALIFIED-SIGNATURE')",
+ *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *                 "parameters" = {
