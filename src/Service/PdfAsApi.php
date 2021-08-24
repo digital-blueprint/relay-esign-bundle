@@ -34,7 +34,8 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 
     private $advancedUrl;
     private $qualifiedUrl;
-    private $qualifiedStaticUrl;
+    private $qualifiedCallbackUrl;
+    private $qualifiedErrorCallbackUrl;
     private $advancedProfiles;
     private $qualifiedProfiles;
 
@@ -42,7 +43,8 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     {
         $this->advancedUrl = '';
         $this->qualifiedUrl = '';
-        $this->qualifiedStaticUrl = '';
+        $this->qualifiedCallbackUrl = '';
+        $this->qualifiedErrorCallbackUrl = '';
         $this->qualifiedProfiles = [];
         $this->advancedProfiles = [];
     }
@@ -51,7 +53,8 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     {
         $this->advancedUrl = $config['advanced_url'] ?? '';
         $this->qualifiedUrl = $config['qualified_url'] ?? '';
-        $this->qualifiedStaticUrl = $config['qualified_static_url'] ?? '';
+        $this->qualifiedCallbackUrl = $config['qualified_callback_url'] ?? '';
+        $this->qualifiedErrorCallbackUrl = $config['qualified_error_callback_url'] ?? '';
         $this->qualifiedProfiles = $config['qualified_profiles'] ?? [];
         $this->advancedProfiles = $config['advanced_profiles'] ?? [];
     }
@@ -79,10 +82,9 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
             $params->setConfigurationOverrides($configurationOverrides);
         }
 
-        $staticUri = $this->qualifiedStaticUrl;
-        $params->setInvokeurl($staticUri.'/callback.html');
+        $params->setInvokeurl($this->qualifiedCallbackUrl);
         // it's important to add the port "443", PDF-AS has a bug that will set the port to "-1" if it isn't set
-        $params->setInvokeerrorurl(Tools::getUriWithPort($staticUri.'/error.html'));
+        $params->setInvokeerrorurl(Tools::getUriWithPort($this->qualifiedErrorCallbackUrl));
 
         // add signature position data if there is any
         if (count($positionData) !== 0) {

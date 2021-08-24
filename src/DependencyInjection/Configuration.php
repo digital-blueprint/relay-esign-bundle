@@ -19,7 +19,8 @@ class Configuration implements ConfigurationInterface
                     ->info('The URL to the PDF-AS server for qualified signatures')
                     ->example('https://pdfas.example.com/pdf-as-web')
                 ->end()
-                ->scalarNode('qualified_static_url')->end() // XXX: Remove this
+                ->scalarNode('qualified_callback_url')->end()
+                ->scalarNode('qualified_error_callback_url')->end()
                 ->arrayNode('qualified_profiles')
                     ->arrayPrototype()
                         ->children()
