@@ -51,12 +51,15 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 
     public function setConfig(array $config)
     {
-        $this->advancedUrl = $config['advanced_url'] ?? '';
-        $this->qualifiedUrl = $config['qualified_url'] ?? '';
-        $this->qualifiedCallbackUrl = $config['qualified_callback_url'] ?? '';
-        $this->qualifiedErrorCallbackUrl = $config['qualified_error_callback_url'] ?? '';
-        $this->qualifiedProfiles = $config['qualified_profiles'] ?? [];
-        $this->advancedProfiles = $config['advanced_profiles'] ?? [];
+        $qualified = $config['qualified_signature'] ?? [];
+        $this->qualifiedUrl = $qualified['server_url'] ?? '';
+        $this->qualifiedCallbackUrl = $qualified['callback_url'] ?? '';
+        $this->qualifiedErrorCallbackUrl = $qualified['error_callback_url'] ?? '';
+        $this->qualifiedProfiles = $qualified['profiles'] ?? [];
+
+        $advanced = $config['advanced_signature'] ?? [];
+        $this->advancedUrl = $advanced['server_url'] ?? '';
+        $this->advancedProfiles = $advanced['profiles'] ?? [];
     }
 
     /**
