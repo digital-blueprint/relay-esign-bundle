@@ -47,5 +47,5 @@ interface SignatureProviderInterface
      *
      * @throws SigningException
      */
-    public function verifyPdfData($data, $requestId = '');
+    public function verifyPdfData($data, $requestId);
 }

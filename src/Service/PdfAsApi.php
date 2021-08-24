@@ -128,7 +128,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
      *
      * @throws SigningException
      */
-    public function verifyPdfData($data, $requestId = '')
+    public function verifyPdfData($data, $requestId)
     {
         $response = $this->doVerifyRequest($data, $requestId);
 
@@ -306,12 +306,8 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     /**
      * @throws SigningException
      */
-    public function doVerifyRequest(string $data, string $requestId = ''): VerifyResponse
+    public function doVerifyRequest(string $data, string $requestId): VerifyResponse
     {
-        if ($requestId === '') {
-            $requestId = Tools::generateRequestId();
-        }
-
         try {
             $wsUri = $this->qualifiedUrl.'/services/wsverify';
             $client = new PDFASVerificationImplService($wsUri);
