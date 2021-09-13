@@ -13,7 +13,7 @@
         "symfony/framework-bundle": "^5.2",
         "symfony/polyfill-php80": "^1.20",
         "symfony/uid": "^5.3",
-        "zbateson/mail-mime-parser": "^1.2",
+        "zbateson/mail-mime-parser": "^2.0",
         "ext-json": "*"
     },
     "require-dev": {
