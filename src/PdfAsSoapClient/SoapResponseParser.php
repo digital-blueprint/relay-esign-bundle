@@ -106,7 +106,7 @@ class SoapResponseParser
      */
     private function findBoundary(string $inputData): string
     {
-        $sub = strstr($inputData, "\r\n", true);
+        $sub = strstr(ltrim($inputData), "\r\n", true);
         if ($sub === false) {
             throw new SoapResponseParserError('Failed to find boundary');
         }

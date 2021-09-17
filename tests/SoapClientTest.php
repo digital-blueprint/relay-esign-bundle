@@ -232,6 +232,16 @@ class SoapClientTest extends TestCase
         $this->assertNotFalse($parsed);
     }
 
+    public function testMTOMXMLParserLeadingNewlines()
+    {
+        // https://gitlab.tugraz.at/dbp/esign/dbp-relay-esign-bundle/-/issues/2
+        $smallExample = "\r\n".$this->getExampleMTOMResponse();
+        $parser = new SoapResponseParser();
+        $xml = $parser->parse($smallExample);
+        $parsed = simplexml_load_string($xml);
+        $this->assertNotFalse($parsed);
+    }
+
     public function testSingleSignNullResult()
     {
         $soapClientMock = $this->getMockBuilder(PDFASSigningImplService::class)
