@@ -2,7 +2,64 @@
 
 ## Bundle Configuration
 
-Create a configuration file under `config/packages` and add the following:
+Created via `./bin/console config:dump-reference DbpRelayEsignBundle | sed '/^$/d'`
+
+```yaml
+# Default configuration for "DbpRelayEsignBundle"
+dbp_relay_esign:
+    qualified_signature:
+        # The URL to the PDF-AS server for qualified signatures
+        server_url:           ~ # Example: 'https://pdfas.example.com/pdf-as-web'
+        # The URL pdf-as will redirect to when the signature is done
+        callback_url:         ~ # Example: 'https://pdfas.example.com/static/callback.html'
+        # The URL pdf-as will redirect to when the signature failed
+        error_callback_url:   ~ # Example: 'https://pdfas.example.com/static/error.html'
+        profiles:
+            # Prototype
+            -
+                # The name of the profile, this needs to be passed to the API
+                name:                 ~ # Example: myprofile
+                # The Symfony role required to use this profile
+                role:                 ~ # Example: ROLE_FOOBAR
+                # The PDF-AS signature profile ID to use
+                profile_id:           ~ # Example: MYPROFILE
+                # The profile table ID to attach the content to. Leave empty to disable user text.
+                user_text_table:      ~ # Example: usercontent
+                # The index of the first unset row in the table (starts with 1)
+                user_text_row:        ~ # Example: 1
+                # In case there is content "child" will be attached to "parent" at "row" (optional)
+                user_text_attach_parent: ~ # Example: parent
+                # In case there is content "child" will be attached to "parent" at "row" (optional)
+                user_text_attach_child: ~ # Example: child
+                # In case there is content "child" will be attached to "parent" at "row" (optional)
+                user_text_attach_row: ~ # Example: 4
+    advanced_signature:
+        # The URL to the PDF-AS server for advanced signatures
+        server_url:           ~ # Example: 'https://pdfas.example.com/pdf-as-web'
+        profiles:
+            # Prototype
+            -
+                # The name of the profile, this needs to be passed to the API
+                name:                 ~ # Example: myprofile
+                # The Symfony role required to use this profile
+                role:                 ~ # Example: ROLE_FOOBAR
+                # The PDF-AS signature key ID used for singing
+                key_id:               ~ # Example: MYKEY
+                # The PDF-AS signature profile ID to use
+                profile_id:           ~ # Example: MYPROFILE
+                # The profile table ID to attach the content to. Leave empty to disable user text.
+                user_text_table:      ~ # Example: usercontent
+                # The index of the first unset row in the table (starts with 1)
+                user_text_row:        ~ # Example: 1
+                # In case there is content "child" will be attached to "parent" at "row" (optional)
+                user_text_attach_parent: ~ # Example: parent
+                # In case there is content "child" will be attached to "parent" at "row" (optional)
+                user_text_attach_child: ~ # Example: child
+                # In case there is content "child" will be attached to "parent" at "row" (optional)
+                user_text_attach_row: ~ # Example: 4
+```
+
+## Examples
 
 ```yaml
 dbp_relay_esign:
@@ -14,14 +71,6 @@ dbp_relay_esign:
       name: default
       profile_id: 'SIGNATURBLOCK_SMALL_DE_NOTE_PDFA'
 ```
-
-* `qualified_url` - The URL to the pdf-as-web endpoint
-* `qualified_static_url` - Endpoint where error.html and callback.html can be accessed
-* `profiles` - A list of profiles
-    * `name` - The unique identifier that needs to be passed to the signing endpoint via the `profile` parameter.
-    * `profile_id` - The profile ID in the pdf-as config
-    * `role` - The Symfony role that is required by the user to use this profile
-    * `profile_user_text_*` (optional) - see "User Defined Text" below
 
 ```yaml
 dbp_relay_esign:
@@ -37,15 +86,6 @@ dbp_relay_esign:
         profile_id: SIGNATURBLOCK_TUGRAZ_SAP
         role: ROLE_SCOPE_CORPORATE-SIGNATURE
 ```
-
-* `server_url` - The URL to the pdf-as-web endpoint
-* `profiles` - A list of profiles
-    * `name` - The unique identifier that needs to be passed to the signing endpoint via the `profile` parameter.
-    * `key_id` - The key ID in the pdf-as-web keystore list
-    * `profile_id` - The profile ID in the pdf-as config
-    * `role` - The Symfony role that is required by the user to use this profile
-    * `user_text_*` (optional) - see "User Defined Text" below
-
 
 ## User Defined Text
 
