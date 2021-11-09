@@ -3,5 +3,5 @@
 /.php_cs
 /*.cache
 /.phpunit.result.cache
-/.ideacghooks.lock
-
+/.idea
+cghooks.lock
