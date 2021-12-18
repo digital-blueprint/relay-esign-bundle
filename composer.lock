@@ -168,11 +168,11 @@
         },
         {
             "name": "dbp/relay-core-bundle",
-            "version": "v0.1.25",
+            "version": "v0.1.26",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.tugraz.at/dbp/relay/dbp-relay-core-bundle",
-                "reference": "6abbb9b3c72844263ddd62f3bf44fb7c4f5ae194"
+                "reference": "c0262c7e9771335cfffe5068e0cd4677d29bfe76"
             },
             "require": {
                 "api-platform/core": "^2.6.6",
@@ -228,7 +228,7 @@
             "license": [
                 "AGPL-3.0-or-later"
             ],
-            "time": "2021-12-13T12:42:35+00:00"
+            "time": "2021-12-14T12:59:26+00:00"
         },
         {
             "name": "doctrine/annotations",
