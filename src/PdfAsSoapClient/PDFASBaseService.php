@@ -31,20 +31,20 @@ class PDFASBaseService extends \SoapClient
     }
 
     /**
-     * @param string $req
-     * @param string $location
-     * @param string $action
-     * @param int    $version
-     * @param int    $one_way
+     * @param string   $request
+     * @param string   $location
+     * @param string   $action
+     * @param int      $version
+     * @param bool|int $oneWay
      *
      * @return string
      *
      * @throws SoapResponseParserError
      * @throws SoapFault
      */
-    public function __doRequest($req, $location, $action, $version = SOAP_1_1, $one_way = 0)
+    public function __doRequest($request, $location, $action, $version = SOAP_1_1, $oneWay = 0): ?string
     {
-        $response = $this->__doParentRequest($req, $location, $action, $version, $one_way);
+        $response = $this->__doParentRequest($request, $location, $action, $version, $oneWay);
 
         // happens for example if the request is denied by the server or a timeout happens
         if ($response === null) {
