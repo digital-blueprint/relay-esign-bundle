@@ -46,7 +46,7 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $profileName = $request->get('profile');
+        $profileName = self::requestGet($request, 'profile');
         if ($profileName === null) {
             throw new BadRequestHttpException('Missing "profile"');
         }
@@ -83,25 +83,25 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
 
         $positionData = [];
 
-        if ($request->get('x', '') !== '') {
-            $positionData['x'] = (int) round((float) $request->get('x'));
+        if (self::requestGet($request, 'x', '') !== '') {
+            $positionData['x'] = (int) round((float) self::requestGet($request, 'x'));
         }
 
-        if ($request->get('y', '') !== '') {
-            $positionData['y'] = (int) round((float) $request->get('y'));
+        if (self::requestGet($request, 'y', '') !== '') {
+            $positionData['y'] = (int) round((float) self::requestGet($request, 'y'));
         }
 
         // there only is "w", no "h" allowed in PDF-AS
-        if ($request->get('w', '') !== '') {
-            $positionData['w'] = (int) round((float) $request->get('w'));
+        if (self::requestGet($request, 'w', '') !== '') {
+            $positionData['w'] = (int) round((float) self::requestGet($request, 'w'));
         }
 
-        if ($request->get('r', '') !== '') {
-            $positionData['r'] = (int) round((float) $request->get('r'));
+        if (self::requestGet($request, 'r', '') !== '') {
+            $positionData['r'] = (int) round((float) self::requestGet($request, 'r'));
         }
 
-        if ($request->get('p', '') !== '') {
-            $positionData['p'] = (int) $request->get('p');
+        if (self::requestGet($request, 'p', '') !== '') {
+            $positionData['p'] = (int) self::requestGet($request, 'p');
         }
 
         $userText = [];
