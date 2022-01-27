@@ -49,11 +49,11 @@ graph TD
     APP --> |embeds|HANDY
 ```
 
-## Installations Requirements
+## Installation Requirements
 
 - PDF-AS 4.1.5+ as a backend server
 
-## PDF-AS
+### PDF-AS
 
 [PDF-AS](https://www.egiz.gv.at/en/schwerpunkte/16-pdf-as) by [EGIZ](https://www.egiz.gv.at/en/)
 is used to sign documents.
