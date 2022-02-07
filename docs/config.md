@@ -163,7 +163,7 @@ ksl.tugraz-official.key.alias=mycert
 ksl.tugraz-official.key.pass=cert-password
 ```
 
-In addition in the pdf-as configuration (`config.properties`) the referenced profiles need to be defined.
+In addition, in the pdf-as configuration (`config.properties`) the referenced profiles need to be defined.
 Usually they are defined in extra files under `./profiles` and then included in `config.properties`:
 
 ```ini
