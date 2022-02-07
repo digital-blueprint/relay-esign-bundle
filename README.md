@@ -35,15 +35,10 @@ Dbp\Relay\CoreBundle\DbpRelayCoreBundle::class => ['all' => true],
 For more details see the [Configuration Documentation](./docs/config.md).
 
 If you were using the [DBP API Server Template](https://gitlab.tugraz.at/dbp/relay/dbp-relay-server-template)
-as template for your Symfony application, then the configuration file should have already been generated for you.
+as template for your Symfony application, then an example configuration file should have already been generated for you.
 
 To handle locking you need to [configure locking in the core bundle](https://gitlab.tugraz.at/dbp/relay/dbp-relay-core-bundle#bundle-config).
 
 You also need to [configure the Symfony Messenger in the core bundle](https://gitlab.tugraz.at/dbp/relay/dbp-relay-core-bundle#bundle-config) to check out guests after a certain amount of time.
 
 For more info on bundle configuration see <https://symfony.com/doc/current/bundles/configuration.html>.
-
-## Roles
-
-This bundle needs the roles `ROLE_SCOPE_OFFICIAL-SIGNATURE` and `ROLE_SCOPE_CORPORATE-SIGNATURE` assigned to the user
-to get permissions for the api for official and corporate signatures.
