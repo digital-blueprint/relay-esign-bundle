@@ -8,3 +8,42 @@ The electronic signature bundle provides an API for interacting with multiple
 servers and allows singing and signature verification of PDF files using [PAdES](https://en.wikipedia.org/wiki/PAdES).
 
 For more details see the [docs](./docs/index.md).
+
+## Bundle installation
+
+You can install the bundle directly from [packagist.org](https://packagist.org/packages/dbp/relay-esign-bundle).
+
+```bash
+composer require dbp/relay-esign-bundle
+```
+
+## Integration into the Relay API Server
+
+* Add the bundle to your `config/bundles.php` in front of `DbpRelayCoreBundle`:
+
+```php
+...
+Dbp\Relay\EsignBundle\DbpRelayEsignBundle::class => ['all' => true],
+Dbp\Relay\CoreBundle\DbpRelayCoreBundle::class => ['all' => true],
+];
+```
+
+* Run `composer install` to clear caches
+
+## Configuration
+
+For more details see the [Configuration Documentation](./docs/config.md).
+
+If you were using the [DBP API Server Template](https://gitlab.tugraz.at/dbp/relay/dbp-relay-server-template)
+as template for your Symfony application, then the configuration file should have already been generated for you.
+
+To handle locking you need to [configure locking in the core bundle](https://gitlab.tugraz.at/dbp/relay/dbp-relay-core-bundle#bundle-config).
+
+You also need to [configure the Symfony Messenger in the core bundle](https://gitlab.tugraz.at/dbp/relay/dbp-relay-core-bundle#bundle-config) to check out guests after a certain amount of time.
+
+For more info on bundle configuration see <https://symfony.com/doc/current/bundles/configuration.html>.
+
+## Roles
+
+This bundle needs the roles `ROLE_SCOPE_OFFICIAL-SIGNATURE` and `ROLE_SCOPE_CORPORATE-SIGNATURE` assigned to the user
+to get permissions for the api for official and corporate signatures.
