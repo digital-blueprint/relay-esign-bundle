@@ -113,7 +113,7 @@ final class CreateQualifiedSigningRequestAction extends BaseSigningController
         $userText = [];
         if ($request->request->has('user_text')) {
             $data = $request->request->all()['user_text'];
-            $userText = $this->parseUserText($data);
+            $userText = self::parseUserText($data);
         }
 
         // generate a request id for the signing process

@@ -35,7 +35,7 @@ abstract class BaseSigningController extends AbstractController
     /**
      * @return UserDefinedText[]
      */
-    public function parseUserText(string $data): array
+    public static function parseUserText(string $data): array
     {
         // Parse and validate the basics
         try {

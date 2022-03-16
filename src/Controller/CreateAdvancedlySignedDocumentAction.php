@@ -107,7 +107,7 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
         $userText = [];
         if ($request->request->has('user_text')) {
             $data = $request->request->all()['user_text'];
-            $userText = $this->parseUserText($data);
+            $userText = self::parseUserText($data);
         }
 
         // sign the pdf data
