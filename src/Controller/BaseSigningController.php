@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Dbp\Relay\EsignBundle\Controller;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
-use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\UserDefinedText;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +39,7 @@ abstract class BaseSigningController extends AbstractController
     {
         // Parse and validate the basics
         try {
-            $parsed = Tools::decodeJSON($data, true);
+            $parsed = json_decode($data, true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             throw new ApiError(Response::HTTP_BAD_REQUEST, 'invalid JSON');
         }
