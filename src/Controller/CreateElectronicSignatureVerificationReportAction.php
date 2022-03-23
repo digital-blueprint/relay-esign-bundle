@@ -39,7 +39,7 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $this->denyAccessUnlessGranted('ROLE_SCOPE_VERIFY-SIGNATURE');
 
-        /** @var UploadedFile $uploadedFile */
+        /** @var ?UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');
 
         // check if there is an uploaded file

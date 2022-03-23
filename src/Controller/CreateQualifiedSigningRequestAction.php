@@ -59,7 +59,7 @@ final class CreateQualifiedSigningRequestAction extends BaseSigningController
 
         $this->checkProfilePermissions($profileName);
 
-        /** @var UploadedFile $uploadedFile */
+        /** @var ?UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');
 
         // check if there is an uploaded file

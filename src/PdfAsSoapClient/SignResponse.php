@@ -7,32 +7,32 @@ namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 class SignResponse
 {
     /**
-     * @var string
+     * @var ?string
      */
     protected $error = null;
 
     /**
-     * @var string
+     * @var ?string
      */
     protected $redirectUrl = null;
 
     /**
-     * @var string
+     * @var ?string
      */
     protected $requestID = null;
 
     /**
-     * @var string
+     * @var ?string
      */
     protected $signedPDF = null;
 
     /**
-     * @var VerificationResponse
+     * @var ?VerificationResponse
      */
     protected $verificationResponse = null;
 
     /**
-     * @param string $requestID
+     * @param ?string $requestID
      */
     public function __construct($requestID)
     {
@@ -40,7 +40,7 @@ class SignResponse
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getError()
     {
@@ -48,7 +48,7 @@ class SignResponse
     }
 
     /**
-     * @param string $error
+     * @param ?string $error
      *
      * @return SignResponse
      */
@@ -60,7 +60,7 @@ class SignResponse
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getRedirectUrl()
     {
@@ -68,7 +68,7 @@ class SignResponse
     }
 
     /**
-     * @param string $redirectUrl
+     * @param ?string $redirectUrl
      *
      * @return SignResponse
      */
@@ -80,7 +80,7 @@ class SignResponse
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getRequestID()
     {
@@ -88,7 +88,7 @@ class SignResponse
     }
 
     /**
-     * @param string $requestID
+     * @param ?string $requestID
      *
      * @return SignResponse
      */
@@ -100,7 +100,7 @@ class SignResponse
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getSignedPDF()
     {
@@ -108,9 +108,9 @@ class SignResponse
     }
 
     /**
-     * @param string $signedPDF
+     * @param ?string $signedPDF
      *
-     * @return SignResponse
+     * @return ?SignResponse
      */
     public function setSignedPDF($signedPDF)
     {
@@ -120,7 +120,7 @@ class SignResponse
     }
 
     /**
-     * @return VerificationResponse
+     * @return ?VerificationResponse
      */
     public function getVerificationResponse()
     {
@@ -128,7 +128,7 @@ class SignResponse
     }
 
     /**
-     * @param VerificationResponse $verificationResponse
+     * @param ?VerificationResponse $verificationResponse
      *
      * @return SignResponse
      */

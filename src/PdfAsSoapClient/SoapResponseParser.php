@@ -45,9 +45,8 @@ class SoapResponseParser
         // Then we inject the attachments into the main XML response
         $byID = [];
         foreach ($parts as $part) {
-            if (!array_key_exists('content-id', $part) || !array_key_exists('content', $part)) {
-                throw new SoapResponseParserError('Missing content-id/content');
-            }
+            assert(array_key_exists('content-id', $part));
+            assert(array_key_exists('content', $part));
             $byID[$part['content-id']] = $part['content'];
         }
 

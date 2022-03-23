@@ -15,7 +15,7 @@ use MyCLabs\Enum\Enum;
  */
 class VerificationLevel extends Enum
 {
-    private const __default = 'intOnly';
-    private const intOnly = 'intOnly';
-    private const full = 'full';
+    private const __default = 'intOnly'; // @phpstan-ignore-line
+    private const intOnly = 'intOnly'; // @phpstan-ignore-line
+    private const full = 'full'; // @phpstan-ignore-line
 }

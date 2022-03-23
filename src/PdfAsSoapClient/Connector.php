@@ -19,11 +19,11 @@ use MyCLabs\Enum\Enum;
  */
 class Connector extends Enum
 {
-    private const __default = 'jks';
-    private const jks = 'jks';
-    private const moa = 'moa';
-    private const bku = 'bku';
-    private const mobilebku = 'mobilebku';
-    private const onlinebku = 'onlinebku';
-    private const sl20 = 'sl20';
+    private const __default = 'jks'; // @phpstan-ignore-line
+    private const jks = 'jks'; // @phpstan-ignore-line
+    private const moa = 'moa'; // @phpstan-ignore-line
+    private const bku = 'bku'; // @phpstan-ignore-line
+    private const mobilebku = 'mobilebku'; // @phpstan-ignore-line
+    private const onlinebku = 'onlinebku'; // @phpstan-ignore-line
+    private const sl20 = 'sl20'; // @phpstan-ignore-line
 }

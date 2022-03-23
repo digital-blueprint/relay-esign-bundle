@@ -53,10 +53,8 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
 
         $this->checkProfilePermissions($profileName);
 
-        /** @var UploadedFile $uploadedFile */
+        /** @var ?UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');
-
-//        dump($uploadedFile);
 
         // check if there is an uploaded file
         if (!$uploadedFile) {

@@ -80,7 +80,7 @@ class SignParameters
     }
 
     /**
-     * @return string
+     * @return ?string
      * @psalm-suppress UndefinedThisPropertyFetch
      */
     public function getInvokeerrorurl()
@@ -102,7 +102,7 @@ class SignParameters
     }
 
     /**
-     * @return string
+     * @return ?string
      * @psalm-suppress UndefinedThisPropertyFetch
      */
     public function getInvoketarget()
@@ -124,7 +124,7 @@ class SignParameters
     }
 
     /**
-     * @return string
+     * @return ?string
      * @psalm-suppress UndefinedThisPropertyFetch
      */
     public function getInvokeurl()
@@ -135,7 +135,7 @@ class SignParameters
     /**
      * @param string $invokeurl
      *
-     * @return SignParameters
+     * @return ?SignParameters
      * @psalm-suppress UndefinedThisPropertyAssignment
      */
     public function setInvokeurl($invokeurl)
@@ -146,7 +146,7 @@ class SignParameters
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getKeyIdentifier()
     {
@@ -156,7 +156,7 @@ class SignParameters
     /**
      * @param string $keyIdentifier
      *
-     * @return SignParameters
+     * @return ?SignParameters
      */
     public function setKeyIdentifier($keyIdentifier)
     {
@@ -166,7 +166,7 @@ class SignParameters
     }
 
     /**
-     * @return PropertyMap
+     * @return ?PropertyMap
      */
     public function getConfigurationOverrides()
     {
@@ -176,7 +176,7 @@ class SignParameters
     /**
      * @param PropertyMap $configurationOverrides
      *
-     * @return SignParameters
+     * @return ?SignParameters
      */
     public function setConfigurationOverrides($configurationOverrides)
     {
@@ -186,7 +186,7 @@ class SignParameters
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getPosition()
     {
@@ -196,7 +196,7 @@ class SignParameters
     /**
      * @param string $position
      *
-     * @return SignParameters
+     * @return ?SignParameters
      */
     public function setPosition($position)
     {
@@ -206,7 +206,7 @@ class SignParameters
     }
 
     /**
-     * @return PropertyMap
+     * @return ?PropertyMap
      */
     public function getPreprocessorArguments()
     {
@@ -216,7 +216,7 @@ class SignParameters
     /**
      * @param PropertyMap $preprocessorArguments
      *
-     * @return SignParameters
+     * @return ?SignParameters
      */
     public function setPreprocessorArguments($preprocessorArguments)
     {
@@ -236,7 +236,7 @@ class SignParameters
     /**
      * @param string $profile
      *
-     * @return SignParameters
+     * @return ?SignParameters
      */
     public function setProfile($profile)
     {
@@ -256,7 +256,7 @@ class SignParameters
     /**
      * @param string $qrCodeContent
      *
-     * @return SignParameters
+     * @return ?SignParameters
      */
     public function setQrCodeContent($qrCodeContent)
     {
@@ -266,7 +266,7 @@ class SignParameters
     }
 
     /**
-     * @return string
+     * @return ?string
      */
     public function getTransactionId()
     {

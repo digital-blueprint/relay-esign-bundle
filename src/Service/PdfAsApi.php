@@ -206,6 +206,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         }
 
         // First we insert the user content into the table
+        $overrides = [];
         foreach ($userText as $entry) {
             $desc = $entry->getDescription();
             $value = $entry->getValue();
@@ -217,11 +218,16 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
             ++$userRow;
         }
 
+        /**
+         * @psalm-suppress RedundantCondition
+         */
+        assert(count($overrides));
+
         // In case we added something we optionally attach a "child" table to a "parent" one at a specific "row"
         // This can be the table we filled above, or some parent table.
         // This is needed because pdf-as doesn't allow empty tables and we need to attach it only when it has at least
         // one row. But it also allows us to show extra images for example if there are >0 extra rows
-        if (count($overrides) > 0 && $attachParent !== '' && $attachChild !== '') {
+        if ($attachParent !== '' && $attachChild !== '') {
             $overrides[] = new PropertyEntry(
                 "sig_obj.$profileId.table.$attachParent.$attachRow", 'TABLE-'.$attachChild);
         }
