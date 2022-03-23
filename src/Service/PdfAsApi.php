@@ -62,6 +62,38 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         $this->advancedProfiles = $advanced['profiles'] ?? [];
     }
 
+    public function checkPdfAsConnection()
+    {
+        $client = new Client();
+
+        $checkWSDL = function (string $url) use ($client) {
+            $response = $client->request('GET', $url);
+            $contentType = $response->getHeader('Content-Type')[0] ?? '';
+            if (!str_starts_with($contentType, 'text/xml')) {
+                throw new \RuntimeException('wrong content type for WSDL response');
+            }
+        };
+
+        if ($this->qualifiedUrl !== '') {
+            $checkWSDL($this->qualifiedUrl.'/services/wsverify?wsdl');
+            $checkWSDL($this->qualifiedUrl.'/services/wssign?wsdl');
+        }
+
+        if ($this->advancedUrl !== '') {
+            $checkWSDL($this->advancedUrl.'/services/wsverify?wsdl');
+            $checkWSDL($this->advancedUrl.'/services/wssign?wsdl');
+        }
+    }
+
+    public function checkCallbackUrls()
+    {
+        $client = new Client();
+        if ($this->qualifiedUrl !== '') {
+            $client->request('GET', $this->qualifiedCallbackUrl);
+            $client->request('GET', $this->qualifiedErrorCallbackUrl);
+        }
+    }
+
     /**
      * @throws SigningException
      */

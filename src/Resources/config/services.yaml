@@ -4,6 +4,10 @@ services:
         autowire: true
         autoconfigure: true
 
+    Dbp\Relay\EsignBundle\HealthCheck\HealthCheck:
+        autowire: true
+        autoconfigure: true
+
     Dbp\Relay\EsignBundle\Service\SignatureProviderInterface:
         '@Dbp\Relay\EsignBundle\Service\PdfAsApi'
 
