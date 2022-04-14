@@ -20,11 +20,13 @@ use Dbp\Relay\EsignBundle\PdfAsSoapClient\VerifyRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\VerifyResponse;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\HandlerStack;
 use League\Uri\Contracts\UriException;
 use League\Uri\UriTemplate;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use SoapFault;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 {
@@ -38,8 +40,9 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     private $qualifiedErrorCallbackUrl;
     private $advancedProfiles;
     private $qualifiedProfiles;
+    private $stopwatch;
 
-    public function __construct()
+    public function __construct(Stopwatch $stopwatch)
     {
         $this->advancedUrl = '';
         $this->qualifiedUrl = '';
@@ -47,6 +50,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         $this->qualifiedErrorCallbackUrl = '';
         $this->qualifiedProfiles = [];
         $this->advancedProfiles = [];
+        $this->stopwatch = $stopwatch;
     }
 
     public function setConfig(array $config)
@@ -129,12 +133,15 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 
         $request = new SignRequest($data, $params, $requestId);
 
+        $event = $this->stopwatch->start('pdf-as.sign-qualified', 'esign');
         try {
             // can and will throw a SoapFault "looks like we got no XML document"
             $response = $service->signSingle($request, self::PDF_AS_TIMEOUT);
         } catch (SoapFault $e) {
             $this->handleSoapFault($e);
             throw new SigningException();
+        } finally {
+            $event->stop();
         }
 
         if ($response->getError() !== null) {
@@ -303,6 +310,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
             $params->setPosition(implode(';', $positionData));
         }
 
+        $event = $this->stopwatch->start('pdf-as.sign-advanced', 'esign');
         $request = new SignRequest($data, $params, $requestId);
         try {
             // can and will throw a SoapFault "looks like we got no XML document"
@@ -310,6 +318,8 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         } catch (SoapFault $e) {
             $this->handleSoapFault($e);
             throw new SigningException();
+        } finally {
+            $event->stop();
         }
 
         if ($response->getError() !== null) {
@@ -351,18 +361,21 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
      */
     public function doVerifyRequest(string $data, string $requestId): VerifyResponse
     {
-        try {
-            $wsUri = $this->qualifiedUrl.'/services/wsverify';
-            $client = new PDFASVerificationImplService($wsUri);
-            $request = new VerifyRequest($data, $requestId);
-            $request->setVerificationLevel(VerificationLevel::intOnly());
-            $request->setSignatureIndex(-1);
-            $request->setPreprocessorArguments(new PropertyMap([]));
+        $wsUri = $this->qualifiedUrl.'/services/wsverify';
+        $client = new PDFASVerificationImplService($wsUri);
+        $request = new VerifyRequest($data, $requestId);
+        $request->setVerificationLevel(VerificationLevel::intOnly());
+        $request->setSignatureIndex(-1);
+        $request->setPreprocessorArguments(new PropertyMap([]));
 
+        $event = $this->stopwatch->start('pdf-as.verify', 'esign');
+        try {
             return $client->verify($request, self::PDF_AS_TIMEOUT);
         } catch (SoapFault $e) {
             $this->handleSoapFault($e);
             throw new SigningException();
+        } finally {
+            $event->stop();
         }
     }
 
@@ -394,15 +407,14 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
      */
     public function fetchQualifiedlySignedDocument(string $requestId): string
     {
-        $client = new Client();
+        $stack = HandlerStack::create();
+        $stack->push(Tools::createStopwatchMiddleware($this->stopwatch, 'pdf-as.fetch-qualified', 'esign'));
+        $client = new Client(['handler' => $stack]);
+
         $url = $this->getQualifiedlySignedDocumentUrl($requestId);
 
-//        dump($url);
-
-        // fetch PDF from PDF-AS
         try {
             $response = $client->request('GET', $url);
-//            dump($response);
             $signedPdfData = (string) $response->getBody();
 
             if ($response->getHeader('Content-Type')[0] !== 'application/pdf') {

@@ -5,7 +5,12 @@ declare(strict_types=1);
 namespace Dbp\Relay\EsignBundle\Tests;
 
 use Dbp\Relay\EsignBundle\Helpers\Tools;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class ToolsTest extends TestCase
 {
@@ -40,5 +45,18 @@ class ToolsTest extends TestCase
         $this->assertSame('-sig', Tools::generateSignedFileName(''));
         $this->assertSame('foo.tar-sig.gz', Tools::generateSignedFileName('foo.tar.gz'));
         $this->assertSame('foo-sig.sig', Tools::generateSignedFileName('foo.sig'));
+    }
+
+    public function testCreateStopwatchMiddleware()
+    {
+        $stopwatch = new Stopwatch();
+        $middleware = Tools::createStopwatchMiddleware($stopwatch, 'foo', 'bar');
+        $stack = new HandlerStack(new MockHandler([new Response(200, ['Content-Type' => 'application/json'], '{}')]));
+        $stack->push($middleware);
+        $client = new Client(['handler' => $stack]);
+        $client->get('https://this.does.not.exist');
+        $events = array_values($stopwatch->getSections())[0]->getEvents();
+        $this->assertCount(1, $events);
+        $this->assertArrayHasKey('foo(GET this.does.not.exist)', $events);
     }
 }

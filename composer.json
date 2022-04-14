@@ -4,6 +4,7 @@
     "license": "AGPL-3.0-or-later",
     "require": {
         "php": ">=7.3",
+        "ext-json": "*",
         "ext-soap": "*",
         "api-platform/core": "^2.6.4",
         "dbp/relay-core-bundle": "^0.1.25",
@@ -12,9 +13,9 @@
         "myclabs/php-enum": "^1.7",
         "symfony/framework-bundle": "^5.2",
         "symfony/polyfill-php80": "^1.20",
+        "symfony/stopwatch": "^5.4",
         "symfony/uid": "^5.3",
-        "zbateson/mail-mime-parser": "^2.0",
-        "ext-json": "*"
+        "zbateson/mail-mime-parser": "^2.0"
     },
     "require-dev": {
         "ext-simplexml": "*",

@@ -7,12 +7,20 @@ namespace Dbp\Relay\EsignBundle\Tests;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use Dbp\Relay\EsignBundle\Service\PdfAsApi;
 use Dbp\Relay\EsignBundle\Service\SigningException;
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class PdfAsApiTest extends ApiTestCase
 {
+    private $api;
+
+    public function setUp(): void
+    {
+        $this->api = new PdfAsApi(new Stopwatch());
+    }
+
     public function testRequiredRoleUnknownProfile()
     {
-        $api = new PdfAsApi();
+        $api = $this->api;
         $api->setConfig(['advanced_signature' => ['profiles' => [['name' => 'foo']]]]);
         $this->expectException(SigningException::class);
         $api->getAdvancedlySignRequiredRole('somename');
@@ -20,7 +28,7 @@ class PdfAsApiTest extends ApiTestCase
 
     public function testRequiredRoleNoRole()
     {
-        $api = new PdfAsApi();
+        $api = $this->api;
         $api->setConfig(['advanced_signature' => ['profiles' => [['name' => 'somename']]]]);
         $this->expectException(SigningException::class);
         $api->getAdvancedlySignRequiredRole('somename');
@@ -28,7 +36,7 @@ class PdfAsApiTest extends ApiTestCase
 
     public function testRequiredRole()
     {
-        $api = new PdfAsApi();
+        $api = $this->api;
         $api->setConfig(['advanced_signature' => ['profiles' => [['name' => 'somename', 'role' => 'somerole']]]]);
         $role = $api->getAdvancedlySignRequiredRole('somename');
         $this->assertSame('somerole', $role);
@@ -36,7 +44,7 @@ class PdfAsApiTest extends ApiTestCase
 
     public function testRequiredRoleUnknownProfileQual()
     {
-        $api = new PdfAsApi();
+        $api = $this->api;
         $api->setConfig(['qualified_signature' => ['profiles' => [['name' => 'foo']]]]);
         $this->expectException(SigningException::class);
         $api->getQualifiedlySignRequiredRole('somename');
@@ -44,7 +52,7 @@ class PdfAsApiTest extends ApiTestCase
 
     public function testRequiredRoleNoRoleQual()
     {
-        $api = new PdfAsApi();
+        $api = $this->api;
         $api->setConfig(['qualified_signature' => ['profiles' => [['name' => 'somename']]]]);
         $this->expectException(SigningException::class);
         $api->getQualifiedlySignRequiredRole('somename');
@@ -52,7 +60,7 @@ class PdfAsApiTest extends ApiTestCase
 
     public function testRequiredRoleQual()
     {
-        $api = new PdfAsApi();
+        $api = $this->api;
         $api->setConfig(['qualified_signature' => ['profiles' => [['name' => 'somename', 'role' => 'somerole']]]]);
         $role = $api->getQualifiedlySignRequiredRole('somename');
         $this->assertSame('somerole', $role);
