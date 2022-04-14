@@ -5,3 +5,4 @@
 /.phpunit.result.cache
 /.idea
 cghooks.lock
+/_coverage
