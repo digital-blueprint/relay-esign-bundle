@@ -48,11 +48,6 @@ final class CreateQualifiedSigningRequestAction extends BaseSigningController
 
         $profileName = self::requestGet($request, 'profile');
 
-        // XXX: Remove this again. Only to make the transission smoother
-        if ($profileName === null) {
-            $profileName = 'default';
-        }
-
         if ($profileName === null) {
             throw new BadRequestHttpException('Missing "profile"');
         }
