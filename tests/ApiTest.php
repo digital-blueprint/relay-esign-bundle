@@ -19,18 +19,18 @@ class ApiTest extends ApiTestCase
     public function testNotAuth()
     {
         $endpoints = [
-            ['POST', '/esign/advancedly_signed_documents?profile=foo', 403],
-            ['GET', '/esign/advancedly_signed_documents', 200],
-            ['GET', '/esign/advancedly_signed_documents/123', 404],
-            ['GET', '/esign/electronic_signature_verification_reports', 403],
-            ['POST', '/esign/electronic_signature_verification_reports', 403],
-            ['GET', '/esign/electronic_signature_verification_reports/123', 404],
-            ['GET', '/esign/electronic_signatures/123', 404],
-            ['POST', '/esign/qualified_signing_requests?profile=foo', 403],
-            ['GET', '/esign/qualified_signing_requests', 200],
-            ['GET', '/esign/qualified_signing_requests/123', 404],
-            ['GET', '/esign/qualifiedly_signed_documents', 200],
-            ['GET', '/esign/qualifiedly_signed_documents/123', 502],
+            ['POST', '/esign/advancedly-signed-documents?profile=foo', 403],
+            ['GET', '/esign/advancedly-signed-documents', 200],
+            ['GET', '/esign/advancedly-signed-documents/123', 404],
+            ['GET', '/esign/electronic-signature-verification-reports', 403],
+            ['POST', '/esign/electronic-signature-verification-reports', 403],
+            ['GET', '/esign/electronic-signature-verification-reports/123', 404],
+            ['GET', '/esign/electronic-signatures/123', 404],
+            ['POST', '/esign/qualified-signing-requests?profile=foo', 403],
+            ['GET', '/esign/qualified-signing-requests', 200],
+            ['GET', '/esign/qualified-signing-requests/123', 404],
+            ['GET', '/esign/qualifiedly-signed-documents', 200],
+            ['GET', '/esign/qualifiedly-signed-documents/123', 502],
         ];
 
         foreach ($endpoints as $ep) {

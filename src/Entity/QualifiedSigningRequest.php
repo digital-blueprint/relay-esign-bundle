@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
- *             "path" = "/esign/qualified_signing_requests",
+ *             "path" = "/esign/qualified-signing-requests",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },
@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *         "post" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *             "method" = "POST",
- *             "path" = "/esign/qualified_signing_requests",
+ *             "path" = "/esign/qualified-signing-requests",
  *             "controller" = CreateQualifiedSigningRequestAction::class,
  *             "deserialize" = false,
  *             "openapi_context" = {
@@ -76,7 +76,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *         "get" = {
- *             "path" = "/esign/qualified_signing_requests/{identifier}",
+ *             "path" = "/esign/qualified-signing-requests/{identifier}",
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},

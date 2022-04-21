@@ -19,14 +19,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
- *             "path" = "/esign/advancedly_signed_documents",
+ *             "path" = "/esign/advancedly-signed-documents",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },
  *         },
  *         "post" = {
  *             "method" = "POST",
- *             "path" = "/esign/advancedly_signed_documents",
+ *             "path" = "/esign/advancedly-signed-documents",
  *             "controller" = CreateAdvancedlySignedDocumentAction::class,
  *             "deserialize" = false,
  *             "openapi_context" = {
@@ -71,7 +71,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     itemOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
- *             "path" = "/esign/advancedly_signed_documents/{identifier}",
+ *             "path" = "/esign/advancedly-signed-documents/{identifier}",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },

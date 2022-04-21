@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     collectionOperations={
  *         "get" = {
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
- *             "path" = "/esign/qualifiedly_signed_documents",
+ *             "path" = "/esign/qualifiedly-signed-documents",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
  *             },
@@ -27,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     },
  *     itemOperations={
  *         "get" = {
- *             "path" = "/esign/qualifiedly_signed_documents/{identifier}",
+ *             "path" = "/esign/qualifiedly-signed-documents/{identifier}",
  *             "security" = "is_granted('IS_AUTHENTICATED_FULLY')",
  *             "openapi_context" = {
  *                 "tags" = {"Electronic Signatures"},
