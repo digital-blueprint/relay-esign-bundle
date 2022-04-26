@@ -29,8 +29,8 @@ class Kernel extends BaseKernel
         yield new NelmioCorsBundle();
         yield new MonologBundle();
         yield new ApiPlatformBundle();
-        yield new DbpRelayCoreBundle();
         yield new DbpRelayEsignBundle();
+        yield new DbpRelayCoreBundle();
     }
 
     protected function configureRoutes(RoutingConfigurator $routes)
