@@ -23,8 +23,8 @@ class DbpRelayEsignExtension extends ConfigurableExtension
             '/esign/advancedly-signed-documents',
             '/esign/qualified-signing-requests/{identifier}',
             '/esign/qualified-signing-requests',
-            '/esign/electronic-signature-verification_reports',
-            '/esign/electronic-signature-verification_reports/{identifier}',
+            '/esign/electronic-signature-verification-reports',
+            '/esign/electronic-signature-verification-reports/{identifier}',
         ];
 
         if (($_ENV['PDF_AS_VERIFICATION_ENABLE'] ?? 'true') !== 'true') {
