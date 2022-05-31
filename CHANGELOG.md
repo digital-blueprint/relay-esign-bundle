@@ -1,7 +1,4 @@
-# ????-??-??
+# v0.2.2
 
-* Prefix all API endpoints with `/esign`
-  * Example: `/advancedly_signed_documents` -> `/esign/advancedly_signed_documents`
-* Prefix all entity names with `Esign`
-  * Example: `AdvancedlySignedDocument` -> `EsignAdvancedlySignedDocument`
-* Restructure bundle config
+* Support for PHP 8.0/8.1
+* Fixed some deprecations with Symfony 5.4
