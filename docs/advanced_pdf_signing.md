@@ -14,8 +14,8 @@ from urllib.request import urlopen
 import requests
 from pyld import jsonld
 
-KEYCLOAK_URL = "https://auth.tugraz.at/auth"
-API_URL = "https://api.tugraz.at"
+KEYCLOAK_URL = "https://auth-demo.tugraz.at/auth"
+API_URL = "https://api-demo.tugraz.at"
 PDF_IN_PATH = 'example.pdf'
 
 # Credentials
@@ -23,7 +23,7 @@ CLIENT_ID="<keycloak-client-id>"
 CLIENT_SECRET="<keycloak-client-secret>"
 
 # Fetch a token pair
-TOKEN_URL = KEYCLOAK_URL + "/realms/tugraz/protocol/openid-connect/token"
+TOKEN_URL = KEYCLOAK_URL + "/realms/tugraz-vpu/protocol/openid-connect/token"
 r = requests.post(
     TOKEN_URL, auth=(CLIENT_ID, CLIENT_SECRET),
     data={'grant_type': 'client_credentials'})
@@ -33,7 +33,7 @@ access_token = r.json()["access_token"]
 # Make a signing request
 with open(PDF_IN_PATH, 'rb') as h:
     r = requests.post(
-        API_URL + "/esign/advancedly_signed_documents",
+        API_URL + "/esign/advancedly-signed-documents",
         headers={'Authorization': 'Bearer ' + access_token},
         params={"profile": "sap"},
         files={'file': (PDF_IN_PATH, h)})
