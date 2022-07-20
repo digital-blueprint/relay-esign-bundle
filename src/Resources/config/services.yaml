@@ -22,3 +22,8 @@ services:
         resource: '../../DataProvider'
         autowire: true
         autoconfigure: true
+
+    Dbp\Relay\EsignBundle\Commands\:
+        resource: '../../Commands'
+        autowire: true
+        autoconfigure: true
