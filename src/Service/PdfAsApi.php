@@ -393,25 +393,25 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     /**
      * @throws UriException
      */
-    protected function getQualifiedlySignedDocumentUrl(string $requestId): string
+    protected function getQualifiedlySignedDocumentUrl(string $sessionId): string
     {
-        $uriTemplate = new UriTemplate('/PDFData;jsessionid={requestId}');
+        $uriTemplate = new UriTemplate('/PDFData;jsessionid={sessionId}');
 
         return $this->qualifiedUrl.$uriTemplate->expand([
-            'requestId' => $requestId,
+            'sessionId' => $sessionId,
         ]);
     }
 
     /**
      * @throws SigningException
      */
-    public function fetchQualifiedlySignedDocument(string $requestId): string
+    public function fetchQualifiedlySignedDocument(string $sessionId): string
     {
         $stack = HandlerStack::create();
         $stack->push(Tools::createStopwatchMiddleware($this->stopwatch, 'pdf-as.fetch-qualified', 'esign'));
         $client = new Client(['handler' => $stack]);
 
-        $url = $this->getQualifiedlySignedDocumentUrl($requestId);
+        $url = $this->getQualifiedlySignedDocumentUrl($sessionId);
 
         try {
             $response = $client->request('GET', $url);
@@ -420,21 +420,21 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
             if ($response->getHeader('Content-Type')[0] !== 'application/pdf') {
                 // PDF-AS doesn't use 404 status code when document wasn't found
                 if (strpos($signedPdfData, '<p>No signed pdf document available.</p>') !== false) {
-                    throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' was not found!", $requestId));
+                    throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' was not found!", $sessionId));
                 }
 
-                throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' could not be loaded!", $requestId));
+                throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' could not be loaded!", $sessionId));
             }
         } catch (RequestException $e) {
             switch ($e->getCode()) {
                 case 403:
-                    throw new SigningException(sprintf("Access to QualifiedlySignedDocument with id '%s' is not allowed!", $requestId));
+                    throw new SigningException(sprintf("Access to QualifiedlySignedDocument with id '%s' is not allowed!", $sessionId));
             }
 
-            throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' could not be loaded! Message: %s", $requestId, $e->getMessage()));
+            throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' could not be loaded! Message: %s", $sessionId, $e->getMessage()));
         }
 
-        $this->log('PDF was qualifiedly signed', ['request_id' => $requestId, 'signed_content_size' => strlen($signedPdfData)]);
+        $this->log('PDF was qualifiedly signed', ['session_id' => $sessionId, 'signed_content_size' => strlen($signedPdfData)]);
 
         return $signedPdfData;
     }

@@ -9,7 +9,7 @@ interface SignatureProviderInterface
     /**
      * @throws SigningException
      */
-    public function fetchQualifiedlySignedDocument(string $requestId): string;
+    public function fetchQualifiedlySignedDocument(string $sessionId): string;
 
     /**
      * The role required for signing with the given profile.
