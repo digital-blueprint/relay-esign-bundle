@@ -26,6 +26,7 @@ use League\Uri\UriTemplate;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use SoapFault;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
@@ -41,29 +42,49 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     private $advancedProfiles;
     private $qualifiedProfiles;
     private $stopwatch;
+    private $router;
 
-    public function __construct(Stopwatch $stopwatch)
+    public function __construct(Stopwatch $stopwatch, UrlGeneratorInterface $router)
     {
         $this->advancedUrl = '';
         $this->qualifiedUrl = '';
-        $this->qualifiedCallbackUrl = '';
-        $this->qualifiedErrorCallbackUrl = '';
+        $this->qualifiedCallbackUrl = null;
+        $this->qualifiedErrorCallbackUrl = null;
         $this->qualifiedProfiles = [];
         $this->advancedProfiles = [];
         $this->stopwatch = $stopwatch;
+        $this->router = $router;
     }
 
     public function setConfig(array $config)
     {
         $qualified = $config['qualified_signature'] ?? [];
         $this->qualifiedUrl = $qualified['server_url'] ?? '';
-        $this->qualifiedCallbackUrl = $qualified['callback_url'] ?? '';
-        $this->qualifiedErrorCallbackUrl = $qualified['error_callback_url'] ?? '';
+        $this->qualifiedCallbackUrl = $qualified['callback_url'] ?? null;
+        $this->qualifiedErrorCallbackUrl = $qualified['error_callback_url'] ?? null;
         $this->qualifiedProfiles = $qualified['profiles'] ?? [];
 
         $advanced = $config['advanced_signature'] ?? [];
         $this->advancedUrl = $advanced['server_url'] ?? '';
         $this->advancedProfiles = $advanced['profiles'] ?? [];
+    }
+
+    public function getCallbackUrl(): string
+    {
+        if ($this->qualifiedCallbackUrl !== null) {
+            return $this->qualifiedCallbackUrl;
+        }
+
+        return $this->router->generate('esign_callback_success', [], UrlGeneratorInterface::ABSOLUTE_URL);
+    }
+
+    public function getErrorCallbackUrl(): string
+    {
+        if ($this->qualifiedErrorCallbackUrl !== null) {
+            return $this->qualifiedErrorCallbackUrl;
+        }
+
+        return $this->router->generate('esign_callback_error', [], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     public function checkPdfAsConnection()
@@ -93,8 +114,13 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     {
         $client = new Client();
         if ($this->qualifiedUrl !== '') {
-            $client->request('GET', $this->qualifiedCallbackUrl);
-            $client->request('GET', $this->qualifiedErrorCallbackUrl);
+            // Only check if it's external, since we might not be deployed/public ourselves
+            if ($this->qualifiedCallbackUrl !== null) {
+                $client->request('GET', $this->qualifiedCallbackUrl);
+            }
+            if ($this->qualifiedErrorCallbackUrl !== null) {
+                $client->request('GET', $this->qualifiedErrorCallbackUrl);
+            }
         }
     }
 
@@ -121,9 +147,9 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
             $params->setConfigurationOverrides($configurationOverrides);
         }
 
-        $params->setInvokeurl($this->qualifiedCallbackUrl);
+        $params->setInvokeurl($this->getCallbackUrl());
         // it's important to add the port "443", PDF-AS has a bug that will set the port to "-1" if it isn't set
-        $params->setInvokeerrorurl(Tools::getUriWithPort($this->qualifiedErrorCallbackUrl));
+        $params->setInvokeerrorurl(Tools::getUriWithPort($this->getErrorCallbackUrl()));
 
         // add signature position data if there is any
         if (count($positionData) !== 0) {

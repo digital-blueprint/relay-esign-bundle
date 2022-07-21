@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+      }
+      .center div {
+        padding: 10px;
+        text-align: center;
+        line-height: 2em;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        font-size: 20px;
+      }
+      #sessionid {
+        background-color: #eee;
+        padding: 4px;
+        word-break: break-all;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="center">
+      <div>Session ID: <span id="sessionid">-</span></div>
+      <div>
+        <input
+          type="button"
+          value="Copy Session ID to Clipboard"
+          onclick="copyToClipboard();"
+        />
+      </div>
+    </div>
+  </body>
+
+  <script type="module">
+    function getSessionId() {
+      // Example query: callback.html?pdfurl=https%253A%252F%252Fsig-dev.tugraz.at%252Fpdf-as-web%252FPDFData%253Bjsessionid%253D357873A48F30D0FFE6ABF1BF758742D7&pdflength=206242
+      const url = new URL(window.location.href);
+      const pdfurl = url.searchParams.get("pdfurl");
+      if (pdfurl === null) {
+        return null;
+      }
+      const sessionId = decodeURIComponent(pdfurl).split("jsessionid=")[1];
+      return sessionId;
+    }
+
+    function postToParent(sessionId) {
+      let message;
+      if (sessionId === null) {
+        message = {
+          type: "pdf-as-error",
+          cause: "",
+          error: "Failed to extract the session ID",
+        };
+      } else {
+        message = { type: "pdf-as-callback", sessionId: sessionId };
+      }
+      window.parent.postMessage(message, "*");
+
+      console.log("Callback - PostMessage Data:");
+      console.log(message);
+    }
+
+    function showOnPage(sessionId) {
+      let element = document.getElementById("sessionid");
+      element.textContent = sessionId !== null ? sessionId : "-";
+    }
+
+    function copyToClipboard() {
+      const sessionId = getSessionId();
+      if (sessionId !== null) {
+        navigator.clipboard.writeText(sessionId);
+      }
+    }
+
+    function main() {
+      const sessionId = getSessionId();
+      postToParent(sessionId);
+      showOnPage(sessionId);
+
+      console.log("Callback - URL: " + window.location.href);
+    }
+
+    main();
+    window.copyToClipboard = copyToClipboard;
+  </script>
+</html>

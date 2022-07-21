@@ -37,6 +37,8 @@ class DbpRelayEsignExtension extends ConfigurableExtension
             $this->addPathToHide($container, $path);
         }
 
+        $this->addRouteResource($container, __DIR__.'/../Resources/config/routes.yaml', 'yaml');
+
         $loader = new YamlFileLoader(
             $container,
             new FileLocator(__DIR__.'/../Resources/config')

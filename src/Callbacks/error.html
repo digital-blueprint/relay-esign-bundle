@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+      }
+      .center div {
+        padding: 10px;
+        text-align: center;
+        line-height: 2em;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        font-size: 20px;
+      }
+
+      #cause,
+      #error {
+        background-color: #eee;
+        padding: 4px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="center">
+      <div>Error: <span id="error">-</span></div>
+      <div>Cause: <span id="cause">-</span></div>
+    </div>
+  </body>
+
+  <script type="module">
+    // Example query (pdf-as 4.1.6): error.html?cause=&error=SecurityLayer%2BError%253A%2B%255B6001%255D%2BAbbruch%2Bdurch%2Bden%2BB%25C3%2583%25C2%25BCrger%2B%25C3%2583%25C2%25BCber%2Bdie%2BBenutzerschnittstelle.
+    // Example query (pdf-as 4.2.0): error.html?cause=&error=SecurityLayer%2BError%253A%2B%255B6001%255D%2BAbbruch%2Bdurch%2Bden%2BB%25C3%25BCrger%2B%25C3%25BCber%2Bdie%2BBenutzerschnittstelle.
+
+    function fixupQueryEncoding(value) {
+      try {
+        // With pdf-as 4.1.6 we get back a double URI encododed string that is encoded using latin-1 instead of
+        // utf-8 and also encodes spaces with + instead of %20. This tries to reverse this madness.
+        return decodeURIComponent(
+          escape(decodeURIComponent(value.replace(/\+/g, "%20")))
+        );
+      } catch (error) {
+        // Starting with pdf-as 4.2.0 things are a bit saner
+        return decodeURIComponent(value.replace(/\+/g, "%20"));
+      }
+    }
+
+    function getCause() {
+      const url = new URL(window.location.href);
+      const cause = url.searchParams.get("cause");
+      if (cause === null) {
+        return "";
+      }
+      return fixupQueryEncoding(cause);
+    }
+
+    function getError() {
+      const url = new URL(window.location.href);
+      const error = url.searchParams.get("error");
+      if (error === null) {
+        return "";
+      }
+      return fixupQueryEncoding(error);
+    }
+
+    function postToParent(cause, error) {
+      const message = { type: "pdf-as-error", cause: cause, error: error };
+      window.parent.postMessage(message, "*");
+      console.log("Error - PostMessage Data:");
+      console.log(message);
+    }
+
+    function showOnPage(cause, error) {
+      document.getElementById("cause").textContent = cause ? cause : "-";
+      document.getElementById("error").textContent = error ? error : "-";
+    }
+
+    function main() {
+      let cause = getCause();
+      let error = getError();
+
+      postToParent(cause, error);
+      showOnPage(cause, error);
+
+      console.log("Error - URL: " + window.location.href);
+    }
+
+    main();
+  </script>
+</html>

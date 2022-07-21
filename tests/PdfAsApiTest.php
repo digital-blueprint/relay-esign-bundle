@@ -15,7 +15,24 @@ class PdfAsApiTest extends ApiTestCase
 
     public function setUp(): void
     {
-        $this->api = new PdfAsApi(new Stopwatch());
+        $router = $this->getContainer()->get('router');
+        $this->api = new PdfAsApi(new Stopwatch(), $router);
+    }
+
+    public function testGetCallbackUrl()
+    {
+        $api = $this->api;
+        $this->assertSame($api->getCallbackUrl(), 'http://localhost/esign/_success');
+        $api->setConfig(['qualified_signature' => ['callback_url' => 'https://foo.bar']]);
+        $this->assertSame($api->getCallbackUrl(), 'https://foo.bar');
+    }
+
+    public function testGetErrorCallbackUrl()
+    {
+        $api = $this->api;
+        $this->assertSame($api->getErrorCallbackUrl(), 'http://localhost/esign/_error');
+        $api->setConfig(['qualified_signature' => ['error_callback_url' => 'https://foo.bar.error']]);
+        $this->assertSame($api->getErrorCallbackUrl(), 'https://foo.bar.error');
     }
 
     public function testRequiredRoleUnknownProfile()

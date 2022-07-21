@@ -27,3 +27,8 @@ services:
         resource: '../../Commands'
         autowire: true
         autoconfigure: true
+
+    Dbp\Relay\EsignBundle\Callbacks\:
+        resource: '../../Callbacks'
+        autowire: true
+        autoconfigure: true
