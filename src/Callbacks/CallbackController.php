@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CallbackController extends AbstractController
 {
     /**
-     * @Route("/esign/_success", name="esign_callback_success")
+     * @Route("/esign/_success", name="esign_callback_success", methods={"GET"})
      */
     public function success(): Response
     {
@@ -20,7 +20,7 @@ class CallbackController extends AbstractController
     }
 
     /**
-     * @Route("/esign/_error", name="esign_callback_error")
+     * @Route("/esign/_error", name="esign_callback_error", methods={"GET"})
      */
     public function error(): Response
     {
