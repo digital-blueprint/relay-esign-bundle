@@ -10,10 +10,6 @@ dbp_relay_esign:
     qualified_signature:
         # The URL to the PDF-AS server for qualified signatures
         server_url:           ~ # Example: 'https://pdfas.example.com/pdf-as-web'
-        # The URL pdf-as will redirect to when the signature is done
-        callback_url:         ~ # Example: 'https://pdfas.example.com/static/callback.html'
-        # The URL pdf-as will redirect to when the signature failed
-        error_callback_url:   ~ # Example: 'https://pdfas.example.com/static/error.html'
         profiles:
             # Prototype
             -
@@ -65,8 +61,6 @@ dbp_relay_esign:
 dbp_relay_esign:
   qualified_signature:
     server_url: 'https://sig.tugraz.at/pdf-as-web'
-    callback_url: 'https://sig.tugraz.at/static/callback.html'
-    error_callback_url: 'https://sig.tugraz.at/static/error.html'
     profiles:
       name: default
       profile_id: 'SIGNATURBLOCK_SMALL_DE_NOTE_PDFA'
@@ -144,7 +138,7 @@ handy-signatur.at
 
 ### Qualified Server
 
-FIXME: Provide error.html and callback.html for the static endpoint and other unrelated required options
+FIXME: other unrelated required options
 
 ### Advanced Server
 
