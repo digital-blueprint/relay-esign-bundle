@@ -5,7 +5,6 @@
 sequenceDiagram
     participant Browser
     participant API as API-Gateway
-    participant Callback as Static Callback
     participant PdfAs as PDF-AS
     participant ATrust as A-Trust
     autonumber
@@ -29,8 +28,8 @@ sequenceDiagram
     ATrust-->>Browser: Deliver redirect URL
     Browser->>PdfAs: Redirect to PDF-AS in iFrame
     PdfAs-->>Browser: Deliver URL with to static callback
-    Browser->>Callback: Redirect to static callback invokeURL in iFrame
-    Callback-->>Browser: Send `sessionId` to frame parent in browser to download file
+    Browser->>API: Redirect to static callback invokeURL in iFrame
+    API-->>Browser: Send `sessionId` to frame parent in browser to download file
     Browser->>API: Send `sessionId`
     API->>PdfAs: Send `sessionId`
     PdfAs-->>API: Send signed PDF
