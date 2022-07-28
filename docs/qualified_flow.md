@@ -28,8 +28,8 @@ sequenceDiagram
     ATrust-->>Browser: Deliver redirect URL
     Browser->>PdfAs: Redirect to PDF-AS in iFrame
     PdfAs-->>Browser: Deliver URL with to static callback
-    Browser->>API: Redirect to static callback invokeURL in iFrame
-    API-->>Browser: Send `sessionId` to frame parent in browser to download file
+    Browser->>API: Redirect to static callback <br> invokeURL in iFrame
+    API-->>Browser: Send `sessionId` to frame <br> parent in browser to download file
     Browser->>API: Send `sessionId`
     API->>PdfAs: Send `sessionId`
     PdfAs-->>API: Send signed PDF
