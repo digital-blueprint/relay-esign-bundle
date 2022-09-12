@@ -27,7 +27,7 @@ class DbpRelayEsignExtension extends ConfigurableExtension
             '/esign/electronic-signature-verification-reports/{identifier}',
         ];
 
-        if (($_ENV['PDF_AS_VERIFICATION_ENABLE'] ?? 'true') !== 'true') {
+        if (($_ENV['ESIGN_PDF_AS_VERIFICATION_ENABLE'] ?? 'false') !== 'true') {
             $pathsToHide = array_merge($pathsToHide, [
                 '/esign/electronic-signatures/{id}',
             ]);
