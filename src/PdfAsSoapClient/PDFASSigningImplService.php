@@ -23,10 +23,11 @@ class PDFASSigningImplService extends PDFASBaseService
     /**
      * @param string $location           The service location
      * @param int    $connection_timeout Connection timeout in seconds
+     * @param bool   $trace              Enable tracing
      *
      * @throws \SoapFault
      */
-    public function __construct(string $location, int $connection_timeout = -1)
+    public function __construct(string $location, int $connection_timeout = -1, bool $trace = false)
     {
         $options = [];
         foreach (self::$classmap as $key => $value) {
@@ -46,6 +47,7 @@ class PDFASSigningImplService extends PDFASBaseService
           'features' => SOAP_SINGLE_ELEMENT_ARRAYS,
           'cache_wsdl' => WSDL_CACHE_NONE,
           'location' => $location,
+          'trace' => $trace,
       ], $options);
         \SoapClient::__construct($wsdl_uri, $options);
     }
