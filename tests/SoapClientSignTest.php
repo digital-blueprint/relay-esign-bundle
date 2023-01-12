@@ -62,9 +62,8 @@ class SoapClientSignTest extends TestCase
         $soapClientMock = $this->getMockSigningService(self::$FAKE_RESPONSE);
 
         $params = new SignParameters(Connector::jks());
-        $params->setInvokeerrorurl('https://XXXXXXXXXXXXXXXXXXXXXX');
+        $params->setInvokeErrorUrl('https://XXXXXXXXXXXXXXXXXXXXXX');
         $request = new SignRequest('foobar', $params, 'my-id');
-        /* @var $soapClientMock PDFASSigningImplService */
         $response = $soapClientMock->signSingle($request);
 
         $this->assertEquals('some-request-id', $response->getRequestID());
@@ -112,7 +111,6 @@ class SoapClientSignTest extends TestCase
         $params = new SignParameters(Connector::jks());
         $request = new SignRequest('foobar', $params, 'my-id');
         $this->expectException(\SoapFault::class);
-        /* @var $soapClientMock PDFASSigningImplService */
         $soapClientMock->signSingle($request);
     }
 
@@ -122,8 +120,28 @@ class SoapClientSignTest extends TestCase
 
         $params = new SignParameters(Connector::jks());
         $request = new SignRequest('foobar', $params, 'my-id');
-        /* @var $soapClientMock PDFASSigningImplService */
         $response = $soapClientMock->signSingle($request, 42);
+        $this->assertNotFalse($response);
+    }
+
+    public function testSingleSignWithSpecialSignParams()
+    {
+        $soapClientMock = $this->getMockSigningService(self::$FAKE_RESPONSE);
+
+        $params = new SignParameters(Connector::jks());
+        $params->setInvokeTarget('http://invoke-target');
+        $params->setInvokeErrorUrl('http://invoke-error-url');
+        $params->setInvokeUrl('http://invoke-url');
+
+        $request = new SignRequest('foobar', $params, 'my-id');
+        $response = $soapClientMock->signSingle($request, 42);
+        $lastRequest = $soapClientMock->__getLastRequest();
+
+        // make sure they end up in the request, despite being magic properties
+        $this->assertStringContainsString('http://invoke-target', $lastRequest);
+        $this->assertStringContainsString('http://invoke-error-url', $lastRequest);
+        $this->assertStringContainsString('http://invoke-url', $lastRequest);
+
         $this->assertNotFalse($response);
     }
 }

@@ -147,9 +147,9 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
             $params->setConfigurationOverrides($configurationOverrides);
         }
 
-        $params->setInvokeurl($this->getCallbackUrl());
+        $params->setInvokeUrl($this->getCallbackUrl());
         // it's important to add the port "443", PDF-AS has a bug that will set the port to "-1" if it isn't set
-        $params->setInvokeerrorurl(Tools::getUriWithPort($this->getErrorCallbackUrl()));
+        $params->setInvokeErrorUrl(Tools::getUriWithPort($this->getErrorCallbackUrl()));
 
         // add signature position data if there is any
         if (count($positionData) !== 0) {

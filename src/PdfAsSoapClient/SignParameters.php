@@ -47,16 +47,26 @@ class SignParameters
     protected $transactionId = null;
 
     /**
+     * @var string
+     */
+    protected $invokeErrorUrl = null;
+
+    /**
+     * @var string
+     */
+    protected $invokeTarget = null;
+
+    /**
+     * @var string
+     */
+    protected $invokeUrl = null;
+
+    /**
      * @param Connector $connector
-     * @psalm-suppress UndefinedThisPropertyAssignment
      */
     public function __construct($connector)
     {
         $this->connector = $connector;
-
-        $this->{'invoke-error-url'} = null; // @phpstan-ignore-line
-        $this->{'invoke-target'} = null;  // @phpstan-ignore-line
-        $this->{'invoke-url'} = null;  // @phpstan-ignore-line
     }
 
     /**
@@ -81,66 +91,77 @@ class SignParameters
 
     /**
      * @return ?string
-     * @psalm-suppress UndefinedThisPropertyFetch
      */
     public function getInvokeerrorurl()
     {
-        return $this->{'invoke-error-url'};  // @phpstan-ignore-line
+        return $this->invokeErrorUrl;
     }
 
     /**
-     * @param string $invokeerrorurl
+     * @return mixed
+     */
+    public function __get(string $name)
+    {
+        // This is used by php-soap when serializing
+        if ($name === 'invoke-error-url') {
+            return $this->invokeErrorUrl;
+        } elseif ($name === 'invoke-target') {
+            return $this->invokeTarget;
+        } elseif ($name === 'invoke-url') {
+            return $this->invokeUrl;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $invokeErrorUrl
      *
      * @return SignParameters
-     * @psalm-suppress UndefinedThisPropertyAssignment
      */
-    public function setInvokeerrorurl($invokeerrorurl)
+    public function setInvokeErrorUrl($invokeErrorUrl)
     {
-        $this->{'invoke-error-url'} = $invokeerrorurl;  // @phpstan-ignore-line
+        $this->invokeErrorUrl = $invokeErrorUrl;
 
         return $this;
     }
 
     /**
      * @return ?string
-     * @psalm-suppress UndefinedThisPropertyFetch
      */
-    public function getInvoketarget()
+    public function getInvokeTarget()
     {
-        return $this->{'invoke-target'};  // @phpstan-ignore-line
+        return $this->invokeTarget;
     }
 
     /**
-     * @param string $invoketarget
+     * @param string $invokeTarget
      *
      * @return SignParameters
-     * @psalm-suppress UndefinedThisPropertyAssignment
      */
-    public function setInvoketarget($invoketarget)
+    public function setInvokeTarget($invokeTarget)
     {
-        $this->{'invoke-target'} = $invoketarget;  // @phpstan-ignore-line
+        $this->invokeTarget = $invokeTarget;
 
         return $this;
     }
 
     /**
      * @return ?string
-     * @psalm-suppress UndefinedThisPropertyFetch
      */
-    public function getInvokeurl()
+    public function getInvokeUrl()
     {
-        return $this->{'invoke-url'};  // @phpstan-ignore-line
+        return $this->invokeUrl;
     }
 
     /**
-     * @param string $invokeurl
+     * @param string $invokeUrl
      *
      * @return ?SignParameters
-     * @psalm-suppress UndefinedThisPropertyAssignment
      */
-    public function setInvokeurl($invokeurl)
+    public function setInvokeUrl($invokeUrl)
     {
-        $this->{'invoke-url'} = $invokeurl;  // @phpstan-ignore-line
+        $this->invokeUrl = $invokeUrl;
 
         return $this;
     }

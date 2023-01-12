@@ -13,14 +13,14 @@ class SoapClientTypesTest extends TestCase
     public function testSignParameters()
     {
         $param = new SignParameters(Connector::bku());
-        $this->assertNull($param->getInvokeurl());
+        $this->assertNull($param->getInvokeUrl());
         $this->assertNull($param->getInvokeerrorurl());
-        $this->assertNull($param->getInvoketarget());
-        $param->setInvokeurl('url');
-        $this->assertEquals('url', $param->getInvokeurl());
-        $param->setInvokeerrorurl('error-url');
+        $this->assertNull($param->getInvokeTarget());
+        $param->setInvokeUrl('url');
+        $this->assertEquals('url', $param->getInvokeUrl());
+        $param->setInvokeErrorUrl('error-url');
         $this->assertEquals('error-url', $param->getInvokeerrorurl());
-        $param->setInvoketarget('target');
-        $this->assertEquals('target', $param->getInvoketarget());
+        $param->setInvokeTarget('target');
+        $this->assertEquals('target', $param->getInvokeTarget());
     }
 }
