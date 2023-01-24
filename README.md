@@ -1,6 +1,6 @@
 # Relay ESign Bundle
 
-[GitLab](https://gitlab.tugraz.at/dbp/esign/dbp-relay-esign-bundle) |
+[GitHub](https://github.com/digital-blueprint/dbp-relay-esign-bundle) |
 [Packagist](https://packagist.org/packages/dbp/relay-esign-bundle) |
 [Frontend Application](https://gitlab.tugraz.at/dbp/esign/signature) |
 [ESign Website](https://dbp-demo.tugraz.at/site/software/esign.html)
