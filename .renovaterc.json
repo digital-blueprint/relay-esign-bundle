@@ -21,7 +21,7 @@
     },
     {
       "matchPackageNames": ["api-platform/core"],
-      "allowedVersions": "<3"
+      "allowedVersions": "<2.7"
     },
     {
       "matchPackageNames": ["friendsofphp/php-cs-fixer"],
