@@ -16,6 +16,10 @@
       "allowedVersions": "<6"
     },
     {
+      "matchPackageNames": ["vimeo/psalm"],
+      "allowedVersions": "<5"
+    },
+    {
       "matchPackageNames": ["api-platform/core"],
       "allowedVersions": "<3"
     },
