@@ -5,6 +5,8 @@
 [Frontend Application](https://gitlab.tugraz.at/dbp/esign/signature) |
 [ESign Website](https://dbp-demo.tugraz.at/site/software/esign.html)
 
+[![Test](https://github.com/digital-blueprint/relay-esign-bundle/actions/workflows/test.yml/badge.svg)](https://github.com/digital-blueprint/relay-esign-bundle/actions/workflows/test.yml)
+
 The electronic signature bundle provides an API for interacting with multiple
 [pdf-as](https://www.egiz.gv.at/en/schwerpunkte/16-pdf-as) and [moa-ssp](https://www.egiz.gv.at/en/schwerpunkte/13-moaspssid)
 servers and allows signing and signature verification of PDF files using [PAdES](https://en.wikipedia.org/wiki/PAdES).
