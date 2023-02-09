@@ -30,6 +30,10 @@
     {
       "matchPackageNames": ["league/uri"],
       "allowedVersions": "<=6.5.0"
+    },
+    {
+      "matchPackageNames": ["phpunit/phpunit"],
+      "allowedVersions": "<10"
     }
   ]
 }
