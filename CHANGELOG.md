@@ -1,3 +1,7 @@
+# v0.3.3
+
+* tests: don't fail if symfony/dotenv is installed
+
 # v0.3.0
 
 * Improved documentation on signature parameters and signature block
