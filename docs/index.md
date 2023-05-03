@@ -1,6 +1,6 @@
 # Overview
 
-Source: https://gitlab.tugraz.at/dbp/esign/dbp-relay-esign-bundle
+Source: https://github.com/digital-blueprint/relay-esign-bundle
 
 ```mermaid
 graph TD

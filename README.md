@@ -2,7 +2,7 @@
 
 [GitHub](https://github.com/digital-blueprint/relay-esign-bundle) |
 [Packagist](https://packagist.org/packages/dbp/relay-esign-bundle) |
-[Frontend Application](https://gitlab.tugraz.at/dbp/esign/signature) |
+[Frontend Application](https://github.com/digital-blueprint/esign-app) |
 [ESign Website](https://dbp-demo.tugraz.at/site/software/esign.html)
 
 [![Test](https://github.com/digital-blueprint/relay-esign-bundle/actions/workflows/test.yml/badge.svg)](https://github.com/digital-blueprint/relay-esign-bundle/actions/workflows/test.yml)
@@ -13,7 +13,7 @@ servers and allows signing and signature verification of PDF files using [PAdES]
 
 For more details see the [docs](./docs/index.md) or the [ESign Website](https://dbp-demo.tugraz.at/site/software/esign.html).
 
-There is a corresponding frontend application that uses this API at [ESign Frontend Application](https://gitlab.tugraz.at/dbp/esign/signature).
+There is a corresponding frontend application that uses this API at [ESign Frontend Application](https://github.com/digital-blueprint/esign-app).
 
 ## Bundle installation
 
@@ -40,11 +40,11 @@ Dbp\Relay\CoreBundle\DbpRelayCoreBundle::class => ['all' => true],
 
 For more details see the [Configuration Documentation](./docs/config.md).
 
-If you were using the [DBP API Server Template](https://gitlab.tugraz.at/dbp/relay/dbp-relay-server-template)
+If you were using the [DBP API Server Template](https://github.com/digital-blueprint/relay-server-template)
 as template for your Symfony application, then an example configuration file should have already been generated for you.
 
-To handle locking you need to [configure locking in the core bundle](https://gitlab.tugraz.at/dbp/relay/dbp-relay-core-bundle#bundle-config).
+To handle locking you need to [configure locking in the core bundle](https://github.com/digital-blueprint/relay-core-bundle#bundle-config).
 
-You also need to [configure the Symfony Messenger in the core bundle](https://gitlab.tugraz.at/dbp/relay/dbp-relay-core-bundle#bundle-config) to check out guests after a certain amount of time.
+You also need to [configure the Symfony Messenger in the core bundle](https://github.com/digital-blueprint/relay-core-bundle#bundle-config) to check out guests after a certain amount of time.
 
 For more info on bundle configuration see <https://symfony.com/doc/current/bundles/configuration.html>.
