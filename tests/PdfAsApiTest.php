@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Tests;
 
-use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
+use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use Dbp\Relay\EsignBundle\Service\PdfAsApi;
 use Dbp\Relay\EsignBundle\Service\SigningException;
 use Symfony\Component\Stopwatch\Stopwatch;

@@ -16,8 +16,6 @@ class DbpRelayEsignExtension extends ConfigurableExtension
 
     public function loadInternal(array $mergedConfig, ContainerBuilder $container)
     {
-        $this->addResourceClassDirectory($container, __DIR__.'/../Entity');
-
         $pathsToHide = [
             '/esign/advancedly-signed-documents/{identifier}',
             '/esign/advancedly-signed-documents',

@@ -12,14 +12,12 @@ services:
         '@Dbp\Relay\EsignBundle\Service\PdfAsApi'
 
     Dbp\Relay\EsignBundle\Controller\:
-        tags: ['controller.service_arguments']
         resource: '../../Controller'
         autowire: true
         autoconfigure: true
 
-    Dbp\Relay\EsignBundle\DataProvider\:
-        tags: ['controller.service_arguments']
-        resource: '../../DataProvider'
+    Dbp\Relay\EsignBundle\State\:
+        resource: '../../State'
         autowire: true
         autoconfigure: true
 
