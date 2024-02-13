@@ -1,3 +1,7 @@
+# v0.3.6
+
+* Remove embedded json-ld context from the signature responses.
+
 # v0.3.5
 
 * Port to the new api-platform metadata system. No user visible changes.
