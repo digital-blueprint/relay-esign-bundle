@@ -7,7 +7,6 @@ resources:
     routePrefix: "/esign"
     normalizationContext:
       groups: ["EsignAdvancedlySignedDocument:output"]
-      jsonld_embed_context: true
 
     operations:
 
@@ -94,7 +93,6 @@ resources:
     routePrefix: "/esign"
     normalizationContext:
       groups: ["EsignQualifiedlySignedDocument:output"]
-      jsonld_embed_context: true
 
     operations:
 
@@ -148,7 +146,6 @@ resources:
     routePrefix: "/esign"
     normalizationContext:
       groups: ["EsignQualifiedSigningRequest:output"]
-      jsonld_embed_context: true
 
     operations:
 
@@ -235,7 +232,6 @@ resources:
     routePrefix: "/esign"
     normalizationContext:
       groups: ["EsignElectronicSignature:output"]
-      jsonld_embed_context: true
 
     operations:
 
@@ -275,7 +271,6 @@ resources:
     routePrefix: "/esign"
     normalizationContext:
       groups: ["EsignElectronicSignatureVerificationReport:output", "ElectronicSignature:output"]
-      jsonld_embed_context: true
 
     operations:
 
