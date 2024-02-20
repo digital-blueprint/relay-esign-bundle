@@ -9,27 +9,27 @@ class SignResponse
     /**
      * @var ?string
      */
-    protected $error = null;
+    protected $error;
 
     /**
      * @var ?string
      */
-    protected $redirectUrl = null;
+    protected $redirectUrl;
 
     /**
      * @var ?string
      */
-    protected $requestID = null;
+    protected $requestID;
 
     /**
      * @var ?string
      */
-    protected $signedPDF = null;
+    protected $signedPDF;
 
     /**
      * @var ?VerificationResponse
      */
-    protected $verificationResponse = null;
+    protected $verificationResponse;
 
     /**
      * @param ?string $requestID

@@ -9,27 +9,27 @@ class VerifyRequest
     /**
      * @var string
      */
-    protected $inputData = null;
+    protected $inputData;
 
     /**
      * @var PropertyMap
      */
-    protected $preprocessorArguments = null;
+    protected $preprocessorArguments;
 
     /**
      * @var string
      */
-    protected $requestID = null;
+    protected $requestID;
 
     /**
      * @var int
      */
-    protected $signatureIndex = null;
+    protected $signatureIndex;
 
     /**
      * @var VerificationLevel
      */
-    protected $verificationLevel = null;
+    protected $verificationLevel;
 
     /**
      * @param string $inputData

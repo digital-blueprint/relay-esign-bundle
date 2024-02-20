@@ -9,57 +9,57 @@ class SignParameters
     /**
      * @var Connector
      */
-    protected $connector = null;
+    protected $connector;
 
     /**
      * @var string
      */
-    protected $keyIdentifier = null;
+    protected $keyIdentifier;
 
     /**
      * @var PropertyMap
      */
-    protected $configurationOverrides = null;
+    protected $configurationOverrides;
 
     /**
      * @var string
      */
-    protected $position = null;
+    protected $position;
 
     /**
      * @var PropertyMap
      */
-    protected $preprocessorArguments = null;
+    protected $preprocessorArguments;
 
     /**
      * @var string
      */
-    protected $profile = null;
+    protected $profile;
 
     /**
      * @var string
      */
-    protected $qrCodeContent = null;
+    protected $qrCodeContent;
 
     /**
      * @var string
      */
-    protected $transactionId = null;
+    protected $transactionId;
 
     /**
      * @var string
      */
-    protected $invokeErrorUrl = null;
+    protected $invokeErrorUrl;
 
     /**
      * @var string
      */
-    protected $invokeTarget = null;
+    protected $invokeTarget;
 
     /**
      * @var string
      */
-    protected $invokeUrl = null;
+    protected $invokeUrl;
 
     /**
      * @param Connector $connector

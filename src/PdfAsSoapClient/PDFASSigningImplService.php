@@ -53,11 +53,11 @@ class PDFASSigningImplService extends PDFASBaseService
     }
 
     /**
-     * @throws \SoapFault (e.g. "looks like we got no XML document")
-     *
      * @param int $timeout Timeout in seconds
      *
      * @return SignResponse
+     *
+     * @throws \SoapFault (e.g. "looks like we got no XML document")
      */
     public function signSingle(SignRequest $signRequest, int $timeout = -1)
     {

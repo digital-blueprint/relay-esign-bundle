@@ -20,18 +20,21 @@ class ElectronicSignature
 
     /**
      * @var string
+     *
      * @Groups({"EsignElectronicSignature:output"})
      */
     private $familyName;
 
     /**
      * @var string
+     *
      * @Groups({"EsignElectronicSignature:output"})
      */
     private $serialNumber;
 
     /**
      * @var string
+     *
      * @Groups({"EsignElectronicSignature:output"})
      */
     private $signedBy;

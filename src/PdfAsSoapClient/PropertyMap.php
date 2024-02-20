@@ -9,7 +9,7 @@ class PropertyMap
     /**
      * @var PropertyEntry[]
      */
-    protected $propertyEntries = null;
+    protected $propertyEntries;
 
     /**
      * @param PropertyEntry[] $propertyEntries

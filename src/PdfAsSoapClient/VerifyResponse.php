@@ -9,7 +9,7 @@ class VerifyResponse
     /**
      * @var VerifyResult[]
      */
-    protected $verifyResults = null;
+    protected $verifyResults;
 
     /**
      * @param VerifyResult[] $verifyResults

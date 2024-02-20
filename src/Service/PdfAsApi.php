@@ -133,7 +133,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 
         try {
             $service = new PDFASSigningImplService($this->qualifiedUrl.'/services/wssign', self::PDF_AS_TIMEOUT);
-        } catch (SoapFault $e) {
+        } catch (\SoapFault $e) {
             throw new SigningException('Signing soap call failed, wsdl URI cannot be loaded!');
         }
 
@@ -163,7 +163,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         try {
             // can and will throw a SoapFault "looks like we got no XML document"
             $response = $service->signSingle($request, self::PDF_AS_TIMEOUT);
-        } catch (SoapFault $e) {
+        } catch (\SoapFault $e) {
             $this->handleSoapFault($e);
             throw new SigningException();
         } finally {
@@ -315,7 +315,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 
         try {
             $service = new PDFASSigningImplService($this->advancedUrl.'/services/wssign', self::PDF_AS_TIMEOUT);
-        } catch (SoapFault $e) {
+        } catch (\SoapFault $e) {
             throw new SigningException('Signing soap call failed, wsdl URI cannot be loaded!');
         }
 
@@ -341,7 +341,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         try {
             // can and will throw a SoapFault "looks like we got no XML document"
             $response = $service->signSingle($request, self::PDF_AS_TIMEOUT);
-        } catch (SoapFault $e) {
+        } catch (\SoapFault $e) {
             $this->handleSoapFault($e);
             throw new SigningException();
         } finally {
@@ -368,13 +368,13 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
      * @throws SigningException
      * @throws SigningUnavailableException
      */
-    private function handleSoapFault(SoapFault $e)
+    private function handleSoapFault(\SoapFault $e)
     {
         switch (strtolower($e->getMessage())) {
             // we get that on a socket timeout
             case 'error fetching http headers':
                 throw new SigningUnavailableException("PDF-AS didn't answer in time! Please try again later.");
-            // we get that if the webserver responds with an 503 error
+                // we get that if the webserver responds with an 503 error
             case 'service unavailable':
                 throw new SigningUnavailableException('PDF-AS service unavailable! Please try again later.');
             default:
@@ -397,7 +397,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         $event = $this->stopwatch->start('pdf-as.verify', 'esign');
         try {
             return $client->verify($request, self::PDF_AS_TIMEOUT);
-        } catch (SoapFault $e) {
+        } catch (\SoapFault $e) {
             $this->handleSoapFault($e);
             throw new SigningException();
         } finally {

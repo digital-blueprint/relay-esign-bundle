@@ -79,7 +79,7 @@ final class CreateQualifiedSigningRequestAction extends BaseSigningController
 
         // check if file is too large
         if ($uploadedFile->getSize() > 33554432) {
-            throw new APIError(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'PDF file too large to sign (32MB limit)!');
+            throw new ApiError(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'PDF file too large to sign (32MB limit)!');
         }
 
         $positionData = [];

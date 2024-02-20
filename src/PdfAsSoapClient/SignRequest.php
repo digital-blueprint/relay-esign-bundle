@@ -9,22 +9,22 @@ class SignRequest
     /**
      * @var string
      */
-    protected $inputData = null;
+    protected $inputData;
 
     /**
      * @var SignParameters
      */
-    protected $parameters = null;
+    protected $parameters;
 
     /**
      * @var string
      */
-    protected $requestID = null;
+    protected $requestID;
 
     /**
      * @var VerificationLevel
      */
-    protected $verificationLevel = null;
+    protected $verificationLevel;
 
     /**
      * @param string         $inputData

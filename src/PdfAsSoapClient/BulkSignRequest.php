@@ -9,7 +9,7 @@ class BulkSignRequest
     /**
      * @var SignRequest[]
      */
-    protected $signRequests = null;
+    protected $signRequests;
 
     /**
      * @param SignRequest[] $signRequests

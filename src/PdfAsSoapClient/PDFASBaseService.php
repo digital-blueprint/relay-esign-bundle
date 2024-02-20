@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 
-use SoapFault;
-
 class PDFASBaseService extends \SoapClient
 {
     // For mocking in tests
@@ -37,10 +35,8 @@ class PDFASBaseService extends \SoapClient
      * @param int      $version
      * @param bool|int $oneWay
      *
-     * @return string
-     *
      * @throws SoapResponseParserError
-     * @throws SoapFault
+     * @throws \SoapFault
      */
     public function __doRequest($request, $location, $action, $version = SOAP_1_1, $oneWay = 0): ?string
     {
@@ -48,7 +44,7 @@ class PDFASBaseService extends \SoapClient
 
         // happens for example if the request is denied by the server or a timeout happens
         if ($response === null) {
-            throw new SoapFault('no-data-returned', 'No data returned by SOAP request!');
+            throw new \SoapFault('no-data-returned', 'No data returned by SOAP request!');
         }
 
         // Sometimes soap errors get sent as XML already

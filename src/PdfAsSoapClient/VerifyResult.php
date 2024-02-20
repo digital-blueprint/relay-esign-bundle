@@ -9,57 +9,57 @@ class VerifyResult
     /**
      * @var string
      */
-    protected $certificate = null;
+    protected $certificate;
 
     /**
      * @var int
      */
-    protected $certificateCode = null;
+    protected $certificateCode;
 
     /**
      * @var string
      */
-    protected $certificateMessage = null;
+    protected $certificateMessage;
 
     /**
      * @var string
      */
-    protected $error = null;
+    protected $error;
 
     /**
      * @var bool
      */
-    protected $processed = null;
+    protected $processed;
 
     /**
      * @var string
      */
-    protected $requestID = null;
+    protected $requestID;
 
     /**
      * @var int
      */
-    protected $signatureIndex = null;
+    protected $signatureIndex;
 
     /**
      * @var string
      */
-    protected $signedBy = null;
+    protected $signedBy;
 
     /**
      * @var string
      */
-    protected $signedData = null;
+    protected $signedData;
 
     /**
      * @var int
      */
-    protected $valueCode = null;
+    protected $valueCode;
 
     /**
      * @var string
      */
-    protected $valueMessage = null;
+    protected $valueMessage;
 
     /**
      * @param string $certificate

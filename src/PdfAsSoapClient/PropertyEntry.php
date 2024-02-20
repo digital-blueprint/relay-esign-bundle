@@ -9,12 +9,12 @@ class PropertyEntry
     /**
      * @var string
      */
-    protected $key = null;
+    protected $key;
 
     /**
      * @var string
      */
-    protected $value = null;
+    protected $value;
 
     /**
      * @param string $key

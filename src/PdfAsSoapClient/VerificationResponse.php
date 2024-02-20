@@ -9,17 +9,17 @@ class VerificationResponse
     /**
      * @var int
      */
-    protected $certificateCode = null;
+    protected $certificateCode;
 
     /**
      * @var string
      */
-    protected $signerCertificate = null;
+    protected $signerCertificate;
 
     /**
      * @var int
      */
-    protected $valueCode = null;
+    protected $valueCode;
 
     /**
      * @param int $certificateCode

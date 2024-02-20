@@ -50,11 +50,11 @@ class PDFASVerificationImplService extends PDFASBaseService
     }
 
     /**
-     * @throws \SoapFault
-     *
      * @param int $timeout Timeout in seconds
      *
      * @return VerifyResponse
+     *
+     * @throws \SoapFault
      */
     public function verify(VerifyRequest $verifyRequest, int $timeout = -1)
     {
