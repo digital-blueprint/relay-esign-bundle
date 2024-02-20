@@ -1,3 +1,7 @@
+# v0.3.7
+
+* Drop support for PHP 7.3
+
 # v0.3.6
 
 * Remove embedded json-ld context from the signature responses.
