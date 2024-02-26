@@ -9,6 +9,8 @@
         "api-platform/core": "^2.7.11",
         "dbp/relay-core-bundle": "^0.1.98",
         "guzzlehttp/guzzle": "^7.5",
+        "guzzlehttp/promises": "^2.0",
+        "guzzlehttp/psr7": "^2.6",
         "league/uri": "^6.5",
         "myclabs/php-enum": "^1.8.4",
         "symfony/filesystem": "^5.4",
@@ -16,7 +18,15 @@
         "symfony/polyfill-php80": "^1.27",
         "symfony/stopwatch": "^5.4",
         "symfony/uid": "^5.4",
-        "zbateson/mail-mime-parser": "^2.0"
+        "zbateson/mail-mime-parser": "^2.0",
+        "psr/log": "^1.1.4 || ^2.0.0 || ^3.0.0",
+        "symfony/config": "^5.4",
+        "symfony/console": "^5.4",
+        "symfony/dependency-injection": "^5.4",
+        "symfony/http-foundation": "^5.4",
+        "symfony/http-kernel": "^5.4",
+        "symfony/routing": "^5.4",
+        "symfony/security-core": "^5.4"
     },
     "require-dev": {
         "ext-simplexml": "*",
