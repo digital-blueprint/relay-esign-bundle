@@ -16,6 +16,8 @@ use MyCLabs\Enum\Enum;
  * @method static Connector sl20()
  *
  * @psalm-immutable
+ *
+ * @extends Enum<string>
  */
 class Connector extends Enum
 {

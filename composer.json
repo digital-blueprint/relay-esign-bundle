@@ -38,7 +38,7 @@
         "symfony/http-client": "^5.4.35",
         "symfony/monolog-bundle": "^3.10",
         "symfony/phpunit-bridge": "^5.4.35",
-        "vimeo/psalm": "^4.30"
+        "vimeo/psalm": "^5.22.2"
     },
     "autoload": {
         "psr-4": {

@@ -14,6 +14,9 @@ use Dbp\Relay\EsignBundle\Service\SigningException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @implements ProviderInterface<QualifiedlySignedDocument>
+ */
 class QualifiedlySignedDocumentProvider extends AbstractController implements ProviderInterface
 {
     /**
