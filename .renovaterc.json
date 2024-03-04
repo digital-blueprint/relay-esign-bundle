@@ -16,20 +16,8 @@
       "allowedVersions": "<6"
     },
     {
-      "matchPackageNames": ["vimeo/psalm"],
-      "allowedVersions": "<5"
-    },
-    {
       "matchPackageNames": ["api-platform/core"],
-      "allowedVersions": "<2.7"
-    },
-    {
-      "matchPackageNames": ["friendsofphp/php-cs-fixer"],
-      "allowedVersions": "<=3.4.0"
-    },
-    {
-      "matchPackageNames": ["league/uri"],
-      "allowedVersions": "<=6.5.0"
+      "allowedVersions": "<3"
     },
     {
       "matchPackageNames": ["phpunit/phpunit"],
