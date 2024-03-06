@@ -1,3 +1,9 @@
+# v0.3.10
+
+* dev: replace abandoned composer-git-hooks with captainhook.
+  Run `vendor/bin/captainhook install -f` to replace the old hooks with the new ones
+  on an existing checkout.
+
 # v0.3.9
 
 * Update to psalm v5
