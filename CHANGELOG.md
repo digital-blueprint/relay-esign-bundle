@@ -1,3 +1,7 @@
+# v0.3.11
+
+* Add support for Symfony 6
+
 # v0.3.10
 
 * dev: replace abandoned composer-git-hooks with captainhook.
