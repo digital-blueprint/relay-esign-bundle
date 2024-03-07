@@ -20,16 +20,15 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
 
     protected $api;
 
-    protected static $defaultName = 'dbp:relay:esign:sign:advanced';
-
     public function __construct(SignatureProviderInterface $api)
     {
         parent::__construct();
         $this->api = $api;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
+        $this->setName('dbp:relay:esign:sign:advanced');
         $this->setDescription('Sign a PDF file');
         $this->addArgument('profile-id', InputArgument::REQUIRED, 'Signing profile ID');
         $this->addArgument('input-path', InputArgument::REQUIRED, 'Input PDF file path');
