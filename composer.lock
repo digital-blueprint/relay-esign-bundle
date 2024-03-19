@@ -6876,16 +6876,16 @@
         },
         {
             "name": "zbateson/mb-wrapper",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zbateson/mb-wrapper.git",
-                "reference": "faf35dddfacfc5d4d5f9210143eafd7a7fe74334"
+                "reference": "09a8b77eb94af3823a9a6623dcc94f8d988da67f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zbateson/mb-wrapper/zipball/faf35dddfacfc5d4d5f9210143eafd7a7fe74334",
-                "reference": "faf35dddfacfc5d4d5f9210143eafd7a7fe74334",
+                "url": "https://api.github.com/repos/zbateson/mb-wrapper/zipball/09a8b77eb94af3823a9a6623dcc94f8d988da67f",
+                "reference": "09a8b77eb94af3823a9a6623dcc94f8d988da67f",
                 "shasum": ""
             },
             "require": {
@@ -6896,7 +6896,7 @@
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "*",
                 "phpstan/phpstan": "*",
-                "phpunit/phpunit": "<=9.0"
+                "phpunit/phpunit": "<10.0"
             },
             "suggest": {
                 "ext-iconv": "For best support/performance",
@@ -6933,7 +6933,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zbateson/mb-wrapper/issues",
-                "source": "https://github.com/zbateson/mb-wrapper/tree/1.2.0"
+                "source": "https://github.com/zbateson/mb-wrapper/tree/1.2.1"
             },
             "funding": [
                 {
@@ -6941,7 +6941,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-01-11T23:05:44+00:00"
+            "time": "2024-03-18T04:31:04+00:00"
         },
         {
             "name": "zbateson/stream-decorators",
@@ -7316,16 +7316,16 @@
         },
         {
             "name": "composer/pcre",
-            "version": "3.1.2",
+            "version": "3.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/pcre.git",
-                "reference": "4775f35b2d70865807c89d32c8e7385b86eb0ace"
+                "reference": "5b16e25a5355f1f3afdfc2f954a0a80aec4826a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/pcre/zipball/4775f35b2d70865807c89d32c8e7385b86eb0ace",
-                "reference": "4775f35b2d70865807c89d32c8e7385b86eb0ace",
+                "url": "https://api.github.com/repos/composer/pcre/zipball/5b16e25a5355f1f3afdfc2f954a0a80aec4826a8",
+                "reference": "5b16e25a5355f1f3afdfc2f954a0a80aec4826a8",
                 "shasum": ""
             },
             "require": {
@@ -7367,7 +7367,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/pcre/issues",
-                "source": "https://github.com/composer/pcre/tree/3.1.2"
+                "source": "https://github.com/composer/pcre/tree/3.1.3"
             },
             "funding": [
                 {
@@ -7383,7 +7383,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-03-07T15:38:35+00:00"
+            "time": "2024-03-19T10:26:25+00:00"
         },
         {
             "name": "composer/semver",
@@ -7803,16 +7803,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.51.0",
+            "version": "v3.52.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "127fa74f010da99053e3f5b62672615b72dd6efd"
+                "reference": "a3564bd66f4bce9bc871ef18b690e2dc67a7f969"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/127fa74f010da99053e3f5b62672615b72dd6efd",
-                "reference": "127fa74f010da99053e3f5b62672615b72dd6efd",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/a3564bd66f4bce9bc871ef18b690e2dc67a7f969",
+                "reference": "a3564bd66f4bce9bc871ef18b690e2dc67a7f969",
                 "shasum": ""
             },
             "require": {
@@ -7883,7 +7883,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.51.0"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.52.0"
             },
             "funding": [
                 {
@@ -7891,7 +7891,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-02-28T19:50:06+00:00"
+            "time": "2024-03-18T18:40:11+00:00"
         },
         {
             "name": "masterminds/html5",
@@ -9582,16 +9582,16 @@
         },
         {
             "name": "sebastian/resource-operations",
-            "version": "3.0.3",
+            "version": "3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/resource-operations.git",
-                "reference": "0f4443cb3a1d92ce809899753bc0d5d5a8dd19a8"
+                "reference": "05d5692a7993ecccd56a03e40cd7e5b09b1d404e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/resource-operations/zipball/0f4443cb3a1d92ce809899753bc0d5d5a8dd19a8",
-                "reference": "0f4443cb3a1d92ce809899753bc0d5d5a8dd19a8",
+                "url": "https://api.github.com/repos/sebastianbergmann/resource-operations/zipball/05d5692a7993ecccd56a03e40cd7e5b09b1d404e",
+                "reference": "05d5692a7993ecccd56a03e40cd7e5b09b1d404e",
                 "shasum": ""
             },
             "require": {
@@ -9603,7 +9603,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-main": "3.0-dev"
                 }
             },
             "autoload": {
@@ -9624,8 +9624,7 @@
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
             "support": {
-                "issues": "https://github.com/sebastianbergmann/resource-operations/issues",
-                "source": "https://github.com/sebastianbergmann/resource-operations/tree/3.0.3"
+                "source": "https://github.com/sebastianbergmann/resource-operations/tree/3.0.4"
             },
             "funding": [
                 {
@@ -9633,7 +9632,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-09-28T06:45:17+00:00"
+            "time": "2024-03-14T16:00:52+00:00"
         },
         {
             "name": "sebastian/type",
