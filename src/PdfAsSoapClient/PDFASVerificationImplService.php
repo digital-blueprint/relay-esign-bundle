@@ -10,11 +10,11 @@ class PDFASVerificationImplService extends PDFASBaseService
      * @var array The defined classes
      */
     private static $classmap = [
-      'VerifyRequest' => __NAMESPACE__.'\\VerifyRequest',
-      'PropertyMap' => __NAMESPACE__.'\\PropertyMap',
-      'PropertyEntry' => __NAMESPACE__.'\\PropertyEntry',
-      'VerifyResponse' => __NAMESPACE__.'\\VerifyResponse',
-      'VerifyResult' => __NAMESPACE__.'\\VerifyResult',
+        'VerifyRequest' => __NAMESPACE__.'\\VerifyRequest',
+        'PropertyMap' => __NAMESPACE__.'\\PropertyMap',
+        'PropertyEntry' => __NAMESPACE__.'\\PropertyEntry',
+        'VerifyResponse' => __NAMESPACE__.'\\VerifyResponse',
+        'VerifyResult' => __NAMESPACE__.'\\VerifyResult',
     ];
 
     /**

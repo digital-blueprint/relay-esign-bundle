@@ -10,14 +10,14 @@ class PDFASSigningImplService extends PDFASBaseService
      * @var array The defined classes
      */
     private static $classmap = [
-      'SignRequest' => __NAMESPACE__.'\\SignRequest',
-      'SignParameters' => __NAMESPACE__.'\\SignParameters',
-      'PropertyMap' => __NAMESPACE__.'\\PropertyMap',
-      'PropertyEntry' => __NAMESPACE__.'\\PropertyEntry',
-      'SignResponse' => __NAMESPACE__.'\\SignResponse',
-      'VerificationResponse' => __NAMESPACE__.'\\VerificationResponse',
-      'BulkSignRequest' => __NAMESPACE__.'\\BulkSignRequest',
-      'BulkSignResponse' => __NAMESPACE__.'\\BulkSignResponse',
+        'SignRequest' => __NAMESPACE__.'\\SignRequest',
+        'SignParameters' => __NAMESPACE__.'\\SignParameters',
+        'PropertyMap' => __NAMESPACE__.'\\PropertyMap',
+        'PropertyEntry' => __NAMESPACE__.'\\PropertyEntry',
+        'SignResponse' => __NAMESPACE__.'\\SignResponse',
+        'VerificationResponse' => __NAMESPACE__.'\\VerificationResponse',
+        'BulkSignRequest' => __NAMESPACE__.'\\BulkSignRequest',
+        'BulkSignResponse' => __NAMESPACE__.'\\BulkSignResponse',
     ];
 
     /**
@@ -44,11 +44,11 @@ class PDFASSigningImplService extends PDFASBaseService
         $wsdl_uri = 'file://'.implode('/', array_map('rawurlencode', explode('/', $wsdl_path)));
 
         $options = array_merge([
-          'features' => SOAP_SINGLE_ELEMENT_ARRAYS,
-          'cache_wsdl' => WSDL_CACHE_NONE,
-          'location' => $location,
-          'trace' => $trace,
-      ], $options);
+            'features' => SOAP_SINGLE_ELEMENT_ARRAYS,
+            'cache_wsdl' => WSDL_CACHE_NONE,
+            'location' => $location,
+            'trace' => $trace,
+        ], $options);
         \SoapClient::__construct($wsdl_uri, $options);
     }
 
