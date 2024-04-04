@@ -5,6 +5,10 @@ resources:
     description: "Advanced signed PDF document"
     shortName: "EsignAdvancedlySignedDocument"
     routePrefix: "/esign"
+    formats:
+      0: 'jsonld'
+      # for backwards compat we also support json here
+      json: ['application/json']
     normalizationContext:
       groups: ["EsignAdvancedlySignedDocument:output"]
 
@@ -91,6 +95,10 @@ resources:
     description: "Qualifiedly signed PDF document"
     shortName: "EsignQualifiedlySignedDocument"
     routePrefix: "/esign"
+    formats:
+      0: 'jsonld'
+      # for backwards compat we also support json here
+      json: ['application/json']
     normalizationContext:
       groups: ["EsignQualifiedlySignedDocument:output"]
 
@@ -144,6 +152,10 @@ resources:
     description: "Qualified signing request"
     shortName: "EsignQualifiedSigningRequest"
     routePrefix: "/esign"
+    formats:
+      0: 'jsonld'
+      # for backwards compat we also support json here
+      json: ['application/json']
     normalizationContext:
       groups: ["EsignQualifiedSigningRequest:output"]
 
@@ -230,6 +242,10 @@ resources:
     description: "An electronic signature of a signed document"
     shortName: "EsignElectronicSignature"
     routePrefix: "/esign"
+    formats:
+      0: 'jsonld'
+      # for backwards compat we also support json here
+      json: ['application/json']
     normalizationContext:
       groups: ["EsignElectronicSignature:output"]
 
@@ -269,6 +285,10 @@ resources:
     types: ['https://schema.tugraz.at/ElectronicSignatureVerificationReport']
     shortName: "EsignElectronicSignatureVerificationReport"
     routePrefix: "/esign"
+    formats:
+      0: 'jsonld'
+      # for backwards compat we also support json here
+      json: ['application/json']
     normalizationContext:
       groups: ["EsignElectronicSignatureVerificationReport:output", "ElectronicSignature:output"]
 
