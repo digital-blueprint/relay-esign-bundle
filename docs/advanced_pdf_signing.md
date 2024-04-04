@@ -12,7 +12,6 @@ import os
 from urllib.request import urlopen
 
 import requests
-from pyld import jsonld
 
 KEYCLOAK_URL = "https://auth-demo.tugraz.at/auth"
 API_URL = "https://api-demo.tugraz.at"
@@ -38,14 +37,7 @@ with open(PDF_IN_PATH, 'rb') as h:
         params={"profile": "sap"},
         files={'file': (PDF_IN_PATH, h)})
     r.raise_for_status()
-
-# Normalize the response
-context = {
-    'contentSize': 'https://schema.org/contentSize',
-    'contentUrl': 'http://schema.org/contentUrl',
-    'name': 'http://schema.org/name',
-}
-response = jsonld.compact(r.json(), context)
+    response = r.json()
 
 # Write the signed data to a file
 with urlopen(response["contentUrl"]) as h:
