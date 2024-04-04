@@ -1,3 +1,8 @@
+# v0.3.12
+
+* Some preparations for api-platform v3
+* docs: minor updates for the Python example
+
 # v0.3.11
 
 * Add support for Symfony 6
