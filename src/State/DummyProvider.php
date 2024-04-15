@@ -21,7 +21,7 @@ class DummyProvider extends AbstractController implements ProviderInterface
     /**
      * @return PartialPaginatorInterface<object>|iterable<mixed, object>|object|null
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = [])
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 

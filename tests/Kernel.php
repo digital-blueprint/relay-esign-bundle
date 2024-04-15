@@ -45,8 +45,5 @@ class Kernel extends BaseKernel
             'test' => true,
             'secret' => '',
         ]);
-        $container->extension('api_platform', [
-            'metadata_backward_compatibility_layer' => false,
-        ]);
     }
 }
