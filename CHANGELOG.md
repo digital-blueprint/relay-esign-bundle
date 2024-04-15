@@ -1,3 +1,7 @@
+# v0.3.13
+
+* Add support for api-platform 3.2
+
 # v0.3.12
 
 * Some preparations for api-platform v3
