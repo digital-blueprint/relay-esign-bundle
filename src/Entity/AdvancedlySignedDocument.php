@@ -8,30 +8,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class AdvancedlySignedDocument
 {
-    /**
-     * @Groups({"EsignAdvancedlySignedDocument:output"})
-     */
+    #[Groups(['EsignAdvancedlySignedDocument:output'])]
     private $identifier;
 
     /**
-     * @Groups({"EsignAdvancedlySignedDocument:output"})
-     *
      * @var string
      */
+    #[Groups(['EsignAdvancedlySignedDocument:output'])]
     private $contentUrl;
 
     /**
-     * @Groups({"EsignAdvancedlySignedDocument:output"})
-     *
      * @var string
      */
+    #[Groups(['EsignAdvancedlySignedDocument:output'])]
     private $name;
 
     /**
-     * @Groups({"EsignAdvancedlySignedDocument:output"})
-     *
      * @var int
      */
+    #[Groups(['EsignAdvancedlySignedDocument:output'])]
     private $contentSize;
 
     public function setIdentifier(string $identifier): self

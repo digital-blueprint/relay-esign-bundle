@@ -8,45 +8,34 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class ElectronicSignature
 {
-    /**
-     * @Groups({"EsignElectronicSignature:output"})
-     */
+    #[Groups(['EsignElectronicSignature:output'])]
     private $identifier;
 
-    /**
-     * @Groups({"EsignElectronicSignature:output"})
-     */
+    #[Groups(['EsignElectronicSignature:output'])]
     private $givenName;
 
     /**
      * @var string
-     *
-     * @Groups({"EsignElectronicSignature:output"})
      */
+    #[Groups(['EsignElectronicSignature:output'])]
     private $familyName;
 
     /**
      * @var string
-     *
-     * @Groups({"EsignElectronicSignature:output"})
      */
+    #[Groups(['EsignElectronicSignature:output'])]
     private $serialNumber;
 
     /**
      * @var string
-     *
-     * @Groups({"EsignElectronicSignature:output"})
      */
+    #[Groups(['EsignElectronicSignature:output'])]
     private $signedBy;
 
-    /**
-     * @Groups({"EsignElectronicSignature:output"})
-     */
+    #[Groups(['EsignElectronicSignature:output'])]
     private $nationality;
 
-    /**
-     * @Groups({"EsignElectronicSignature:output"})
-     */
+    #[Groups(['EsignElectronicSignature:output'])]
     private $valueMessage;
 
     public function setIdentifier(string $identifier): self

@@ -8,23 +8,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class ElectronicSignatureVerificationReport
 {
-    /**
-     * @Groups({"EsignElectronicSignatureVerificationReport:output"})
-     */
+    #[Groups(['EsignElectronicSignatureVerificationReport:output'])]
     private $identifier;
 
     /**
-     * @Groups({"EsignElectronicSignatureVerificationReport:output"})
-     *
      * @var string
      */
+    #[Groups(['EsignElectronicSignatureVerificationReport:output'])]
     private $name;
 
     /**
-     * @Groups({"EsignElectronicSignatureVerificationReport:output"})
-     *
      * @var ElectronicSignature[]
      */
+    #[Groups(['EsignElectronicSignatureVerificationReport:output'])]
     private $signatures;
 
     public function setIdentifier(string $identifier): self

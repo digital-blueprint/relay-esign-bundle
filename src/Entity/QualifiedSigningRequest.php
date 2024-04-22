@@ -8,23 +8,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class QualifiedSigningRequest
 {
-    /**
-     * @Groups({"EsignQualifiedSigningRequest:output"})
-     */
+    #[Groups(['EsignQualifiedSigningRequest:output'])]
     private $identifier;
 
     /**
-     * @Groups({"EsignQualifiedSigningRequest:output"})
-     *
      * @var string
      */
+    #[Groups(['EsignQualifiedSigningRequest:output'])]
     private $name;
 
     /**
-     * @Groups({"EsignQualifiedSigningRequest:output"})
-     *
      * @var string
      */
+    #[Groups(['EsignQualifiedSigningRequest:output'])]
     private $url;
 
     public function setIdentifier(string $identifier): self

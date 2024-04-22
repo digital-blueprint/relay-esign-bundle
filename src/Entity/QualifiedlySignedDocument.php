@@ -8,30 +8,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class QualifiedlySignedDocument
 {
-    /**
-     * @Groups({"EsignQualifiedlySignedDocument:output"})
-     */
+    #[Groups(['EsignQualifiedlySignedDocument:output'])]
     private $identifier;
 
     /**
-     * @Groups({"EsignQualifiedlySignedDocument:output"})
-     *
      * @var string
      */
+    #[Groups(['EsignQualifiedlySignedDocument:output'])]
     private $contentUrl;
 
     /**
-     * @Groups({"EsignQualifiedlySignedDocument:output"})
-     *
      * @var string
      */
+    #[Groups(['EsignQualifiedlySignedDocument:output'])]
     private $name;
 
     /**
-     * @Groups({"EsignQualifiedlySignedDocument:output"})
-     *
      * @var int
      */
+    #[Groups(['EsignQualifiedlySignedDocument:output'])]
     private $contentSize;
 
     public function setIdentifier(string $identifier): self
