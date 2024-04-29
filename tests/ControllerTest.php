@@ -20,7 +20,7 @@ class ControllerTest extends TestCase
         $this->assertSame($res[0]->getValue(), 'val');
     }
 
-    public function invalidUserText()
+    public static function invalidUserText()
     {
         return [['nope'], [''], ['[{}]'], ['[0]']];
     }
