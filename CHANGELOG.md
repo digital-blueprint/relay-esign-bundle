@@ -1,51 +1,58 @@
-# v0.3.13
+# Changelog
+
+## Unreleased
+
+* Port to PHPUnit 10
+* Add support for zbateson/mail-mime-parser v3
+
+## v0.3.13
 
 * Add support for api-platform 3.2
 
-# v0.3.12
+## v0.3.12
 
 * Some preparations for api-platform v3
 * docs: minor updates for the Python example
 
-# v0.3.11
+## v0.3.11
 
 * Add support for Symfony 6
 
-# v0.3.10
+## v0.3.10
 
 * dev: replace abandoned composer-git-hooks with captainhook.
   Run `vendor/bin/captainhook install -f` to replace the old hooks with the new ones
   on an existing checkout.
 
-# v0.3.9
+## v0.3.9
 
 * Update to psalm v5
 
-# v0.3.8
+## v0.3.8
 
 * Drop support for PHP 7.4/8.0
 
-# v0.3.7
+## v0.3.7
 
 * Drop support for PHP 7.3
 
-# v0.3.6
+## v0.3.6
 
 * Remove embedded json-ld context from the signature responses.
 
-# v0.3.5
+## v0.3.5
 
 * Port to the new api-platform metadata system. No user visible changes.
 
-# v0.3.4
+## v0.3.4
 
 * Update to api-platform v2.7
 
-# v0.3.3
+## v0.3.3
 
 * tests: don't fail if symfony/dotenv is installed
 
-# v0.3.0
+## v0.3.0
 
 * Improved documentation on signature parameters and signature block
   positioning.
@@ -72,7 +79,7 @@ Breaking:
 * Setting a "profile" when creating a qualified signature is now mandatory.
 * Switch all API paths from "snake_case" to "kebap-case" to match other bundles.
 
-# v0.2.2
+## v0.2.2
 
 * Support for PHP 8.0/8.1
 * Fixed some deprecations with Symfony 5.4
