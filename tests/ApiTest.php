@@ -36,14 +36,19 @@ class ApiTest extends ApiTestCase
         foreach ($endpoints as $ep) {
             [$method, $path, $status] = $ep;
             $client = $this->withUser('foobar', [], '42');
-            $response = $client->request($method, $path, ['headers' => [
+
+            $headers = [
                 'Authorization' => 'Bearer 42',
-            ]]);
+            ];
+            if ($method === 'POST') {
+                $headers['Content-Type'] = 'multipart/form-data';
+            }
+            $response = $client->request($method, $path, ['headers' => $headers]);
 
             $this->assertEquals($status, $response->getStatusCode(), $path);
 
             // Without any token
-            $response = $client->request($method, $path);
+            $response = $client->request($method, $path, ['headers' => $headers]);
             $this->assertContains($response->getStatusCode(), [401, 404, 403], $path);
         }
     }

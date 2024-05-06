@@ -30,6 +30,8 @@ resources:
         controller: Dbp\Relay\EsignBundle\Controller\CreateAdvancedlySignedDocumentAction
         uriTemplate: "/advancedly-signed-documents"
         deserialize: false
+        inputFormats:
+          multipart: "multipart/form-data"
         openapiContext:
           tags: ["Electronic Signatures"]
           requestBody:
@@ -177,6 +179,8 @@ resources:
         controller: Dbp\Relay\EsignBundle\Controller\CreateQualifiedSigningRequestAction
         uriTemplate: "/qualified-signing-requests"
         deserialize: false
+        inputFormats:
+          multipart: "multipart/form-data"
         openapiContext:
           tags: ["Electronic Signatures"]
           requestBody:
@@ -310,6 +314,8 @@ resources:
         controller: Dbp\Relay\EsignBundle\Controller\CreateElectronicSignatureVerificationReportAction
         uriTemplate: "/electronic-signature-verification-reports"
         deserialize: false
+        inputFormats:
+          multipart: "multipart/form-data"
         openapiContext:
           summary: "Retrieves a ElectronicSignatureVerificationReport resource with a collection of ElectronicSignature resources of a signed document."
           tags: ["Electronic Signatures"]
