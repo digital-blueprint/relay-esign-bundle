@@ -39,7 +39,7 @@
         "symfony/http-client": "^5.4 || ^6.4",
         "symfony/monolog-bridge": "^5.4 || ^6.4",
         "symfony/monolog-bundle": "^3.10",
-        "symfony/phpunit-bridge": "^5.4 || ^6.4",
+        "symfony/phpunit-bridge": "^7.0",
         "vimeo/psalm": "^5.22.2"
     },
     "conflict": {
