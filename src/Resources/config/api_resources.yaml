@@ -307,7 +307,7 @@ resources:
           tags: ["Electronic Signatures"]
 
       ApiPlatform\Metadata\Post:
-        controller: Dbp\Relay\EsignBundle\Controller\CreateAdvancedlySignedDocumentAction
+        controller: Dbp\Relay\EsignBundle\Controller\CreateElectronicSignatureVerificationReportAction
         uriTemplate: "/electronic-signature-verification-reports"
         deserialize: false
         openapiContext:
