@@ -1,9 +1,11 @@
 # Changelog
 
-## Unreleased
+## v0.3.14
 
 * Port to PHPUnit 10
 * Add support for zbateson/mail-mime-parser v3
+* Add support for api-platform 3.3
+* Port from doctrine annotations to PHP attributes
 
 ## v0.3.13
 
