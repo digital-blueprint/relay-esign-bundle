@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.15
+
+* Fix an assertion error when running the unit tests
+
 ## v0.3.14
 
 * Port to PHPUnit 10
