@@ -36,6 +36,7 @@ class ApiTest extends ApiTestCase
         foreach ($endpoints as $ep) {
             [$method, $path, $status] = $ep;
             $client = $this->withUser('foobar', [], '42');
+            $client->disableReboot();
 
             $headers = [
                 'Authorization' => 'Bearer 42',
@@ -48,6 +49,7 @@ class ApiTest extends ApiTestCase
             $this->assertEquals($status, $response->getStatusCode(), $path);
 
             // Without any token
+            unset($headers['Authorization']);
             $response = $client->request($method, $path, ['headers' => $headers]);
             $this->assertContains($response->getStatusCode(), [401, 404, 403], $path);
         }
