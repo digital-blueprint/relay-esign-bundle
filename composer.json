@@ -6,7 +6,7 @@
         "php": ">=8.1",
         "ext-json": "*",
         "ext-soap": "*",
-        "api-platform/core": "^2.7.11 || ^3.2",
+        "api-platform/core": "^4.0",
         "dbp/relay-core-bundle": "^0.1.148",
         "guzzlehttp/guzzle": "^7.5",
         "guzzlehttp/promises": "^2.0",
