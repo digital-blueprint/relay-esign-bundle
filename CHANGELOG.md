@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+## v0.3.16
+
+* Update core
+
 ## v0.3.15
 
 * Fix an assertion error when running the unit tests
