@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Tests;
 
+use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Controller\BaseSigningController;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ControllerTest extends TestCase
 {
@@ -30,7 +30,7 @@ class ControllerTest extends TestCase
      */
     public function testUserTextInvalid(string $input)
     {
-        $this->expectException(HttpException::class);
+        $this->expectException(ApiError::class);
         BaseSigningController::parseUserText($input);
     }
 }
