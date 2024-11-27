@@ -17,22 +17,32 @@ class DbpRelayEsignExtension extends ConfigurableExtension
     public function loadInternal(array $mergedConfig, ContainerBuilder $container): void
     {
         $pathsToHide = [
-            '/esign/advancedly-signed-documents/{identifier}',
-            '/esign/advancedly-signed-documents',
-            '/esign/qualified-signing-requests/{identifier}',
-            '/esign/qualified-signing-requests',
-            '/esign/electronic-signature-verification-reports',
-            '/esign/electronic-signature-verification-reports/{identifier}',
+            'GET' => [
+                '/esign/advancedly-signed-documents/{identifier}',
+                '/esign/advancedly-signed-documents',
+                '/esign/qualified-signing-requests/{identifier}',
+                '/esign/qualified-signing-requests',
+                '/esign/qualifiedly-signed-documents',
+            ],
         ];
 
-        if (($_ENV['ESIGN_PDF_AS_VERIFICATION_ENABLE'] ?? 'false') !== 'true') {
-            $pathsToHide = array_merge($pathsToHide, [
+        $verificationEnabled = ($_ENV['ESIGN_PDF_AS_VERIFICATION_ENABLE'] ?? 'false') === 'true';
+        if (!$verificationEnabled) {
+            $pathsToHide['GET'] = array_merge($pathsToHide['GET'], [
+                '/esign/electronic-signatures',
                 '/esign/electronic-signatures/{identifier}',
+                '/esign/electronic-signature-verification-reports',
+                '/esign/electronic-signature-verification-reports/{identifier}',
             ]);
+            $pathsToHide['POST'] = [
+                '/esign/electronic-signature-verification-reports',
+            ];
         }
 
-        foreach ($pathsToHide as $path) {
-            $this->addPathToHide($container, $path);
+        foreach ($pathsToHide as $method => $paths) {
+            foreach ($paths as $path) {
+                $this->addPathToHide($container, $path, $method);
+            }
         }
 
         $this->addRouteResource($container, __DIR__.'/../Resources/config/routes.yaml', 'yaml');
