@@ -1,6 +1,4 @@
-# Configuration
-
-## Bundle Configuration
+# Bundle Configuration
 
 Created via `./bin/console config:dump-reference DbpRelayEsignBundle | sed '/^$/d'`
 
