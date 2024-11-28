@@ -11,7 +11,7 @@ The electronic signature bundle provides an API for interacting with multiple
 [pdf-as](https://www.egiz.gv.at/en/schwerpunkte/16-pdf-as) and [moa-ssp](https://www.egiz.gv.at/en/schwerpunkte/13-moaspssid)
 servers and allows signing and signature verification of PDF files using [PAdES](https://en.wikipedia.org/wiki/PAdES).
 
-For more details see the [docs](./docs/index.md) or the [ESign Website](https://dbp-demo.tugraz.at/site/software/esign.html).
+For more details see the [docs](./docs/README.md) or the [ESign Website](https://dbp-demo.tugraz.at/site/software/esign.html).
 
 There is a corresponding frontend application that uses this API at [ESign Frontend Application](https://github.com/digital-blueprint/esign-app).
 
