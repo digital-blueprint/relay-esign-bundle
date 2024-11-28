@@ -29,9 +29,3 @@ For more details see the [Configuration Documentation](./docs/config.md).
 
 If you were using the [DBP API Server Template](https://github.com/digital-blueprint/relay-server-template)
 as template for your Symfony application, then an example configuration file should have already been generated for you.
-
-To handle locking you need to [configure locking in the core bundle](https://github.com/digital-blueprint/relay-core-bundle#bundle-config).
-
-You also need to [configure the Symfony Messenger in the core bundle](https://github.com/digital-blueprint/relay-core-bundle#bundle-config) to check out guests after a certain amount of time.
-
-For more info on bundle configuration see <https://symfony.com/doc/current/bundles/configuration.html>.
