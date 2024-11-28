@@ -3,7 +3,7 @@
 [GitHub](https://github.com/digital-blueprint/relay-esign-bundle) |
 [Packagist](https://packagist.org/packages/dbp/relay-esign-bundle) |
 [Frontend Application](https://github.com/digital-blueprint/esign-app) |
-[ESign Website](https://dbp-demo.tugraz.at/site/software/esign.html)
+[ESign Website](https://handbook.digital-blueprint.org/blueprints/esign)
 
 [![Test](https://github.com/digital-blueprint/relay-esign-bundle/actions/workflows/test.yml/badge.svg)](https://github.com/digital-blueprint/relay-esign-bundle/actions/workflows/test.yml)
 
@@ -11,7 +11,7 @@ The electronic signature bundle provides an API for interacting with multiple
 [pdf-as](https://www.egiz.gv.at/en/schwerpunkte/16-pdf-as) and [moa-ssp](https://www.egiz.gv.at/en/schwerpunkte/13-moaspssid)
 servers and allows signing and signature verification of PDF files using [PAdES](https://en.wikipedia.org/wiki/PAdES).
 
-For more details see the [docs](./docs/README.md) or the [ESign Website](https://dbp-demo.tugraz.at/site/software/esign.html).
+For more details see the [docs](./docs/README.md) or the [ESign Website](https://handbook.digital-blueprint.org/blueprints/esign).
 
 There is a corresponding frontend application that uses this API at [ESign Frontend Application](https://github.com/digital-blueprint/esign-app).
 
