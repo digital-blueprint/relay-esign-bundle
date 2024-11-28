@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.3.18
+
+* Fix running under phpstan v1 for integration tests pruposes
+
 ## v0.3.17
 
 * Drop support for api-platform v2
