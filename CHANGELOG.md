@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v0.3.17
+
+* Drop support for api-platform v2
+* Drop support for Symfony v5
+* Fix some endpoints in the API docs not being hidden if the experimental
+  signature verification isn't enabled.
+* Support for PHP 8.4
+* Update to phpstan v2
+
 ## v0.3.16
 
 * Update core
