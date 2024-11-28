@@ -1,14 +1,15 @@
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-symfony/extension.neon
 
 parameters:
     inferPrivatePropertyTypeFromConstructor: true
-    level: 4
+    level: 5
     paths:
         - src
         - tests
     excludePaths:
         - tests/bootstrap.php
     ignoreErrors:
-        - message: '#.*NodeDefinition::children.*#'
-          path: ./src/DependencyInjection
+        - identifier: function.alreadyNarrowedType
+        - identifier: method.alreadyNarrowedType

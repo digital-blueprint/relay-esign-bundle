@@ -81,8 +81,8 @@ class SoapClientVerifyTest extends TestCase
 
     public function testBasicVerify()
     {
-        $service = new PDFASVerificationImplService('nope');
-        $this->assertNotNull($service);
+        new PDFASVerificationImplService('nope');
+        $this->expectNotToPerformAssertions();
     }
 
     public function testVerify()

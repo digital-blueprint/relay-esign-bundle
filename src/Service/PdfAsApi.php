@@ -286,7 +286,8 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         /**
          * @psalm-suppress RedundantCondition
          */
-        assert(count($overrides));
+        // @phpstan-ignore-next-line
+        assert(count($overrides) > 0);
 
         // In case we added something we optionally attach a "child" table to a "parent" one at a specific "row"
         // This can be the table we filled above, or some parent table.
