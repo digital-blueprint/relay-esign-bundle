@@ -23,19 +23,6 @@ You can install the bundle directly from [packagist.org](https://packagist.org/p
 composer require dbp/relay-esign-bundle
 ```
 
-## Integration into the Relay API Server
-
-* Add the bundle to your `config/bundles.php` in front of `DbpRelayCoreBundle`:
-
-```php
-...
-Dbp\Relay\EsignBundle\DbpRelayEsignBundle::class => ['all' => true],
-Dbp\Relay\CoreBundle\DbpRelayCoreBundle::class => ['all' => true],
-];
-```
-
-* Run `composer install` to clear caches
-
 ## Configuration
 
 For more details see the [Configuration Documentation](./docs/config.md).
