@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Service;
 
+use Dbp\Relay\EsignBundle\Configuration\AdvancedProfile;
+use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
+use Dbp\Relay\EsignBundle\Configuration\Profile;
+use Dbp\Relay\EsignBundle\Configuration\QualifiedProfile;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\Connector;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASSigningImplService;
@@ -25,7 +29,6 @@ use League\Uri\Contracts\UriException;
 use League\Uri\UriTemplate;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
-use SoapFault;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
@@ -35,44 +38,20 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 
     private const PDF_AS_TIMEOUT = 40;
 
-    private $advancedUrl;
-    private $qualifiedUrl;
-    private $qualifiedCallbackUrl;
-    private $qualifiedErrorCallbackUrl;
-    private $advancedProfiles;
-    private $qualifiedProfiles;
     private $stopwatch;
     private $router;
 
-    public function __construct(Stopwatch $stopwatch, UrlGeneratorInterface $router)
+    public function __construct(Stopwatch $stopwatch, UrlGeneratorInterface $router, private BundleConfig $bundleConfig)
     {
-        $this->advancedUrl = '';
-        $this->qualifiedUrl = '';
-        $this->qualifiedCallbackUrl = null;
-        $this->qualifiedErrorCallbackUrl = null;
-        $this->qualifiedProfiles = [];
-        $this->advancedProfiles = [];
         $this->stopwatch = $stopwatch;
         $this->router = $router;
     }
 
-    public function setConfig(array $config)
-    {
-        $qualified = $config['qualified_signature'] ?? [];
-        $this->qualifiedUrl = $qualified['server_url'] ?? '';
-        $this->qualifiedCallbackUrl = $qualified['callback_url'] ?? null;
-        $this->qualifiedErrorCallbackUrl = $qualified['error_callback_url'] ?? null;
-        $this->qualifiedProfiles = $qualified['profiles'] ?? [];
-
-        $advanced = $config['advanced_signature'] ?? [];
-        $this->advancedUrl = $advanced['server_url'] ?? '';
-        $this->advancedProfiles = $advanced['profiles'] ?? [];
-    }
-
     public function getCallbackUrl(): string
     {
-        if ($this->qualifiedCallbackUrl !== null) {
-            return $this->qualifiedCallbackUrl;
+        $qualifiedConfig = $this->bundleConfig->getQualified();
+        if ($qualifiedConfig !== null && $qualifiedConfig->getCallbackUrl() !== null) {
+            return $qualifiedConfig->getCallbackUrl();
         }
 
         return $this->router->generate('esign_callback_success', [], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -80,8 +59,9 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 
     public function getErrorCallbackUrl(): string
     {
-        if ($this->qualifiedErrorCallbackUrl !== null) {
-            return $this->qualifiedErrorCallbackUrl;
+        $qualifiedConfig = $this->bundleConfig->getQualified();
+        if ($qualifiedConfig !== null && $qualifiedConfig->getErrorCallbackUrl() !== null) {
+            return $qualifiedConfig->getErrorCallbackUrl();
         }
 
         return $this->router->generate('esign_callback_error', [], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -99,27 +79,32 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
             }
         };
 
-        if ($this->qualifiedUrl !== '') {
-            $checkWSDL($this->qualifiedUrl.'/services/wsverify?wsdl');
-            $checkWSDL($this->qualifiedUrl.'/services/wssign?wsdl');
+        $qualifiedConfig = $this->bundleConfig->getQualified();
+        if ($qualifiedConfig !== null) {
+            $serverUrl = $qualifiedConfig->getServerUrl();
+            $checkWSDL($serverUrl.'/services/wsverify?wsdl');
+            $checkWSDL($serverUrl.'/services/wssign?wsdl');
         }
 
-        if ($this->advancedUrl !== '') {
-            $checkWSDL($this->advancedUrl.'/services/wsverify?wsdl');
-            $checkWSDL($this->advancedUrl.'/services/wssign?wsdl');
+        $advancedConfig = $this->bundleConfig->getAdvanced();
+        if ($advancedConfig !== null) {
+            $serverUrl = $advancedConfig->getServerUrl();
+            $checkWSDL($serverUrl.'/services/wsverify?wsdl');
+            $checkWSDL($serverUrl.'/services/wssign?wsdl');
         }
     }
 
     public function checkCallbackUrls()
     {
         $client = new Client();
-        if ($this->qualifiedUrl !== '') {
+        $qualifiedConfig = $this->bundleConfig->getQualified();
+        if ($qualifiedConfig !== null) {
             // Only check if it's external, since we might not be deployed/public ourselves
-            if ($this->qualifiedCallbackUrl !== null) {
-                $client->request('GET', $this->qualifiedCallbackUrl);
+            if ($qualifiedConfig->getCallbackUrl() !== null) {
+                $client->request('GET', $qualifiedConfig->getCallbackUrl());
             }
-            if ($this->qualifiedErrorCallbackUrl !== null) {
-                $client->request('GET', $this->qualifiedErrorCallbackUrl);
+            if ($qualifiedConfig->getErrorCallbackUrl() !== null) {
+                $client->request('GET', $qualifiedConfig->getErrorCallbackUrl());
             }
         }
     }
@@ -130,15 +115,17 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     public function createQualifiedSigningRequestRedirectUrl(string $data, string $profileName, string $requestId, array $positionData = [], array $userText = []): string
     {
         $profile = $this->getQualifiedProfileData($profileName);
+        $qualifiedConfig = $this->bundleConfig->getQualified();
+        assert($qualifiedConfig !== null);
 
         try {
-            $service = new PDFASSigningImplService($this->qualifiedUrl.'/services/wssign', self::PDF_AS_TIMEOUT);
+            $service = new PDFASSigningImplService($qualifiedConfig->getServerUrl().'/services/wssign', self::PDF_AS_TIMEOUT);
         } catch (\SoapFault $e) {
             throw new SigningException('Signing soap call failed, wsdl URI cannot be loaded!');
         }
 
         $params = new SignParameters(Connector::mobilebku());
-        $params->setProfile($profile['profile_id'] ?? '');
+        $params->setProfile($profile->getProfileId());
 
         // Add custom user defined text if needed
         $overrides = $this->buildUserTextConfigOverride($profile, $userText);
@@ -208,24 +195,32 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         return $results;
     }
 
-    private function getQualifiedProfileData(string $profileName)
+    private function getQualifiedProfileData(string $profileName): QualifiedProfile
     {
-        foreach ($this->qualifiedProfiles as $profile) {
-            if ($profile['name'] === $profileName) {
-                return $profile;
-            }
+        $profile = null;
+        $qualifiedConfig = $this->bundleConfig->getQualified();
+        if ($qualifiedConfig !== null) {
+            $profile = $qualifiedConfig->getProfile($profileName);
         }
-        throw new SigningException('Unknown profile');
+        if ($profile === null) {
+            throw new SigningException('Unknown profile');
+        }
+
+        return $profile;
     }
 
-    private function getAdvancedProfileData(string $profileName)
+    private function getAdvancedProfileData(string $profileName): AdvancedProfile
     {
-        foreach ($this->advancedProfiles as $profile) {
-            if ($profile['name'] === $profileName) {
-                return $profile;
-            }
+        $profile = null;
+        $advancedConfig = $this->bundleConfig->getAdvanced();
+        if ($advancedConfig !== null) {
+            $profile = $advancedConfig->getProfile($profileName);
         }
-        throw new SigningException('Unknown profile');
+        if ($profile === null) {
+            throw new SigningException('Unknown profile');
+        }
+
+        return $profile;
     }
 
     /**
@@ -233,36 +228,36 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
      *
      * @return PropertyEntry[]
      */
-    public function buildUserTextConfigOverride(array $profile, array $userText): array
+    public function buildUserTextConfigOverride(Profile $profile, array $userText): array
     {
-        if (count($userText) === 0) {
-            return [];
-        }
-
-        $profileId = $profile['profile_id'];
-
-        // User text specific placement config
-        $userTable = $profile['user_text_table'] ?? '';
-        /* @var int $userRow */
-        $userRow = $profile['user_text_row'] ?? 1;
-        $attachParent = $profile['user_text_attach_parent'] ?? '';
-        $attachChild = $profile['user_text_attach_child'] ?? '';
-        /* @var int $attachRow */
-        $attachRow = $profile['user_text_attach_row'] ?? 1;
-
-        if ($userTable === '') {
+        $userTextConfig = $profile->getUserText();
+        if ($userTextConfig === null) {
             throw new SigningException('user_text not available/implemented for this profile');
         }
 
+        $profileId = $profile->getProfileId();
+
+        // User text specific placement config
+        $userTable = $userTextConfig->getTable();
+        $userRow = $userTextConfig->getRow();
+        $attachParent = $userTextConfig->getAttachParent();
+        $attachChild = $userTextConfig->getAttachChild();
+        $attachRow = $userTextConfig->getAttachRow() ?? 1;
+
         $checkID = function ($name) {
-            return preg_match('/[^.-]*/', $name);
+            return preg_match('/[^.-]*/', $name) && $name !== '';
         };
 
         // validate the config, so we don't write out invalid config lines
-        if (!$checkID($userTable) || !$checkID($attachParent) || !$checkID($attachChild)) {
+        if (!$checkID($userTable)) {
             throw new \RuntimeException('invalid table id');
         }
-
+        if ($attachChild !== null && !$checkID($attachChild)) {
+            throw new \RuntimeException('invalid child id');
+        }
+        if ($attachParent !== null && !$checkID($attachParent)) {
+            throw new \RuntimeException('invalid parent id');
+        }
         if ($userRow <= 0 || $attachRow <= 0) {
             throw new \RuntimeException('invalid table row');
         }
@@ -283,17 +278,11 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
             ++$userRow;
         }
 
-        /**
-         * @psalm-suppress RedundantCondition
-         */
-        // @phpstan-ignore-next-line
-        assert(count($overrides) > 0);
-
         // In case we added something we optionally attach a "child" table to a "parent" one at a specific "row"
         // This can be the table we filled above, or some parent table.
         // This is needed because pdf-as doesn't allow empty tables and we need to attach it only when it has at least
         // one row. But it also allows us to show extra images for example if there are >0 extra rows
-        if ($attachParent !== '' && $attachChild !== '') {
+        if ($attachParent !== null && $attachChild !== null && count($overrides) > 0) {
             $overrides[] = new PropertyEntry(
                 "sig_obj.$profileId.table.$attachParent.$attachRow", 'TABLE-'.$attachChild);
         }
@@ -309,20 +298,22 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = []): string
     {
         $profile = $this->getAdvancedProfileData($profileName);
+        $advancedConfig = $this->bundleConfig->getAdvanced();
+        assert($advancedConfig !== null);
 
         if ($requestId === '') {
             $requestId = Tools::generateRequestId();
         }
 
         try {
-            $service = new PDFASSigningImplService($this->advancedUrl.'/services/wssign', self::PDF_AS_TIMEOUT);
+            $service = new PDFASSigningImplService($advancedConfig->getServerUrl().'/services/wssign', self::PDF_AS_TIMEOUT);
         } catch (\SoapFault $e) {
             throw new SigningException('Signing soap call failed, wsdl URI cannot be loaded!');
         }
 
         $params = new SignParameters(Connector::jks());
-        $params->setKeyIdentifier($profile['key_id']);
-        $params->setProfile($profile['profile_id']);
+        $params->setKeyIdentifier($profile->getKeyId());
+        $params->setProfile($profile->getProfileId());
 
         // Add custom user defined text if needed
         $overrides = $this->buildUserTextConfigOverride($profile, $userText);
@@ -388,7 +379,11 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
      */
     public function doVerifyRequest(string $data, string $requestId): VerifyResponse
     {
-        $wsUri = $this->qualifiedUrl.'/services/wsverify';
+        $qualifiedConfig = $this->bundleConfig->getQualified();
+        if ($qualifiedConfig === null) {
+            throw new SigningException();
+        }
+        $wsUri = $qualifiedConfig->getServerUrl().'/services/wsverify';
         $client = new PDFASVerificationImplService($wsUri);
         $request = new VerifyRequest($data, $requestId);
         $request->setVerificationLevel(VerificationLevel::intOnly());
@@ -423,8 +418,12 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     protected function getQualifiedlySignedDocumentUrl(string $sessionId): string
     {
         $uriTemplate = new UriTemplate('/PDFData;jsessionid={sessionId}');
+        $qualifiedConfig = $this->bundleConfig->getQualified();
+        if ($qualifiedConfig === null) {
+            throw new SigningException();
+        }
 
-        return $this->qualifiedUrl.$uriTemplate->expand([
+        return $qualifiedConfig->getServerUrl().$uriTemplate->expand([
             'sessionId' => $sessionId,
         ]);
     }
@@ -469,20 +468,20 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     public function getAdvancedlySignRequiredRole(string $profileName): string
     {
         $profile = $this->getAdvancedProfileData($profileName);
-        if (!isset($profile['role'])) {
+        if ($profile->getRole() === null) {
             throw new SigningException('No role set');
         }
 
-        return $profile['role'];
+        return $profile->getRole();
     }
 
     public function getQualifiedlySignRequiredRole(string $profileName): string
     {
         $profile = $this->getQualifiedProfileData($profileName);
-        if (!isset($profile['role'])) {
+        if ($profile->getRole() === null) {
             throw new SigningException('No role set');
         }
 
-        return $profile['role'];
+        return $profile->getRole();
     }
 }
