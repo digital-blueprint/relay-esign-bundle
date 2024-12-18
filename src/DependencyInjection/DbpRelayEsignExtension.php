@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dbp\Relay\EsignBundle\DependencyInjection;
 
 use Dbp\Relay\CoreBundle\Extension\ExtensionTrait;
+use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
@@ -26,8 +27,7 @@ class DbpRelayEsignExtension extends ConfigurableExtension
             ],
         ];
 
-        $verificationEnabled = ($_ENV['ESIGN_PDF_AS_VERIFICATION_ENABLE'] ?? 'false') === 'true';
-        if (!$verificationEnabled) {
+        if (!BundleConfig::hasVerification()) {
             $pathsToHide['GET'] = array_merge($pathsToHide['GET'], [
                 '/esign/electronic-signatures',
                 '/esign/electronic-signatures/{identifier}',
@@ -53,7 +53,7 @@ class DbpRelayEsignExtension extends ConfigurableExtension
         );
         $loader->load('services.yaml');
 
-        $definition = $container->getDefinition('Dbp\Relay\EsignBundle\Service\PdfAsApi');
+        $definition = $container->getDefinition(BundleConfig::class);
         $definition->addMethodCall('setConfig', [$mergedConfig]);
     }
 }
