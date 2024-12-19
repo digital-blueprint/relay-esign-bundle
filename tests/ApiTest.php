@@ -24,13 +24,13 @@ class ApiTest extends ApiTestCase
             ['GET', '/esign/advancedly-signed-documents/123', 404],
             ['GET', '/esign/electronic-signature-verification-reports', 403],
             ['POST', '/esign/electronic-signature-verification-reports', 403],
-            ['GET', '/esign/electronic-signature-verification-reports/123', 404],
-            ['GET', '/esign/electronic-signatures/123', 404],
+            ['GET', '/esign/electronic-signature-verification-reports/123', 403],
+            ['GET', '/esign/electronic-signatures/123', 403],
             ['POST', '/esign/qualified-signing-requests?profile=foo', 403],
             ['GET', '/esign/qualified-signing-requests', 200],
             ['GET', '/esign/qualified-signing-requests/123', 404],
             ['GET', '/esign/qualifiedly-signed-documents', 200],
-            ['GET', '/esign/qualifiedly-signed-documents/123', 502],
+            ['GET', '/esign/qualifiedly-signed-documents/123', 403],
         ];
 
         foreach ($endpoints as $ep) {

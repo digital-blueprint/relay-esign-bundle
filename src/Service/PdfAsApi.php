@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Service;
 
-use Dbp\Relay\EsignBundle\Configuration\AdvancedProfile;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
-use Dbp\Relay\EsignBundle\Configuration\QualifiedProfile;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\Connector;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASSigningImplService;
@@ -112,9 +110,14 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
      */
     public function createQualifiedSigningRequestRedirectUrl(string $data, string $profileName, string $requestId, array $positionData = [], array $userText = []): string
     {
-        $profile = $this->getQualifiedProfileData($profileName);
+        $profile = null;
         $qualifiedConfig = $this->bundleConfig->getQualified();
-        assert($qualifiedConfig !== null);
+        if ($qualifiedConfig !== null) {
+            $profile = $qualifiedConfig->getProfile($profileName);
+        }
+        if ($qualifiedConfig === null || $profile === null) {
+            throw new SigningException('Unknown profile');
+        }
 
         try {
             $service = new PDFASSigningImplService($qualifiedConfig->getServerUrl().'/services/wssign', self::PDF_AS_TIMEOUT);
@@ -185,44 +188,12 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
      */
     public function verifyPdfData($data, $requestId)
     {
-        if (!$this->bundleConfig->hasVerification()) {
-            throw new SigningException('verification is not enabled');
-        }
-
         $response = $this->doVerifyRequest($data, $requestId);
 
         $results = $response->getVerifyResults();
         $this->log('PDF was verified', ['request_id' => $requestId]);
 
         return $results;
-    }
-
-    private function getQualifiedProfileData(string $profileName): QualifiedProfile
-    {
-        $profile = null;
-        $qualifiedConfig = $this->bundleConfig->getQualified();
-        if ($qualifiedConfig !== null) {
-            $profile = $qualifiedConfig->getProfile($profileName);
-        }
-        if ($profile === null) {
-            throw new SigningException('Unknown profile');
-        }
-
-        return $profile;
-    }
-
-    private function getAdvancedProfileData(string $profileName): AdvancedProfile
-    {
-        $profile = null;
-        $advancedConfig = $this->bundleConfig->getAdvanced();
-        if ($advancedConfig !== null) {
-            $profile = $advancedConfig->getProfile($profileName);
-        }
-        if ($profile === null) {
-            throw new SigningException('Unknown profile');
-        }
-
-        return $profile;
     }
 
     /**
@@ -232,9 +203,14 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
      */
     public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = []): string
     {
-        $profile = $this->getAdvancedProfileData($profileName);
+        $profile = null;
         $advancedConfig = $this->bundleConfig->getAdvanced();
-        assert($advancedConfig !== null);
+        if ($advancedConfig !== null) {
+            $profile = $advancedConfig->getProfile($profileName);
+        }
+        if ($advancedConfig === null || $profile === null) {
+            throw new SigningException('Unknown profile');
+        }
 
         if ($requestId === '') {
             $requestId = Tools::generateRequestId();
@@ -398,25 +374,5 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         $this->log('PDF was qualifiedly signed', ['session_id' => $sessionId, 'signed_content_size' => strlen($signedPdfData)]);
 
         return $signedPdfData;
-    }
-
-    public function getAdvancedlySignRequiredRole(string $profileName): string
-    {
-        $profile = $this->getAdvancedProfileData($profileName);
-        if ($profile->getRole() === null) {
-            throw new SigningException('No role set');
-        }
-
-        return $profile->getRole();
-    }
-
-    public function getQualifiedlySignRequiredRole(string $profileName): string
-    {
-        $profile = $this->getQualifiedProfileData($profileName);
-        if ($profile->getRole() === null) {
-            throw new SigningException('No role set');
-        }
-
-        return $profile->getRole();
     }
 }

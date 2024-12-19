@@ -5,64 +5,75 @@ Created via `./bin/console config:dump-reference DbpRelayEsignBundle | sed '/^$/
 ```yaml
 # Default configuration for "DbpRelayEsignBundle"
 dbp_relay_esign:
-    qualified_signature:
-        # The URL to the PDF-AS server for qualified signatures
-        server_url:           ~ # Required, Example: 'https://pdfas.example.com/pdf-as-web'
-        # The URL pdf-as will redirect to when the signature is done (optional)
-        callback_url:         ~ # Deprecated (Since dbp/relay-esign-bundle ???: The "callback_url" option is deprecated. The API server now provides the callback URL itself.), Example: 'https://pdfas.example.com/static/callback.html'
-        # The URL pdf-as will redirect to when the signature failed (optional)
-        error_callback_url:   ~ # Deprecated (Since dbp/relay-esign-bundle ???: The "error_callback_url" option is deprecated. The API server now provides the callback URL itself.), Example: 'https://pdfas.example.com/static/error.html'
-        profiles:
-            # Prototype
-            -
-                # The name of the profile, this needs to be passed to the API
-                name:                 ~ # Required, Example: myprofile
-                # The Symfony role required to use this profile
-                role:                 ~ # Example: ROLE_FOOBAR
-                # The PDF-AS signature profile ID to use
-                profile_id:           ~ # Required, Example: MYPROFILE
-                # For extending the PDF-AS signature layout with user provided text (optional)
-                user_text:
-                    # The profile table ID to attach the content to.
-                    target_table:         ~ # Required, Example: usercontent
-                    # The index of the first unset row in the table (starts with 1)
-                    target_row:           ~ # Required, Example: '1'
-                    # In case there is content "child_table" will be attached to "parent_table" at "parent_row" (optional)
-                    attach:
-                        # The name of the parent table
-                        parent_table:         ~ # Required, Example: parent
-                        # Child table name
-                        child_table:          ~ # Required, Example: child
-                        # The index of the row where the child table will be attached to
-                        parent_row:           ~ # Required, Example: '4'
-    advanced_signature:
-        # The URL to the PDF-AS server for advanced signatures
-        server_url:           ~ # Required, Example: 'https://pdfas.example.com/pdf-as-web'
-        profiles:
-            # Prototype
-            -
-                # The name of the profile, this needs to be passed to the API
-                name:                 ~ # Required, Example: myprofile
-                # The Symfony role required to use this profile
-                role:                 ~ # Example: ROLE_FOOBAR
-                # The PDF-AS signature key ID used for singing
-                key_id:               ~ # Required, Example: MYKEY
-                # The PDF-AS signature profile ID to use
-                profile_id:           ~ # Required, Example: MYPROFILE
-                # For extending the PDF-AS signature layout with user provided text (optional)
-                user_text:
-                    # The profile table ID to attach the content to.
-                    target_table:         ~ # Required, Example: usercontent
-                    # The index of the first unset row in the table (starts with 1)
-                    target_row:           ~ # Required, Example: '1'
-                    # In case there is content "child_table" will be attached to "parent_table" at "parent_row" (optional)
-                    attach:
-                        # The name of the parent table
-                        parent_table:         ~ # Required, Example: parent
-                        # Child table name
-                        child_table:          ~ # Required, Example: child
-                        # The index of the row where the child table will be attached to
-                        parent_row:           ~ # Required, Example: '4'
+  qualified_signature:
+    # The URL to the PDF-AS server for qualified signatures
+    server_url:           ~ # Required, Example: 'https://pdfas.example.com/pdf-as-web'
+    # The URL pdf-as will redirect to when the signature is done (optional)
+    callback_url:         ~ # Deprecated (Since dbp/relay-esign-bundle ???: The "callback_url" option is deprecated. The API server now provides the callback URL itself.), Example: 'https://pdfas.example.com/static/callback.html'
+    # The URL pdf-as will redirect to when the signature failed (optional)
+    error_callback_url:   ~ # Deprecated (Since dbp/relay-esign-bundle ???: The "error_callback_url" option is deprecated. The API server now provides the callback URL itself.), Example: 'https://pdfas.example.com/static/error.html'
+    profiles:
+      # Prototype
+      -
+        # The name of the profile, this needs to be passed to the API
+        name:                 ~ # Required, Example: myprofile
+        # The Symfony role required to use this profile. If set, overrides the authorization config.
+        role:                 ~ # Deprecated (Since dbp/relay-esign-bundle ???: The "role" option is deprecated. Use the global authorization node instead.), Example: ROLE_FOOBAR
+        # The PDF-AS signature profile ID to use
+        profile_id:           ~ # Required, Example: MYPROFILE
+        # For extending the PDF-AS signature layout with user provided text (optional)
+        user_text:
+          # The profile table ID to attach the content to.
+          target_table:         ~ # Required, Example: usercontent
+          # The index of the first unset row in the table (starts with 1)
+          target_row:           ~ # Required, Example: '1'
+          # In case there is content "child_table" will be attached to "parent_table" at "parent_row" (optional)
+          attach:
+            # The name of the parent table
+            parent_table:         ~ # Required, Example: parent
+            # Child table name
+            child_table:          ~ # Required, Example: child
+            # The index of the row where the child table will be attached to
+            parent_row:           ~ # Required, Example: '4'
+  advanced_signature:
+    # The URL to the PDF-AS server for advanced signatures
+    server_url:           ~ # Required, Example: 'https://pdfas.example.com/pdf-as-web'
+    profiles:
+      # Prototype
+      -
+        # The name of the profile, this needs to be passed to the API
+        name:                 ~ # Required, Example: myprofile
+        # The Symfony role required to use this profile. If set, overrides the authorization config.
+        role:                 ~ # Deprecated (Since dbp/relay-esign-bundle ???: The "role" option is deprecated. Use the global authorization node instead.), Example: ROLE_FOOBAR
+        # The PDF-AS signature key ID used for singing
+        key_id:               ~ # Required, Example: MYKEY
+        # The PDF-AS signature profile ID to use
+        profile_id:           ~ # Required, Example: MYPROFILE
+        # For extending the PDF-AS signature layout with user provided text (optional)
+        user_text:
+          # The profile table ID to attach the content to.
+          target_table:         ~ # Required, Example: usercontent
+          # The index of the first unset row in the table (starts with 1)
+          target_row:           ~ # Required, Example: '1'
+          # In case there is content "child_table" will be attached to "parent_table" at "parent_row" (optional)
+          attach:
+            # The name of the parent table
+            parent_table:         ~ # Required, Example: parent
+            # Child table name
+            child_table:          ~ # Required, Example: child
+            # The index of the row where the child table will be attached to
+            parent_row:           ~ # Required, Example: '4'
+  authorization:
+    policies:             []
+    roles:
+      # Returns true if the user is allowed to sign things in general.
+      ROLE_SIGNER:          user.isAuthenticated()
+      # Returns true if the user is allowed to verify signatures.
+      ROLE_VERIFIER:        'false'
+    resource_permissions:
+      # Returns true if the user can sign with the given profile.
+      ROLE_PROFILE_SIGNER:  'false'
+    attributes:           []
 ```
 
 ## Examples
@@ -74,6 +85,11 @@ dbp_relay_esign:
     profiles:
       name: default
       profile_id: 'SIGNATURBLOCK_SMALL_DE_NOTE_PDFA'
+  authorization:
+    roles:
+      ROLE_SIGNER: 'user.isAuthenticated()'
+    resource_permissions:
+      ROLE_PROFILE_SIGNER: 'true'
 ```
 
 ```yaml
@@ -84,11 +100,63 @@ dbp_relay_esign:
       - name: official
         key_id: tugraz-official
         profile_id: SIGNATURBLOCK_TUGRAZ_AMTSSIGNATUR
-        role: ROLE_SCOPE_OFFICIAL-SIGNATURE
       - name: sap
         key_id: tugraz-sap
         profile_id: SIGNATURBLOCK_TUGRAZ_SAP
-        role: ROLE_SCOPE_CORPORATE-SIGNATURE
+  authorization:
+    roles:
+      ROLE_SIGNER: 'user.isAuthenticated()'
+    resource_permissions:
+      ROLE_PROFILE_SIGNER: >
+        (resource.getName() === "official" && user.get("SCOPE_OFFICIAL-SIGNATURE")) ||
+        (resource.getName() === "sap" && user.get("SCOPE_SAP-SIGNATURE"))
+```
+
+## Authorization
+
+The bundle authorization config consists of two roles:
+
+* `ROLE_SIGNER` - Should evaluate to true if the user is allowed to sign in general.
+* `ROLE_VERIFIER` - Should evaluate to true if the user is allowed to verify signatures.
+
+In addition, there is one resource based role:
+
+* `ROLE_PROFILE_SIGNER` - Returns true if the user can sign with the given profile.
+  The resource is a profile object which only has a `getName()` method returning the profile name.
+
+For a user to be able to sign with a specific profile both the `ROLE_SIGNER` and
+`ROLE_PROFILE_SIGNER` roles need to evaluate to true for the selected profile.
+
+## Symfony-Role based authorization (deprecated)
+
+Each profile in the bundle configuration can have a `role` key which is a
+Symfony role that is required to use this profile. If set, this overrides the
+global authorization configuration for this profile alone.
+
+To port to the new authorization system, you need to remove the `role` key from
+the config, which makes the global authorization configuration apply to the
+profile. Instead of checking for a Symfony role you need to check for a user
+attribute.
+
+before:
+
+```yaml
+profiles:
+  name: my-profile
+  profile_id: 'SIGNATURBLOCK_SMALL_DE_NOTE_PDFA'
+  role: ROLE_FOOBAR
+```
+
+after:
+
+```yaml
+profiles:
+  name: my-profile
+  profile_id: 'SIGNATURBLOCK_SMALL_DE_NOTE_PDFA'
+  authorization:
+    resource_permissions:
+      ROLE_PROFILE_SIGNER: >
+        resource.getName() === "my-profile" && user.get("SOMETHING_THAT_IS_TRUE_IF_WE_CAN_SIGN_USING_MY_PROFILE")
 ```
 
 ## User Defined Text

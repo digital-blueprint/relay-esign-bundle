@@ -7,6 +7,7 @@ namespace Dbp\Relay\EsignBundle\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Dbp\Relay\CoreBundle\Exception\ApiError;
+use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\Entity\QualifiedlySignedDocument;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\SignatureProviderInterface;
@@ -24,14 +25,17 @@ class QualifiedlySignedDocumentProvider extends AbstractController implements Pr
      */
     private $api;
 
-    public function __construct(SignatureProviderInterface $api)
+    public function __construct(SignatureProviderInterface $api, private readonly AuthorizationService $authorizationService)
     {
         $this->api = $api;
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): QualifiedlySignedDocument
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        // There is currently no way to see which profile created this signed PDF, so we can't check if the user
+        // is allowed to fetch it. Since only the signer knows the ID this isn't a problem though.
+        // But just for extra safety we check if the current user would be able to sign anything in the first place.
+        $this->authorizationService->checkCanSignWithAnyQualifiedProfile();
 
         $id = $uriVariables['identifier'];
         assert(is_string($id));

@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\DependencyInjection;
 
+use Dbp\Relay\CoreBundle\Authorization\AuthorizationConfigDefinition;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
+    public const ROLE_SIGNER = 'ROLE_SIGNER';
+    public const ROLE_VERIFIER = 'ROLE_VERIFIER';
+    public const ROLE_PROFILE_SIGNER = 'ROLE_PROFILE_SIGNER';
+
     private function getUserTextNode(): ArrayNodeDefinition
     {
         $builder = new ArrayNodeDefinition('user_text');
@@ -51,6 +57,15 @@ class Configuration implements ConfigurationInterface
         return $builder;
     }
 
+    private function getAuthNode(): NodeDefinition
+    {
+        return AuthorizationConfigDefinition::create()
+            ->addRole(self::ROLE_SIGNER, 'user.isAuthenticated()', 'Returns true if the user is allowed to sign things in general.')
+            ->addRole(self::ROLE_VERIFIER, 'false', 'Returns true if the user is allowed to verify signatures.')
+            ->addResourcePermission(self::ROLE_PROFILE_SIGNER, 'false', 'Returns true if the user can sign with the given profile.')
+            ->getNodeDefinition();
+    }
+
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('dbp_relay_esign');
@@ -83,8 +98,9 @@ class Configuration implements ConfigurationInterface
                                         ->isRequired()
                                     ->end()
                                     ->scalarNode('role')
-                                        ->info('The Symfony role required to use this profile')
+                                        ->info('The Symfony role required to use this profile. If set, overrides the authorization config.')
                                         ->example('ROLE_FOOBAR')
+                                        ->setDeprecated('dbp/relay-esign-bundle', '???', 'The "%node%" option is deprecated. Use the global authorization node instead.')
                                     ->end()
                                     ->scalarNode('profile_id')
                                         ->info('The PDF-AS signature profile ID to use')
@@ -113,8 +129,9 @@ class Configuration implements ConfigurationInterface
                                         ->isRequired()
                                     ->end()
                                     ->scalarNode('role')
-                                        ->info('The Symfony role required to use this profile')
+                                        ->info('The Symfony role required to use this profile. If set, overrides the authorization config.')
                                         ->example('ROLE_FOOBAR')
+                                        ->setDeprecated('dbp/relay-esign-bundle', '???', 'The "%node%" option is deprecated. Use the global authorization node instead.')
                                     ->end()
                                     ->scalarNode('key_id')
                                         ->info('The PDF-AS signature key ID used for singing')
@@ -132,6 +149,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+            ->append($this->getAuthNode())
             ->end()
         ;
 
