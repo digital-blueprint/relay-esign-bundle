@@ -27,8 +27,8 @@ abstract class Profile
 
     public function getUserText(): ?UserTextConfig
     {
-        if (($this->config['user_text_table'] ?? '') !== '') {
-            return new UserTextConfig($this->config);
+        if (array_key_exists('user_text', $this->config)) {
+            return new UserTextConfig($this->config['user_text']);
         }
 
         return null;

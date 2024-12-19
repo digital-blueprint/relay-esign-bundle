@@ -4,11 +4,53 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
+    private function getUserTextNode(): ArrayNodeDefinition
+    {
+        $builder = new ArrayNodeDefinition('user_text');
+        $builder
+            ->info('For extending the PDF-AS signature layout with user provided text (optional)')
+            ->children()
+                ->scalarNode('target_table')
+                    ->info('The profile table ID to attach the content to.')
+                    ->example('usercontent')
+                    ->isRequired()
+                ->end()
+                ->integerNode('target_row')
+                    ->info('The index of the first unset row in the table (starts with 1)')
+                    ->example('1')
+                    ->isRequired()
+                ->end()
+                ->arrayNode('attach')
+                    ->info('In case there is content "child_table" will be attached to "parent_table" at "parent_row" (optional)')
+                    ->children()
+                        ->scalarNode('parent_table')
+                            ->info('The name of the parent table')
+                            ->example('parent')
+                            ->isRequired()
+                        ->end()
+                        ->scalarNode('child_table')
+                            ->info('Child table name')
+                            ->example('child')
+                            ->isRequired()
+                        ->end()
+                        ->integerNode('parent_row')
+                            ->info('The index of the row where the child table will be attached to')
+                            ->example('4')
+                            ->isRequired()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+
+        return $builder;
+    }
+
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('dbp_relay_esign');
@@ -49,26 +91,7 @@ class Configuration implements ConfigurationInterface
                                         ->example('MYPROFILE')
                                         ->isRequired()
                                     ->end()
-                                    ->scalarNode('user_text_table')
-                                        ->info('The profile table ID to attach the content to. Leave empty to disable user text.')
-                                        ->example('usercontent')
-                                    ->end()
-                                    ->integerNode('user_text_row')
-                                        ->info('The index of the first unset row in the table (starts with 1)')
-                                        ->example('1')
-                                    ->end()
-                                    ->scalarNode('user_text_attach_parent')
-                                        ->info('In case there is content "child" will be attached to "parent" at "row" (optional)')
-                                        ->example('parent')
-                                    ->end()
-                                    ->scalarNode('user_text_attach_child')
-                                        ->info('In case there is content "child" will be attached to "parent" at "row" (optional)')
-                                        ->example('child')
-                                    ->end()
-                                    ->integerNode('user_text_attach_row')
-                                        ->info('In case there is content "child" will be attached to "parent" at "row" (optional)')
-                                        ->example('4')
-                                    ->end()
+                                    ->append($this->getUserTextNode())
                                 ->end()
                             ->end()
                         ->end()
@@ -103,26 +126,7 @@ class Configuration implements ConfigurationInterface
                                         ->example('MYPROFILE')
                                         ->isRequired()
                                     ->end()
-                                    ->scalarNode('user_text_table')
-                                        ->info('The profile table ID to attach the content to. Leave empty to disable user text.')
-                                        ->example('usercontent')
-                                    ->end()
-                                    ->integerNode('user_text_row')
-                                        ->info('The index of the first unset row in the table (starts with 1)')
-                                        ->example('1')
-                                    ->end()
-                                    ->scalarNode('user_text_attach_parent')
-                                        ->info('In case there is content "child" will be attached to "parent" at "row" (optional)')
-                                        ->example('parent')
-                                    ->end()
-                                    ->scalarNode('user_text_attach_child')
-                                        ->info('In case there is content "child" will be attached to "parent" at "row" (optional)')
-                                        ->example('child')
-                                    ->end()
-                                    ->integerNode('user_text_attach_row')
-                                        ->info('In case there is content "child" will be attached to "parent" at "row" (optional)')
-                                        ->example('4')
-                                    ->end()
+                                    ->append($this->getUserTextNode())
                                 ->end()
                             ->end()
                         ->end()
