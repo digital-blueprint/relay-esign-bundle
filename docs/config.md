@@ -7,50 +7,62 @@ Created via `./bin/console config:dump-reference DbpRelayEsignBundle | sed '/^$/
 dbp_relay_esign:
     qualified_signature:
         # The URL to the PDF-AS server for qualified signatures
-        server_url:           ~ # Example: 'https://pdfas.example.com/pdf-as-web'
+        server_url:           ~ # Required, Example: 'https://pdfas.example.com/pdf-as-web'
+        # The URL pdf-as will redirect to when the signature is done (optional)
+        callback_url:         ~ # Deprecated (Since dbp/relay-esign-bundle ???: The "callback_url" option is deprecated. The API server now provides the callback URL itself.), Example: 'https://pdfas.example.com/static/callback.html'
+        # The URL pdf-as will redirect to when the signature failed (optional)
+        error_callback_url:   ~ # Deprecated (Since dbp/relay-esign-bundle ???: The "error_callback_url" option is deprecated. The API server now provides the callback URL itself.), Example: 'https://pdfas.example.com/static/error.html'
         profiles:
             # Prototype
             -
                 # The name of the profile, this needs to be passed to the API
-                name:                 ~ # Example: myprofile
+                name:                 ~ # Required, Example: myprofile
                 # The Symfony role required to use this profile
                 role:                 ~ # Example: ROLE_FOOBAR
                 # The PDF-AS signature profile ID to use
-                profile_id:           ~ # Example: MYPROFILE
-                # The profile table ID to attach the content to. Leave empty to disable user text.
-                user_text_table:      ~ # Example: usercontent
-                # The index of the first unset row in the table (starts with 1)
-                user_text_row:        ~ # Example: 1
-                # In case there is content "child" will be attached to "parent" at "row" (optional)
-                user_text_attach_parent: ~ # Example: parent
-                # In case there is content "child" will be attached to "parent" at "row" (optional)
-                user_text_attach_child: ~ # Example: child
-                # In case there is content "child" will be attached to "parent" at "row" (optional)
-                user_text_attach_row: ~ # Example: 4
+                profile_id:           ~ # Required, Example: MYPROFILE
+                # For extending the PDF-AS signature layout with user provided text (optional)
+                user_text:
+                    # The profile table ID to attach the content to.
+                    target_table:         ~ # Required, Example: usercontent
+                    # The index of the first unset row in the table (starts with 1)
+                    target_row:           ~ # Required, Example: '1'
+                    # In case there is content "child_table" will be attached to "parent_table" at "parent_row" (optional)
+                    attach:
+                        # The name of the parent table
+                        parent_table:         ~ # Required, Example: parent
+                        # Child table name
+                        child_table:          ~ # Required, Example: child
+                        # The index of the row where the child table will be attached to
+                        parent_row:           ~ # Required, Example: '4'
     advanced_signature:
         # The URL to the PDF-AS server for advanced signatures
-        server_url:           ~ # Example: 'https://pdfas.example.com/pdf-as-web'
+        server_url:           ~ # Required, Example: 'https://pdfas.example.com/pdf-as-web'
         profiles:
             # Prototype
             -
                 # The name of the profile, this needs to be passed to the API
-                name:                 ~ # Example: myprofile
+                name:                 ~ # Required, Example: myprofile
                 # The Symfony role required to use this profile
                 role:                 ~ # Example: ROLE_FOOBAR
                 # The PDF-AS signature key ID used for singing
-                key_id:               ~ # Example: MYKEY
+                key_id:               ~ # Required, Example: MYKEY
                 # The PDF-AS signature profile ID to use
-                profile_id:           ~ # Example: MYPROFILE
-                # The profile table ID to attach the content to. Leave empty to disable user text.
-                user_text_table:      ~ # Example: usercontent
-                # The index of the first unset row in the table (starts with 1)
-                user_text_row:        ~ # Example: 1
-                # In case there is content "child" will be attached to "parent" at "row" (optional)
-                user_text_attach_parent: ~ # Example: parent
-                # In case there is content "child" will be attached to "parent" at "row" (optional)
-                user_text_attach_child: ~ # Example: child
-                # In case there is content "child" will be attached to "parent" at "row" (optional)
-                user_text_attach_row: ~ # Example: 4
+                profile_id:           ~ # Required, Example: MYPROFILE
+                # For extending the PDF-AS signature layout with user provided text (optional)
+                user_text:
+                    # The profile table ID to attach the content to.
+                    target_table:         ~ # Required, Example: usercontent
+                    # The index of the first unset row in the table (starts with 1)
+                    target_row:           ~ # Required, Example: '1'
+                    # In case there is content "child_table" will be attached to "parent_table" at "parent_row" (optional)
+                    attach:
+                        # The name of the parent table
+                        parent_table:         ~ # Required, Example: parent
+                        # Child table name
+                        child_table:          ~ # Required, Example: child
+                        # The index of the row where the child table will be attached to
+                        parent_row:           ~ # Required, Example: '4'
 ```
 
 ## Examples
@@ -89,16 +101,9 @@ signature block.
 Both `qualified_profile` as well as every entry in `advanced_profiles` allows
 setting an optional user text configuration:
 
-
-user_text_table: user
-user_text_row: 1
-user_text_attach_parent: info
-user_text_attach_child: user
-user_text_attach_row: 2
-
-* `user_text_table` - The profile table ID to attach the content to
-* `user_text_row` - The index of the first unset row in the table (starts with 1)
-* `user_text_attach_parent`/`user_text_attach_child`/`user_text_attach_row` (optional) - In case there is content to add the `child` will be attached to `parent` at row `row`.
+* `user_text.target_table` - The profile table ID to attach the content to
+* `user_text.target_row` - The index of the first unset row in the table (starts with 1)
+* `user_text.attach.parent_table`/`user_text.attach.child_table`/`user_text.attach.parent_row` (optional) - In case there is content to add the `child` will be attached to `parent` at row `row`.
 
 The extra attachment configuration is required because pdf-as-web doesn't allow
 reachable empty tables, so we either have to add to existing tables or attach a
@@ -107,11 +112,13 @@ new table depending on wether we want to add rows or not. Example:
 ```yaml
 # We attach user text rows to "user" at row 1
 # and if there are any rows we attach "user" to "info" at row 2
-user_text_table: user
-user_text_row: 1
-user_text_attach_parent: info
-user_text_attach_child: user
-user_text_attach_row: 2
+user_text:
+  target_table: user
+  target_row: 1
+  attach:
+    parent_table: info
+    child_table: user
+    parent_row: 2
 ```
 
 To allow the esign bundle to add custom text to the signature profiles you need
