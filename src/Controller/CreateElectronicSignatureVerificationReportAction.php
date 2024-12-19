@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Dbp\Relay\EsignBundle\Controller;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
+use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
+use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\Entity\ElectronicSignature;
 use Dbp\Relay\EsignBundle\Entity\ElectronicSignatureVerificationReport;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
@@ -24,7 +26,7 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
 {
     protected $api;
 
-    public function __construct(SignatureProviderInterface $api)
+    public function __construct(SignatureProviderInterface $api, private readonly AuthorizationService $authorizationService, private readonly BundleConfig $bundleConfig)
     {
         $this->api = $api;
     }
@@ -36,8 +38,11 @@ final class CreateElectronicSignatureVerificationReportAction extends AbstractCo
      */
     public function __invoke(Request $request): ElectronicSignatureVerificationReport
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        $this->denyAccessUnlessGranted('ROLE_SCOPE_VERIFY-SIGNATURE');
+        $this->authorizationService->checkCanVerify();
+
+        if (!$this->bundleConfig->hasVerification()) {
+            throw new SigningException('verification is not enabled');
+        }
 
         /** @var ?UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');

@@ -48,6 +48,26 @@ class BundleConfig
         return $profiles;
     }
 
+    public function getProfile(string $name): ?Profile
+    {
+        $qualifiedConfig = $this->getQualified();
+        if ($qualifiedConfig !== null) {
+            $profile = $qualifiedConfig->getProfile($name);
+            if ($profile !== null) {
+                return $profile;
+            }
+        }
+        $advancedConfig = $this->getAdvanced();
+        if ($advancedConfig !== null) {
+            $profile = $advancedConfig->getProfile($name);
+            if ($profile !== null) {
+                return $profile;
+            }
+        }
+
+        return null;
+    }
+
     public function getQualified(): ?QualifiedConfig
     {
         if (array_key_exists('qualified_signature', $this->config)) {

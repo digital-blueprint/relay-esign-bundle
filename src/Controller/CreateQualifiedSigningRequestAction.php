@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dbp\Relay\EsignBundle\Controller;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
+use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\Entity\QualifiedSigningRequest;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\SignatureProviderInterface;
@@ -17,26 +18,14 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 final class CreateQualifiedSigningRequestAction extends BaseSigningController
 {
     protected $api;
 
-    public function __construct(SignatureProviderInterface $api)
+    public function __construct(SignatureProviderInterface $api, private readonly AuthorizationService $authorizationService)
     {
         $this->api = $api;
-    }
-
-    public function checkProfilePermissions(string $profileName)
-    {
-        try {
-            $role = $this->api->getQualifiedlySignRequiredRole($profileName);
-        } catch (SigningException $e) {
-            throw new AccessDeniedException($e->getMessage());
-        }
-
-        $this->denyAccessUnlessGranted($role);
     }
 
     /**
@@ -44,7 +33,7 @@ final class CreateQualifiedSigningRequestAction extends BaseSigningController
      */
     public function __invoke(Request $request): QualifiedSigningRequest
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->authorizationService->checkCanSign();
 
         $profileName = self::requestGet($request, 'profile');
 
@@ -52,7 +41,7 @@ final class CreateQualifiedSigningRequestAction extends BaseSigningController
             throw new BadRequestHttpException('Missing "profile"');
         }
 
-        $this->checkProfilePermissions($profileName);
+        $this->authorizationService->checkCanSignWithProfile($profileName);
 
         /** @var ?UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');

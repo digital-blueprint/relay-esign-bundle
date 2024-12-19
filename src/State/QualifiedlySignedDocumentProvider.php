@@ -7,6 +7,7 @@ namespace Dbp\Relay\EsignBundle\State;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Dbp\Relay\CoreBundle\Exception\ApiError;
+use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\Entity\QualifiedlySignedDocument;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\SignatureProviderInterface;
@@ -24,14 +25,14 @@ class QualifiedlySignedDocumentProvider extends AbstractController implements Pr
      */
     private $api;
 
-    public function __construct(SignatureProviderInterface $api)
+    public function __construct(SignatureProviderInterface $api, private readonly AuthorizationService $authorizationService)
     {
         $this->api = $api;
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): QualifiedlySignedDocument
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->authorizationService->checkCanSign();
 
         $id = $uriVariables['identifier'];
         assert(is_string($id));

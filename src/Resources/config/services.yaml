@@ -35,3 +35,8 @@ services:
         resource: '../../Configuration'
         autowire: true
         autoconfigure: true
+
+    Dbp\Relay\EsignBundle\Authorization\:
+        resource: '../../Authorization'
+        autowire: true
+        autoconfigure: true

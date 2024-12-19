@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\CollectionOperationInterface;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\PartialPaginatorInterface;
 use ApiPlatform\State\ProviderInterface;
+use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -16,14 +17,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  *
  * @implements ProviderInterface<object>
  */
-class DummyProvider extends AbstractController implements ProviderInterface
+class DummyVerifyProvider extends AbstractController implements ProviderInterface
 {
+    public function __construct(private readonly AuthorizationService $authorizationService)
+    {
+    }
+
     /**
      * @return PartialPaginatorInterface<object>|iterable<mixed, object>|object|null
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->authorizationService->checkCanVerify();
 
         if ($operation instanceof CollectionOperationInterface) {
             return [];

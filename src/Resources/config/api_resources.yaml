@@ -15,13 +15,13 @@ resources:
     operations:
 
       ApiPlatform\Metadata\GetCollection:
-        provider: Dbp\Relay\EsignBundle\State\DummyProvider
+        provider: Dbp\Relay\EsignBundle\State\DummySignProvider
         uriTemplate: "/advancedly-signed-documents"
         openapiContext:
           tags: ["Electronic Signatures"]
 
       ApiPlatform\Metadata\Get:
-        provider: Dbp\Relay\EsignBundle\State\DummyProvider
+        provider: Dbp\Relay\EsignBundle\State\DummySignProvider
         uriTemplate: "/advancedly-signed-documents/{identifier}"
         openapiContext:
           tags: ["Electronic Signatures"]
@@ -107,7 +107,7 @@ resources:
     operations:
 
       ApiPlatform\Metadata\GetCollection:
-        provider: Dbp\Relay\EsignBundle\State\DummyProvider
+        provider: Dbp\Relay\EsignBundle\State\DummySignProvider
         uriTemplate: "/qualifiedly-signed-documents"
         openapiContext:
           tags: ["Electronic Signatures"]
@@ -164,13 +164,13 @@ resources:
     operations:
 
       ApiPlatform\Metadata\GetCollection:
-        provider: Dbp\Relay\EsignBundle\State\DummyProvider
+        provider: Dbp\Relay\EsignBundle\State\DummySignProvider
         uriTemplate: "/qualified-signing-requests"
         openapiContext:
           tags: ["Electronic Signatures"]
 
       ApiPlatform\Metadata\Get:
-        provider: Dbp\Relay\EsignBundle\State\DummyProvider
+        provider: Dbp\Relay\EsignBundle\State\DummySignProvider
         uriTemplate: "/qualified-signing-requests/{identifier}"
         openapiContext:
           tags: ["Electronic Signatures"]
@@ -256,13 +256,13 @@ resources:
     operations:
 
       ApiPlatform\Metadata\GetCollection:
-        provider: Dbp\Relay\EsignBundle\State\DummyProvider
+        provider: Dbp\Relay\EsignBundle\State\DummyVerifyProvider
         uriTemplate: "/electronic-signatures"
         openapiContext:
           tags: ["Electronic Signatures"]
 
       ApiPlatform\Metadata\Get:
-        provider: Dbp\Relay\EsignBundle\State\DummyProvider
+        provider: Dbp\Relay\EsignBundle\State\DummyVerifyProvider
         uriTemplate: "/electronic-signatures/{identifier}"
         openapiContext:
           tags: ["Electronic Signatures"]
@@ -299,13 +299,13 @@ resources:
     operations:
 
       ApiPlatform\Metadata\GetCollection:
-        provider: Dbp\Relay\EsignBundle\State\DummyProvider
+        provider: Dbp\Relay\EsignBundle\State\DummyVerifyProvider
         uriTemplate: "/electronic-signature-verification-reports"
         openapiContext:
           tags: ["Electronic Signatures"]
 
       ApiPlatform\Metadata\Get:
-        provider: Dbp\Relay\EsignBundle\State\DummyProvider
+        provider: Dbp\Relay\EsignBundle\State\DummyVerifyProvider
         uriTemplate: "/electronic-signature-verification-reports/{identifier}"
         openapiContext:
           tags: ["Electronic Signatures"]
