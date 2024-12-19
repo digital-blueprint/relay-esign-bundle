@@ -10,28 +10,39 @@ class UserTextConfig
     {
     }
 
-    public function getTable(): string
+    public function getTargetTable(): string
     {
-        return $this->config['user_text_table'];
+        return $this->config['target_table'];
     }
 
-    public function getRow(): int
+    public function getTargetRow(): int
     {
-        return $this->config['user_text_row'];
+        return $this->config['target_row'];
     }
 
-    public function getAttachParent(): ?string
+    public function hasAttach(): bool
     {
-        return $this->config['user_text_attach_parent'] ?? null;
+        return array_key_exists('attach', $this->config);
     }
 
-    public function getAttachChild(): ?string
+    public function getAttachParentTable(): string
     {
-        return $this->config['user_text_attach_child'] ?? null;
+        assert($this->hasAttach());
+
+        return $this->config['attach']['parent_table'];
     }
 
-    public function getAttachRow(): ?int
+    public function getAttachChildTable(): string
     {
-        return $this->config['user_text_attach_row'] ?? null;
+        assert($this->hasAttach());
+
+        return $this->config['attach']['child_table'];
+    }
+
+    public function getAttachParentRow(): int
+    {
+        assert($this->hasAttach());
+
+        return $this->config['attach']['parent_row'];
     }
 }
