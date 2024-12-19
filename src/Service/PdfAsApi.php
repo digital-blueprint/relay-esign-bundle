@@ -185,6 +185,10 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
      */
     public function verifyPdfData($data, $requestId)
     {
+        if (!$this->bundleConfig->hasVerification()) {
+            throw new SigningException('verification is not enabled');
+        }
+
         $response = $this->doVerifyRequest($data, $requestId);
 
         $results = $response->getVerifyResults();
