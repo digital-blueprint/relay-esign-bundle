@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e5ce51a7c32c146030f4ac692bbe787d",
+    "content-hash": "31dce0657c8efe670f5938b8dfa9290d",
     "packages": [
         {
             "name": "api-platform/core",
@@ -229,16 +229,16 @@
         },
         {
             "name": "dbp/relay-core-bundle",
-            "version": "v0.1.196",
+            "version": "v0.1.197",
             "source": {
                 "type": "git",
                 "url": "https://github.com/digital-blueprint/relay-core-bundle.git",
-                "reference": "570baf4b3d271720ba209c6614a694f207680c0f"
+                "reference": "aa9a0155ded806af46e6b312b8fd845d5567c5d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/digital-blueprint/relay-core-bundle/zipball/570baf4b3d271720ba209c6614a694f207680c0f",
-                "reference": "570baf4b3d271720ba209c6614a694f207680c0f",
+                "url": "https://api.github.com/repos/digital-blueprint/relay-core-bundle/zipball/aa9a0155ded806af46e6b312b8fd845d5567c5d1",
+                "reference": "aa9a0155ded806af46e6b312b8fd845d5567c5d1",
                 "shasum": ""
             },
             "require": {
@@ -275,6 +275,7 @@
                 "symfony/mime": "^5.4 || ^6.4",
                 "symfony/monolog-bundle": "^3.8",
                 "symfony/process": "^5.4 || ^6.4",
+                "symfony/property-info": "^6.4",
                 "symfony/routing": "^5.4 || ^6.4",
                 "symfony/security-bundle": "^5.4 || ^6.4",
                 "symfony/security-core": "^5.4 || ^6.4",
@@ -304,13 +305,11 @@
                 "phpstan/phpstan-phpunit": "^2.0.0",
                 "phpstan/phpstan-symfony": "^2.0.0",
                 "phpunit/phpunit": "^10.1",
-                "psalm/plugin-symfony": "^5.1",
                 "symfony/browser-kit": "^5.4 || ^6.4",
                 "symfony/doctrine-messenger": "^5.4 || ^6.4",
                 "symfony/http-client": "^5.4 || ^6.4",
                 "symfony/monolog-bridge": "^5.4 || ^6.4",
-                "symfony/phpunit-bridge": "^7.0.6",
-                "vimeo/psalm": "^5.22.2"
+                "symfony/phpunit-bridge": "^7.0.6"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -325,9 +324,9 @@
             "description": "The core bundle of the Relay API gateway",
             "support": {
                 "issues": "https://github.com/digital-blueprint/relay-core-bundle/issues",
-                "source": "https://github.com/digital-blueprint/relay-core-bundle/tree/v0.1.196"
+                "source": "https://github.com/digital-blueprint/relay-core-bundle/tree/v0.1.197"
             },
-            "time": "2024-12-11T10:25:50+00:00"
+            "time": "2025-01-02T14:55:42+00:00"
         },
         {
             "name": "doctrine/collections",
