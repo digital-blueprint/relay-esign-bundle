@@ -2,6 +2,22 @@
 
 ## Unreleased
 
+## v0.4.0
+
+Note: This release only contains some breaking changes for the configuration.
+
+* config: Rework the structure of the `user_text` config:
+  * `user_text_table` -> `user_text.target_table`
+  * `user_text_row` -> `user_text.target_row`
+  * `user_text_attach_parent` -> `user_text.attach.parent_table`
+  * `user_text_attach_child` -> `user_text.attach.child_table`
+  * `user_text_attach_row` -> `user_text.attach.parent_row`
+* config: profile names across both the `advanced` and `qualified` signature
+  flows are now required to be unique.
+* authz: new authorization config using authz expressions and authz attributes.
+  The old Symfony role based system is still supported and works as before. See
+  the docs for more information.
+
 ## v0.3.18
 
 * Fix running under phpstan v1 for integration tests pruposes
