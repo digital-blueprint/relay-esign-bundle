@@ -342,9 +342,9 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     /**
      * @throws SigningException
      */
-    public function fetchQualifiedlySignedDocument(string $sessionId): string
+    public function fetchQualifiedlySignedDocument(string $sessionId, ?callable $handler = null): string
     {
-        $stack = HandlerStack::create();
+        $stack = HandlerStack::create($handler);
         $stack->push(Tools::createStopwatchMiddleware($this->stopwatch, 'pdf-as.fetch-qualified', 'esign'));
         $client = new Client(['handler' => $stack]);
 
@@ -352,16 +352,6 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 
         try {
             $response = $client->request('GET', $url);
-            $signedPdfData = (string) $response->getBody();
-
-            if ($response->getHeader('Content-Type')[0] !== 'application/pdf') {
-                // PDF-AS doesn't use 404 status code when document wasn't found
-                if (strpos($signedPdfData, '<p>No signed pdf document available.</p>') !== false) {
-                    throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' was not found!", $sessionId));
-                }
-
-                throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' could not be loaded!", $sessionId));
-            }
         } catch (RequestException $e) {
             switch ($e->getCode()) {
                 case 403:
@@ -370,6 +360,9 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 
             throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' could not be loaded! Message: %s", $sessionId, $e->getMessage()));
         }
+
+        $pdfResponse = PDFDataResponse::fromResponse($response, $sessionId);
+        $signedPdfData = $pdfResponse->getSignedPDF();
 
         $this->log('PDF was qualifiedly signed', ['session_id' => $sessionId, 'signed_content_size' => strlen($signedPdfData)]);
 
