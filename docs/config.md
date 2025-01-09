@@ -83,8 +83,8 @@ dbp_relay_esign:
   qualified_signature:
     server_url: 'https://sig.tugraz.at/pdf-as-web'
     profiles:
-      name: default
-      profile_id: 'SIGNATURBLOCK_SMALL_DE_NOTE_PDFA'
+      - name: default
+        profile_id: 'SIGNATURBLOCK_SMALL_DE_NOTE_PDFA'
   authorization:
     roles:
       ROLE_SIGNER: 'user.isAuthenticated()'
