@@ -10,6 +10,24 @@ use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyEntry;
 class UserText
 {
     /**
+     * @param string $imageData A PNG image
+     */
+    public static function buildUserImageConfigOverride(Profile $profile, string $imageData): PropertyEntry
+    {
+        // Don't allow arbitrarily large images, 500kb should be enough for any normal usage.
+        if (strlen($imageData) > 1024 * 500) {
+            throw new SigningException('signature image data too large');
+        }
+        // We only allow PNG since pdf-as will internally convert it, so allowing JPG would just lead to larger PDFs
+        $finfo = new \finfo(\FILEINFO_MIME_TYPE);
+        if ($finfo->buffer($imageData) !== 'image/png') {
+            throw new SigningException('only image/png allowed for signature image');
+        }
+
+        return new PropertyEntry('sig_obj.'.$profile->getProfileId().'.value.SIG_LABEL', base64_encode($imageData));
+    }
+
+    /**
      * @param UserDefinedText[] $userText
      *
      * @return PropertyEntry[]

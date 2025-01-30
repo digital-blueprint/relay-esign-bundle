@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
+namespace Dbp\Relay\EsignBundle\Tests;
+
 use Dbp\Relay\EsignBundle\Configuration\AdvancedProfile;
+use Dbp\Relay\EsignBundle\Service\SigningException;
 use Dbp\Relay\EsignBundle\Service\UserDefinedText;
 use Dbp\Relay\EsignBundle\Service\UserText;
+use PHPUnit\Framework\TestCase;
 
-class UserTextTest extends PHPUnit\Framework\TestCase
+class UserTextTest extends TestCase
 {
     public function testUserText()
     {
@@ -61,5 +65,40 @@ class UserTextTest extends PHPUnit\Framework\TestCase
 
         $overrides = UserText::buildUserTextConfigOverride($profileConfig, []);
         $this->assertCount(0, $overrides);
+    }
+
+    public function testUserImage()
+    {
+        $profileConfig = new AdvancedProfile([
+            'profile_id' => 'someid',
+        ]);
+
+        $png = "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x00\x00\x00\x00:~\x9bU\x00\x00\x00\nIDAT\x08\x1dc\xf8\x0f\x00\x01\x01\x01\x006_g\x80\x00\x00\x00\x00IEND\xaeB`\x82";
+        $entry = UserText::buildUserImageConfigOverride($profileConfig, $png);
+        $this->assertSame('sig_obj.someid.value.SIG_LABEL', $entry->getKey());
+        $this->assertSame(base64_encode($png), $entry->getValue());
+    }
+
+    public function testUserImageInvalid()
+    {
+        $profileConfig = new AdvancedProfile([
+            'profile_id' => 'someid',
+        ]);
+
+        $png = 'this-is-not-a-png';
+        $this->expectException(SigningException::class);
+        UserText::buildUserImageConfigOverride($profileConfig, $png);
+    }
+
+    public function testUserIamgeTooLarge()
+    {
+        $profileConfig = new AdvancedProfile([
+            'profile_id' => 'someid',
+        ]);
+
+        $png = "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x00\x00\x00\x00:~\x9bU\x00\x00\x00\nIDAT\x08\x1dc\xf8\x0f\x00\x01\x01\x01\x006_g\x80\x00\x00\x00\x00IEND\xaeB`\x82";
+        $png = str_repeat($png, 10000);
+        $this->expectException(SigningException::class);
+        UserText::buildUserImageConfigOverride($profileConfig, $png);
     }
 }

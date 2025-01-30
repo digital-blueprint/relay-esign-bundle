@@ -108,7 +108,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     /**
      * @throws SigningException
      */
-    public function createQualifiedSigningRequestRedirectUrl(string $data, string $profileName, string $requestId, array $positionData = [], array $userText = []): string
+    public function createQualifiedSigningRequestRedirectUrl(string $data, string $profileName, string $requestId, array $positionData = [], array $userText = [], ?string $userImageData = null): string
     {
         $profile = null;
         $qualifiedConfig = $this->bundleConfig->getQualified();
@@ -130,6 +130,12 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 
         // Add custom user defined text if needed
         $overrides = UserText::buildUserTextConfigOverride($profile, $userText);
+
+        // Add the custom signature image
+        if ($userImageData !== null) {
+            $overrides[] = UserText::buildUserImageConfigOverride($profile, $userImageData);
+        }
+
         if (count($overrides) > 0) {
             $configurationOverrides = new PropertyMap($overrides);
             $params->setConfigurationOverrides($configurationOverrides);
@@ -201,7 +207,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
      *
      * @throws SigningException
      */
-    public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = []): string
+    public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = [], ?string $userImageData = null): string
     {
         $profile = null;
         $advancedConfig = $this->bundleConfig->getAdvanced();
@@ -228,6 +234,12 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
 
         // Add custom user defined text if needed
         $overrides = UserText::buildUserTextConfigOverride($profile, $userText);
+
+        // Add the custom signature image
+        if ($userImageData !== null) {
+            $overrides[] = UserText::buildUserImageConfigOverride($profile, $userImageData);
+        }
+
         if (count($overrides) > 0) {
             $configurationOverrides = new PropertyMap($overrides);
             $params->setConfigurationOverrides($configurationOverrides);
