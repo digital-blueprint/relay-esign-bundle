@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## v0.4.1
+
+* The CLI commands gained a new `--user-text` option for specifying custom user text to be included in the signature block
+* The CLI commands gained a new `--user-image-path` option for passing a path to a PNG file for overriding the signature block image
+
 ## v0.4.0
 
 Note: This release only contains some breaking changes for the configuration.
