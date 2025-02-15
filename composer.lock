@@ -7640,16 +7640,16 @@
         },
         {
             "name": "captainhook/captainhook",
-            "version": "5.24.3",
+            "version": "5.24.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/captainhookphp/captainhook.git",
-                "reference": "00acb745e6132dcffe3e9bd45e1fe27934a134c7"
+                "reference": "e70822202c89a4c2889948bd6a040fed85ced41b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/captainhookphp/captainhook/zipball/00acb745e6132dcffe3e9bd45e1fe27934a134c7",
-                "reference": "00acb745e6132dcffe3e9bd45e1fe27934a134c7",
+                "url": "https://api.github.com/repos/captainhookphp/captainhook/zipball/e70822202c89a4c2889948bd6a040fed85ced41b",
+                "reference": "e70822202c89a4c2889948bd6a040fed85ced41b",
                 "shasum": ""
             },
             "require": {
@@ -7712,7 +7712,7 @@
             ],
             "support": {
                 "issues": "https://github.com/captainhookphp/captainhook/issues",
-                "source": "https://github.com/captainhookphp/captainhook/tree/5.24.3"
+                "source": "https://github.com/captainhookphp/captainhook/tree/5.24.4"
             },
             "funding": [
                 {
@@ -7720,7 +7720,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-16T11:37:53+00:00"
+            "time": "2025-02-11T14:10:20+00:00"
         },
         {
             "name": "captainhook/secrets",
@@ -11155,16 +11155,16 @@
         },
         {
             "name": "sebastianfeldmann/git",
-            "version": "3.12.0",
+            "version": "3.13.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianfeldmann/git.git",
-                "reference": "d4a1e28233983ec623383912e534af2f3767fe26"
+                "reference": "95c5fccbbf5e94ad86c459a73f0c2d2d2e776d98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianfeldmann/git/zipball/d4a1e28233983ec623383912e534af2f3767fe26",
-                "reference": "d4a1e28233983ec623383912e534af2f3767fe26",
+                "url": "https://api.github.com/repos/sebastianfeldmann/git/zipball/95c5fccbbf5e94ad86c459a73f0c2d2d2e776d98",
+                "reference": "95c5fccbbf5e94ad86c459a73f0c2d2d2e776d98",
                 "shasum": ""
             },
             "require": {
@@ -11205,7 +11205,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianfeldmann/git/issues",
-                "source": "https://github.com/sebastianfeldmann/git/tree/3.12.0"
+                "source": "https://github.com/sebastianfeldmann/git/tree/3.13.2"
             },
             "funding": [
                 {
@@ -11213,7 +11213,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-01-16T10:53:19+00:00"
+            "time": "2025-02-11T19:34:51+00:00"
         },
         {
             "name": "spatie/array-to-xml",
