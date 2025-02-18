@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.4.2
+
+* Fix a regression where signing profiles without user text configuration would fail.
+
 ## v0.4.1
 
 * The CLI commands gained a new `--user-text` option for specifying custom user text to be included in the signature block
