@@ -129,7 +129,11 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         $params->setProfile($profile->getProfileId());
 
         // Add custom user defined text if needed
-        $overrides = UserText::buildUserTextConfigOverride($profile, $userText);
+        if ($userText !== []) {
+            $overrides = UserText::buildUserTextConfigOverride($profile, $userText);
+        } else {
+            $overrides = [];
+        }
 
         // Add the custom signature image
         if ($userImageData !== null) {
@@ -233,7 +237,11 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         $params->setProfile($profile->getProfileId());
 
         // Add custom user defined text if needed
-        $overrides = UserText::buildUserTextConfigOverride($profile, $userText);
+        if ($userText !== []) {
+            $overrides = UserText::buildUserTextConfigOverride($profile, $userText);
+        } else {
+            $overrides = [];
+        }
 
         // Add the custom signature image
         if ($userImageData !== null) {
