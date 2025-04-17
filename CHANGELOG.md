@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v0.4.3
+
+* Drop support for PHP 8.1
+* Drop support for Psalm
+* Add support for api-platform 4.1+, drop support for <3.4
+
 ## v0.4.2
 
 * Fix a regression where signing profiles without user text configuration would fail.
