@@ -7,7 +7,7 @@
         "ext-fileinfo": "*",
         "ext-json": "*",
         "ext-soap": "*",
-        "api-platform/core": "^3.2",
+        "api-platform/core": "^3.4 || ^4.1",
         "dbp/relay-core-bundle": "^0.1.197",
         "guzzlehttp/guzzle": "^7.5",
         "guzzlehttp/promises": "^2.0",
@@ -47,7 +47,8 @@
     },
     "conflict": {
         "willdurand/negotiation": "<3",
-        "pimple/pimple": "<3.1"
+        "pimple/pimple": "<3.1",
+        "zbateson/stream-decorators": "<1.2"
     },
     "autoload": {
         "psr-4": {
