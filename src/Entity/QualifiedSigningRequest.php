@@ -23,16 +23,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new GetCollection(
             uriTemplate: '/qualified-signing-requests',
-            openapi: new Operation(
-                tags: ['Electronic Signatures']
-            ),
+            openapi: false,
             provider: DummySignProvider::class
         ),
         new Get(
             uriTemplate: '/qualified-signing-requests/{identifier}',
-            openapi: new Operation(
-                tags: ['Electronic Signatures']
-            ),
+            openapi: false,
             provider: DummySignProvider::class
         ),
         new Post(

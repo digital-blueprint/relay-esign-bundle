@@ -20,23 +20,12 @@ class DbpRelayEsignExtension extends ConfigurableExtension
     {
         $this->addResourceClassDirectory($container, __DIR__.'/../Entity');
 
-        $pathsToHide = [
-            'GET' => [
-                '/esign/advancedly-signed-documents/{identifier}',
-                '/esign/advancedly-signed-documents',
-                '/esign/qualified-signing-requests/{identifier}',
-                '/esign/qualified-signing-requests',
-                '/esign/qualifiedly-signed-documents',
-            ],
-        ];
-
+        $pathsToHide = [];
         if (!BundleConfig::hasVerification()) {
-            $pathsToHide['GET'] = array_merge($pathsToHide['GET'], [
-                '/esign/electronic-signatures',
-                '/esign/electronic-signatures/{identifier}',
+            $pathsToHide['GET'] = [
                 '/esign/electronic-signature-verification-reports',
                 '/esign/electronic-signature-verification-reports/{identifier}',
-            ]);
+            ];
             $pathsToHide['POST'] = [
                 '/esign/electronic-signature-verification-reports',
             ];

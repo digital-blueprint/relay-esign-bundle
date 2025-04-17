@@ -8,7 +8,6 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\OpenApi\Model\Operation;
 use Dbp\Relay\EsignBundle\State\DummyVerifyProvider;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -19,16 +18,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new GetCollection(
             uriTemplate: '/electronic-signatures',
-            openapi: new Operation(
-                tags: ['Electronic Signatures']
-            ),
+            openapi: false,
             provider: DummyVerifyProvider::class
         ),
         new Get(
             uriTemplate: '/electronic-signatures/{identifier}',
-            openapi: new Operation(
-                tags: ['Electronic Signatures']
-            ),
+            openapi: false,
             provider: DummyVerifyProvider::class
         ),
     ],
