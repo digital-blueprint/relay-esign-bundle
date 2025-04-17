@@ -11,8 +11,6 @@ use MyCLabs\Enum\Enum;
  * @method static VerificationLevel intOnly()
  * @method static VerificationLevel full()
  *
- * @psalm-immutable
- *
  * @extends Enum<string>
  */
 class VerificationLevel extends Enum

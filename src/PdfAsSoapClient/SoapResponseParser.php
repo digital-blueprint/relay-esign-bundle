@@ -27,9 +27,6 @@ class SoapResponseParser
         // First we try to create a valid mime multipart input and parse it
         $inputData = $this->fixupHeader($inputData, $rootID);
         $mailParser = new MailMimeParser();
-        /**
-         * @psalm-suppress TooManyArguments
-         */
         $result = $mailParser->parse($inputData, true);
         $parts = [];
         foreach ($result->getChildParts() as $part) {
