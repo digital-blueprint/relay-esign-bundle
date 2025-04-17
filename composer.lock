@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "daa288a22a04079edff47d26cd9fbb71",
+    "content-hash": "3141003e59f5b676c6cdaacb83cc4304",
     "packages": [
         {
             "name": "api-platform/core",
@@ -7780,12 +7780,12 @@
             "version": "5.25.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/captainhookphp/captainhook.git",
+                "url": "https://github.com/captainhook-git/captainhook.git",
                 "reference": "e096240c130557be6d2059881341db7ebd84f653"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/captainhookphp/captainhook/zipball/e096240c130557be6d2059881341db7ebd84f653",
+                "url": "https://api.github.com/repos/captainhook-git/captainhook/zipball/e096240c130557be6d2059881341db7ebd84f653",
                 "reference": "e096240c130557be6d2059881341db7ebd84f653",
                 "shasum": ""
             },
@@ -7864,12 +7864,12 @@
             "version": "0.9.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/captainhookphp/secrets.git",
+                "url": "https://github.com/captainhook-git/secrets.git",
                 "reference": "0232c67019e11c4bee4ee9bfec9575b67e0854e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/captainhookphp/secrets/zipball/0232c67019e11c4bee4ee9bfec9575b67e0854e5",
+                "url": "https://api.github.com/repos/captainhook-git/secrets/zipball/0232c67019e11c4bee4ee9bfec9575b67e0854e5",
                 "reference": "0232c67019e11c4bee4ee9bfec9575b67e0854e5",
                 "shasum": ""
             },
@@ -12116,7 +12116,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.1",
+        "php": ">=8.2",
         "ext-json": "*",
         "ext-soap": "*",
         "ext-fileinfo": "*"
@@ -12125,7 +12125,7 @@
         "ext-simplexml": "*"
     },
     "platform-overrides": {
-        "php": "8.1"
+        "php": "8.2"
     },
     "plugin-api-version": "2.6.0"
 }
