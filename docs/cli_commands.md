@@ -26,6 +26,7 @@ Arguments:
 Options:
       --user-image-path=USER-IMAGE-PATH  Signature image path (PNG)
       --user-text=USER-TEXT              User text JSON
+      --invisible                        Create an invisible signature
 ```
 
 ## dbp:relay:esign:sign:qualified
@@ -49,4 +50,5 @@ Arguments:
 Options:
       --user-image-path=USER-IMAGE-PATH  Signature image path (PNG)
       --user-text=USER-TEXT              User text JSON
+      --invisible                        Create an invisible signature
 ```

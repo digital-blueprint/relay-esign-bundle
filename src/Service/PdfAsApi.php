@@ -8,10 +8,12 @@ declare(strict_types=1);
 namespace Dbp\Relay\EsignBundle\Service;
 
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
+use Dbp\Relay\EsignBundle\Configuration\Profile;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\Connector;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASSigningImplService;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASVerificationImplService;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyEntry;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyMap;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignParameters;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignRequest;
@@ -108,7 +110,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
     /**
      * @throws SigningException
      */
-    public function createQualifiedSigningRequestRedirectUrl(string $data, string $profileName, string $requestId, array $positionData = [], array $userText = [], ?string $userImageData = null): string
+    public function createQualifiedSigningRequestRedirectUrl(string $data, string $profileName, string $requestId, array $positionData = [], array $userText = [], ?string $userImageData = null, bool $invisible = false): string
     {
         $profile = null;
         $qualifiedConfig = $this->bundleConfig->getQualified();
@@ -138,6 +140,10 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         // Add the custom signature image
         if ($userImageData !== null) {
             $overrides[] = UserText::buildUserImageConfigOverride($profile, $userImageData);
+        }
+
+        if ($invisible) {
+            $overrides[] = self::buildInvisibleOverride($profile, $invisible);
         }
 
         if (count($overrides) > 0) {
@@ -206,12 +212,26 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         return $results;
     }
 
+    public static function buildInvisibleOverride(Profile $profile, bool $invisible): PropertyEntry
+    {
+        $profileId = $profile->getProfileId();
+
+        $checkID = function ($name) {
+            return preg_match('/[^.-]*/', $name) && $name !== '';
+        };
+        if (!$checkID($profileId)) {
+            throw new \RuntimeException('invalid profile id');
+        }
+
+        return new PropertyEntry("sig_obj.$profileId.isvisible", !$invisible ? 'true' : 'false');
+    }
+
     /**
      * Signs $data.
      *
      * @throws SigningException
      */
-    public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = [], ?string $userImageData = null): string
+    public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = [], ?string $userImageData = null, bool $invisible = false): string
     {
         $profile = null;
         $advancedConfig = $this->bundleConfig->getAdvanced();
@@ -246,6 +266,10 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         // Add the custom signature image
         if ($userImageData !== null) {
             $overrides[] = UserText::buildUserImageConfigOverride($profile, $userImageData);
+        }
+
+        if ($invisible) {
+            $overrides[] = self::buildInvisibleOverride($profile, $invisible);
         }
 
         if (count($overrides) > 0) {
