@@ -37,6 +37,7 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
         $this->addArgument('output-path', InputArgument::REQUIRED, 'Output PDF file path');
         $this->addOption('user-image-path', null, InputOption::VALUE_REQUIRED, 'Signature image path (PNG)');
         $this->addOption('user-text', null, InputOption::VALUE_REQUIRED, 'User text JSON');
+        $this->addOption('invisible', null, InputOption::VALUE_NONE, 'Create an invisible signature');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -47,6 +48,7 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
         $profile = $input->getArgument('profile-id');
         $userImagePath = $input->getOption('user-image-path');
         $userText = $input->getOption('user-text');
+        $invisible = $input->getOption('invisible');
 
         $inputData = @file_get_contents($inputPath);
         if ($inputData === false) {
@@ -68,7 +70,7 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
             $userText = [];
         }
 
-        $signedData = $this->api->advancedlySignPdfData($inputData, $profile, $requestId, userText: $userText, userImageData: $userImageData);
+        $signedData = $this->api->advancedlySignPdfData($inputData, $profile, $requestId, userText: $userText, userImageData: $userImageData, invisible: $invisible);
 
         $filesystem = new Filesystem();
         $filesystem->dumpFile($outputPath, $signedData);
