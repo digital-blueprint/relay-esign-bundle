@@ -6,6 +6,7 @@ namespace Dbp\Relay\EsignBundle\Tests;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Controller\BaseSigningController;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class ControllerTest extends TestCase
@@ -25,9 +26,7 @@ class ControllerTest extends TestCase
         return [['nope'], [''], ['[{}]'], ['[0]']];
     }
 
-    /**
-     * @dataProvider invalidUserText
-     */
+    #[DataProvider('invalidUserText')]
     public function testUserTextInvalid(string $input)
     {
         $this->expectException(ApiError::class);

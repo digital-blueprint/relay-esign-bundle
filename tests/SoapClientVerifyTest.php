@@ -74,7 +74,7 @@ class SoapClientVerifyTest extends TestCase
             ->setConstructorArgs(['nope', -1, true])
             ->onlyMethods(['__doParentRequest'])
             ->getMock();
-        $soapClientMock->method('__doParentRequest')->will($this->returnValue($response));
+        $soapClientMock->method('__doParentRequest')->willReturn($response);
 
         return $soapClientMock;
     }
