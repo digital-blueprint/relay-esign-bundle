@@ -7,7 +7,9 @@
         "ext-fileinfo": "*",
         "ext-json": "*",
         "ext-soap": "*",
-        "api-platform/core": "^3.4 || ^4.1",
+        "api-platform/metadata": "^4.1",
+        "api-platform/openapi": "^4.1",
+        "api-platform/state": "^4.1",
         "dbp/relay-core-bundle": "^0.1.197",
         "guzzlehttp/guzzle": "^7.5",
         "guzzlehttp/promises": "^2.0",
@@ -31,6 +33,7 @@
         "zbateson/mail-mime-parser": "^2.2 || ^3"
     },
     "require-dev": {
+        "api-platform/symfony": "^4.1",
         "ext-simplexml": "*",
         "captainhook/captainhook": "^5.21",
         "friendsofphp/php-cs-fixer": "^3.50",
