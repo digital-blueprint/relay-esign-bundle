@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Tests;
 
-use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
-use Dbp\Relay\CoreBundle\TestUtils\TestClient;
+use Dbp\Relay\CoreBundle\TestUtils\AbstractApiTest;
 
-class ApiTest extends ApiTestCase
+class ApiTest extends AbstractApiTest
 {
     public function testNotAuth()
     {
@@ -26,21 +25,17 @@ class ApiTest extends ApiTestCase
             ['GET', '/esign/qualifiedly-signed-documents/123', 403],
         ];
 
-        $client = $this->createClient();
-        $client->disableReboot();
-
         foreach ($endpoints as $ep) {
             [$method, $path, $status] = $ep;
-            $testClient = new TestClient($client);
-            $testClient->setUpUser('foobar', token: '42');
+            $this->testClient->setUpUser('foobar', token: '42');
             if ($method === 'POST') {
                 $headers['Content-Type'] = 'multipart/form-data';
             }
-            $response = $testClient->request($method, $path, token: '42');
+            $response = $this->testClient->request($method, $path, token: '42');
             $this->assertEquals($status, $response->getStatusCode(), $path);
 
             // Without any token
-            $response = $testClient->request($method, $path, token: null);
+            $response = $this->testClient->request($method, $path, token: null);
             $this->assertContains($response->getStatusCode(), [401, 404, 403], $path);
         }
     }
