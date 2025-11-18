@@ -7,7 +7,7 @@
         "ext-fileinfo": "*",
         "ext-json": "*",
         "ext-soap": "*",
-        "api-platform/core": "^3.4 || ^4.1",
+        "api-platform/core": "^4.1",
         "dbp/relay-core-bundle": "^0.1.224",
         "guzzlehttp/guzzle": "^7.5",
         "guzzlehttp/promises": "^2.0",
