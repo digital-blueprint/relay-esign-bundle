@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## v0.4.4
+
+* Add CLI-only option for creating invisible signatures for all profiles.
+* Drop support for api-platform <4.1
+
 ## v0.4.3
 
 * Drop support for PHP 8.1
