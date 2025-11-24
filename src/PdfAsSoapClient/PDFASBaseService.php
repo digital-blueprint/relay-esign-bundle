@@ -7,9 +7,9 @@ namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 class PDFASBaseService extends \SoapClient
 {
     // For mocking in tests
-    public function __doParentRequest($req, $location, $action, $version, $one_way)
+    public function __doParentRequest(...$args)
     {
-        return parent::__doRequest($req, $location, $action, $version, $one_way);
+        return parent::__doRequest(...$args);
     }
 
     /**
@@ -29,18 +29,12 @@ class PDFASBaseService extends \SoapClient
     }
 
     /**
-     * @param string   $request
-     * @param string   $location
-     * @param string   $action
-     * @param int      $version
-     * @param bool|int $oneWay
-     *
      * @throws SoapResponseParserError
      * @throws \SoapFault
      */
-    public function __doRequest($request, $location, $action, $version = SOAP_1_1, $oneWay = 0): ?string
+    public function __doRequest(...$args): ?string
     {
-        $response = $this->__doParentRequest($request, $location, $action, $version, $oneWay);
+        $response = $this->__doParentRequest(...$args);
 
         // happens for example if the request is denied by the server or a timeout happens
         if ($response === null) {
