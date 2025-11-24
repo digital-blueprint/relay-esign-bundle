@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.4.5
+
+* Add support for PHP 8.5
+
 ## v0.4.4
 
 * Add CLI-only option for creating invisible signatures for all profiles.
