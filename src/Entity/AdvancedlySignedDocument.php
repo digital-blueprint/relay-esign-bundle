@@ -85,6 +85,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
                                         'type' => 'number',
                                         'example' => '2',
                                     ],
+                                    'invisible' => [
+                                        'description' => 'Whether the signature block should not be visible in the PDF',
+                                        'type' => 'boolean',
+                                        'default' => 'false',
+                                        'example' => 'true',
+                                    ],
                                     'user_text' => [
                                         'description' => 'User defined text. JSON list of objects with description/value',
                                         'type' => 'string',

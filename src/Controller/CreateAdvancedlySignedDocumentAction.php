@@ -97,10 +97,15 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
             $userText = self::parseUserText($data);
         }
 
+        $invisible = $request->request->getBoolean('invisible');
+        if ($invisible && !empty($positionData)) {
+            throw new BadRequestHttpException('Position parameters are not allowed in case the signature block is set to invisible');
+        }
+
         // sign the pdf data
         try {
             $signedPdfData = $this->api->advancedlySignPdfData(
-                file_get_contents($uploadedFile->getPathname()), $profileName, $requestId, $positionData, $userText);
+                file_get_contents($uploadedFile->getPathname()), $profileName, $requestId, $positionData, $userText, invisible: $invisible);
         } catch (SigningUnavailableException $e) {
             throw new ServiceUnavailableHttpException(100, $e->getMessage());
         } catch (SigningException $e) {

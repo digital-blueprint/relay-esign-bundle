@@ -9,7 +9,7 @@ after the content, either on the last page, or if there isn't enough space on
 the last page then on a newly added page at the end.
 
 The position units are in "points" using the PDF coordinate system which starts
-at the bottom left corner of each page. The point unit can be converted to e.g.
+in the bottom left corner of each page. The point unit can be converted to e.g.
 cm via the DPI, for example "1cm ~ 28.3465pt".
 
 * `p` - The page number where the signature block should be placed, starting
@@ -26,3 +26,7 @@ cm via the DPI, for example "1cm ~ 28.3465pt".
   internal layout.
 * `r` - Absolute rotation of the signature block in degrees, counterclockwise.
   Defaults to 0.
+
+In case you don't want to have a visible signature block at all you can set `invisible` to `true`:
+
+* `invisible` - if `true` the block will not be visible. Defaults to `false`.

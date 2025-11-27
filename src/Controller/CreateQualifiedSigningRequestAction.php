@@ -100,13 +100,18 @@ final class CreateQualifiedSigningRequestAction extends BaseSigningController
             $userText = self::parseUserText($data);
         }
 
+        $invisible = $request->request->getBoolean('invisible');
+        if ($invisible && !empty($positionData)) {
+            throw new BadRequestHttpException('Position parameters are not allowed in case the signature block is set to invisible');
+        }
+
         // generate a request id for the signing process
         $requestId = Tools::generateRequestId();
 
         // create redirect url for signing request
         try {
             $url = $this->api->createQualifiedSigningRequestRedirectUrl(
-                file_get_contents($uploadedFile->getPathname()), $profileName, $requestId, $positionData, $userText);
+                file_get_contents($uploadedFile->getPathname()), $profileName, $requestId, $positionData, $userText, invisible: $invisible);
         } catch (SigningUnavailableException $e) {
             throw new ServiceUnavailableHttpException(100, $e->getMessage());
         } catch (SigningException $e) {
