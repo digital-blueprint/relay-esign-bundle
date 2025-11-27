@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## v0.4.6
+
+* Add API parameter `invisible` to create invisible signatures via the API.
+* Add `dbp:relay:esign:preview` CLI command for generating signature block previews.
+
 ## v0.4.5
 
 * Add support for PHP 8.5
