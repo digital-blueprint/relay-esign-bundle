@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Service;
 
+use Dbp\Relay\EsignBundle\Configuration\AdvancedProfile;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\Configuration\Profile;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
@@ -411,5 +412,33 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         $this->log('PDF was qualifiedly signed', ['session_id' => $sessionId, 'signed_content_size' => strlen($signedPdfData)]);
 
         return $signedPdfData;
+    }
+
+    public function createPreviewImage(string $profileName, int $resolution): string
+    {
+        $profile = $this->bundleConfig->getProfile($profileName);
+        if ($profile === null) {
+            throw new SigningException('Unknown profile');
+        }
+        if ($profile instanceof AdvancedProfile) {
+            $serverUrl = $this->bundleConfig->getAdvanced()->getServerUrl();
+        } else {
+            $serverUrl = $this->bundleConfig->getQualified()->getServerUrl();
+        }
+
+        $uriTemplate = new UriTemplate('/visblock{?r,p}');
+        $uri = rtrim($serverUrl, '/').$uriTemplate->expand([
+            'p' => $profile->getProfileId(),
+            'r' => $resolution, // 16-512 is possible
+        ]);
+
+        $client = new Client();
+        $response = $client->get($uri);
+        $contentType = $response->getHeaderLine('Content-Type');
+        if ($contentType !== 'image/png') {
+            throw new \RuntimeException('invalid content type: '.$contentType);
+        }
+
+        return (string) $response->getBody();
     }
 }

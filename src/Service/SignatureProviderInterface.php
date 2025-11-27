@@ -23,6 +23,8 @@ interface SignatureProviderInterface
      */
     public function createQualifiedSigningRequestRedirectUrl(string $data, string $profileName, string $requestId, array $positionData = [], array $userText = [], ?string $userImageData = null, bool $invisible = false): string;
 
+    public function createPreviewImage(string $profileName, int $resolution): string;
+
     /**
      * Verifies pdf $data.
      *
