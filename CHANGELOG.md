@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.4.7
+
+* Add support for Symfony 7.4
+
 ## v0.4.6
 
 * Add API parameter `invisible` to create invisible signatures via the API.
