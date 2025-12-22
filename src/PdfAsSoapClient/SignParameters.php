@@ -7,7 +7,7 @@ namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 class SignParameters
 {
     /**
-     * @var Connector
+     * @var string
      */
     protected $connector;
 
@@ -66,7 +66,7 @@ class SignParameters
      */
     public function __construct($connector)
     {
-        $this->connector = $connector;
+        $this->connector = $connector->value;
     }
 
     /**
@@ -74,7 +74,7 @@ class SignParameters
      */
     public function getConnector()
     {
-        return $this->connector;
+        return Connector::from($this->connector);
     }
 
     /**
@@ -84,7 +84,7 @@ class SignParameters
      */
     public function setConnector($connector)
     {
-        $this->connector = $connector;
+        $this->connector = $connector->value;
 
         return $this;
     }

@@ -27,7 +27,7 @@ class VerifyRequest
     protected $signatureIndex;
 
     /**
-     * @var VerificationLevel
+     * @var string
      */
     protected $verificationLevel;
 
@@ -126,7 +126,7 @@ class VerifyRequest
      */
     public function getVerificationLevel()
     {
-        return $this->verificationLevel;
+        return VerificationLevel::from($this->verificationLevel);
     }
 
     /**
@@ -136,7 +136,7 @@ class VerifyRequest
      */
     public function setVerificationLevel($verificationLevel)
     {
-        $this->verificationLevel = $verificationLevel;
+        $this->verificationLevel = $verificationLevel->value;
 
         return $this;
     }

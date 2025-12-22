@@ -22,7 +22,7 @@ class SignRequest
     protected $requestID;
 
     /**
-     * @var VerificationLevel
+     * @var string
      */
     protected $verificationLevel;
 
@@ -103,7 +103,7 @@ class SignRequest
      */
     public function getVerificationLevel()
     {
-        return $this->verificationLevel;
+        return VerificationLevel::from($this->verificationLevel);
     }
 
     /**
@@ -113,7 +113,7 @@ class SignRequest
      */
     public function setVerificationLevel($verificationLevel)
     {
-        $this->verificationLevel = $verificationLevel;
+        $this->verificationLevel = $verificationLevel->value;
 
         return $this;
     }
