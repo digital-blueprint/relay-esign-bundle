@@ -90,7 +90,7 @@ class SoapClientVerifyTest extends TestCase
         $soapClientMock = $this->getMockVerificationService(self::$FAKE_VERIFY_RESPONSE);
 
         $request = new VerifyRequest('somebogusdata', 'foobar');
-        $request->setVerificationLevel(VerificationLevel::intOnly());
+        $request->setVerificationLevel(VerificationLevel::intOnly);
         $request->setSignatureIndex(-1);
         $request->setPreprocessorArguments(new PropertyMap([]));
         $response = $soapClientMock->verify($request);
@@ -114,7 +114,7 @@ class SoapClientVerifyTest extends TestCase
         $soapClientMock = $this->getMockVerificationService(self::$FAKE_EMPTY_VERIFY_RESPONSE);
 
         $request = new VerifyRequest('somebogusdata', 'foobar');
-        $request->setVerificationLevel(VerificationLevel::intOnly());
+        $request->setVerificationLevel(VerificationLevel::intOnly);
         $request->setSignatureIndex(99);
         $request->setPreprocessorArguments(new PropertyMap([]));
         $response = $soapClientMock->verify($request);

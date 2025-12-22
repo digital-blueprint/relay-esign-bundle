@@ -61,7 +61,7 @@ class SoapClientSignTest extends TestCase
     {
         $soapClientMock = $this->getMockSigningService(self::$FAKE_RESPONSE);
 
-        $params = new SignParameters(Connector::jks());
+        $params = new SignParameters(Connector::jks);
         $params->setInvokeErrorUrl('https://XXXXXXXXXXXXXXXXXXXXXX');
         $request = new SignRequest('foobar', $params, 'my-id');
         $response = $soapClientMock->signSingle($request);
@@ -77,7 +77,7 @@ class SoapClientSignTest extends TestCase
         $smallExample = $this->getExampleMTOMResponse();
         $soapClientMock = $this->getMockSigningService($smallExample);
 
-        $params = new SignParameters(Connector::jks());
+        $params = new SignParameters(Connector::jks);
         $request = new SignRequest('foobar', $params, 'my-id');
         $response = $soapClientMock->signSingle($request);
         $pdf = $response->getSignedPDF();
@@ -108,7 +108,7 @@ class SoapClientSignTest extends TestCase
     {
         $soapClientMock = $this->getMockSigningService(null);
 
-        $params = new SignParameters(Connector::jks());
+        $params = new SignParameters(Connector::jks);
         $request = new SignRequest('foobar', $params, 'my-id');
         $this->expectException(\SoapFault::class);
         $soapClientMock->signSingle($request);
@@ -118,7 +118,7 @@ class SoapClientSignTest extends TestCase
     {
         $soapClientMock = $this->getMockSigningService(self::$FAKE_RESPONSE);
 
-        $params = new SignParameters(Connector::jks());
+        $params = new SignParameters(Connector::jks);
         $request = new SignRequest('foobar', $params, 'my-id');
         $response = $soapClientMock->signSingle($request, 42);
         $this->assertNotFalse($response);
@@ -128,7 +128,7 @@ class SoapClientSignTest extends TestCase
     {
         $soapClientMock = $this->getMockSigningService(self::$FAKE_RESPONSE);
 
-        $params = new SignParameters(Connector::jks());
+        $params = new SignParameters(Connector::jks);
         $params->setInvokeTarget('http://invoke-target');
         $params->setInvokeErrorUrl('http://invoke-error-url');
         $params->setInvokeUrl('http://invoke-url');

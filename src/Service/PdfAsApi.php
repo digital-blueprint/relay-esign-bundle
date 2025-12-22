@@ -128,7 +128,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
             throw new SigningException('Signing soap call failed, wsdl URI cannot be loaded!');
         }
 
-        $params = new SignParameters(Connector::mobilebku());
+        $params = new SignParameters(Connector::mobilebku);
         $params->setProfile($profile->getProfileId());
 
         // Add custom user defined text if needed
@@ -253,7 +253,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
             throw new SigningException('Signing soap call failed, wsdl URI cannot be loaded!');
         }
 
-        $params = new SignParameters(Connector::jks());
+        $params = new SignParameters(Connector::jks);
         $params->setKeyIdentifier($profile->getKeyId());
         $params->setProfile($profile->getProfileId());
 
@@ -342,7 +342,7 @@ class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
         $wsUri = $qualifiedConfig->getServerUrl().'/services/wsverify';
         $client = new PDFASVerificationImplService($wsUri);
         $request = new VerifyRequest($data, $requestId);
-        $request->setVerificationLevel(VerificationLevel::intOnly());
+        $request->setVerificationLevel(VerificationLevel::intOnly);
         $request->setSignatureIndex(-1);
         $request->setPreprocessorArguments(new PropertyMap([]));
 
