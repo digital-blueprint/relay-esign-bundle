@@ -12,13 +12,12 @@ use Dbp\Relay\EsignBundle\Entity\QualifiedlySignedDocument;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\SignatureProviderInterface;
 use Dbp\Relay\EsignBundle\Service\SigningException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @implements ProviderInterface<QualifiedlySignedDocument>
  */
-class QualifiedlySignedDocumentProvider extends AbstractController implements ProviderInterface
+class QualifiedlySignedDocumentProvider implements ProviderInterface
 {
     /**
      * @var SignatureProviderInterface

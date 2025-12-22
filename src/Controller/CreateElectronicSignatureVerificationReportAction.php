@@ -13,16 +13,17 @@ use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\SignatureProviderInterface;
 use Dbp\Relay\EsignBundle\Service\SigningException;
 use Dbp\Relay\EsignBundle\Service\SigningUnavailableException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
-final class CreateElectronicSignatureVerificationReportAction extends AbstractController
+#[AsController]
+final class CreateElectronicSignatureVerificationReportAction
 {
     protected $api;
 

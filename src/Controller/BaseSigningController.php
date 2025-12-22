@@ -6,11 +6,10 @@ namespace Dbp\Relay\EsignBundle\Controller;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Service\UserDefinedText;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class BaseSigningController extends AbstractController
+abstract class BaseSigningController
 {
     /**
      * Request::get() is internal starting with Symfony 5.4, so we duplicate a subset of the logic we need here.

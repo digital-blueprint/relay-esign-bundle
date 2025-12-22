@@ -21,7 +21,6 @@
         "symfony/console": "^6.4 || ^7.4",
         "symfony/dependency-injection": "^6.4 || ^7.4",
         "symfony/filesystem": "^6.4 || ^7.4",
-        "symfony/framework-bundle": "^6.4 || ^7.4",
         "symfony/http-foundation": "^6.4 || ^7.4",
         "symfony/http-kernel": "^6.4 || ^7.4",
         "symfony/routing": "^6.4 || ^7.4",
@@ -32,6 +31,7 @@
         "zbateson/mail-mime-parser": "^2.2 || ^3"
     },
     "require-dev": {
+        "symfony/framework-bundle": "^6.4 || ^7.4",
         "api-platform/symfony": "^4.1",
         "ext-simplexml": "*",
         "captainhook/captainhook": "^5.21",

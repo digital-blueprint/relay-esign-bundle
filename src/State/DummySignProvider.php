@@ -9,7 +9,6 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\Pagination\PartialPaginatorInterface;
 use ApiPlatform\State\ProviderInterface;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * For GET endpoints which we don't implement, either return an empty collection
@@ -17,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  *
  * @implements ProviderInterface<object>
  */
-class DummySignProvider extends AbstractController implements ProviderInterface
+class DummySignProvider implements ProviderInterface
 {
     public function __construct(private readonly AuthorizationService $authorizationService)
     {
