@@ -111,12 +111,12 @@ class PdfAsApi implements LoggerAwareInterface
     /**
      * @throws SigningException
      */
-    public function createQualifiedSigningRequestRedirectUrl(string $data, string $profileName, string $requestId, array $positionData = [], array $userText = [], ?string $userImageData = null, bool $invisible = false): string
+    public function createQualifiedSigningRequestRedirectUrl(SigningRequest $request): string
     {
         $profile = null;
         $qualifiedConfig = $this->bundleConfig->getQualified();
         if ($qualifiedConfig !== null) {
-            $profile = $qualifiedConfig->getProfile($profileName);
+            $profile = $qualifiedConfig->getProfile($request->getProfileName());
         }
         if ($qualifiedConfig === null || $profile === null) {
             throw new SigningException('Unknown profile');
@@ -132,6 +132,7 @@ class PdfAsApi implements LoggerAwareInterface
         $params->setProfile($profile->getProfileId());
 
         // Add custom user defined text if needed
+        $userText = $request->getUserText();
         if ($userText !== []) {
             $overrides = UserText::buildUserTextConfigOverride($profile, $userText);
         } else {
@@ -139,10 +140,12 @@ class PdfAsApi implements LoggerAwareInterface
         }
 
         // Add the custom signature image
+        $userImageData = $request->getUserImageData();
         if ($userImageData !== null) {
             $overrides[] = UserText::buildUserImageConfigOverride($profile, $userImageData);
         }
 
+        $invisible = $request->isInvisible();
         if ($invisible) {
             $overrides[] = self::buildInvisibleOverride($profile, $invisible);
         }
@@ -157,12 +160,14 @@ class PdfAsApi implements LoggerAwareInterface
         $params->setInvokeErrorUrl(Tools::getUriWithPort($this->getErrorCallbackUrl()));
 
         // add signature position data if there is any
+        $positionData = $request->getPositionData();
         if (count($positionData) !== 0) {
             array_walk($positionData, function (&$item, $key) { $item = "$key:$item"; });
             $params->setPosition(implode(';', $positionData));
         }
 
-        $request = new SignRequest($data, $params, $requestId);
+        $requestId = $request->getRequestId();
+        $request = new SignRequest($request->getData(), $params, $requestId);
 
         $event = $this->stopwatch->start('pdf-as.sign-qualified', 'esign');
         try {
@@ -232,19 +237,15 @@ class PdfAsApi implements LoggerAwareInterface
      *
      * @throws SigningException
      */
-    public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = [], ?string $userImageData = null, bool $invisible = false): PDFDataResponse
+    public function advancedlySignPdfData(SigningRequest $request): PDFDataResponse
     {
         $profile = null;
         $advancedConfig = $this->bundleConfig->getAdvanced();
         if ($advancedConfig !== null) {
-            $profile = $advancedConfig->getProfile($profileName);
+            $profile = $advancedConfig->getProfile($request->getProfileName());
         }
         if ($advancedConfig === null || $profile === null) {
             throw new SigningException('Unknown profile');
-        }
-
-        if ($requestId === '') {
-            $requestId = Tools::generateRequestId();
         }
 
         try {
@@ -258,6 +259,7 @@ class PdfAsApi implements LoggerAwareInterface
         $params->setProfile($profile->getProfileId());
 
         // Add custom user defined text if needed
+        $userText = $request->getUserText();
         if ($userText !== []) {
             $overrides = UserText::buildUserTextConfigOverride($profile, $userText);
         } else {
@@ -265,10 +267,12 @@ class PdfAsApi implements LoggerAwareInterface
         }
 
         // Add the custom signature image
+        $userImageData = $request->getUserImageData();
         if ($userImageData !== null) {
             $overrides[] = UserText::buildUserImageConfigOverride($profile, $userImageData);
         }
 
+        $invisible = $request->isInvisible();
         if ($invisible) {
             $overrides[] = self::buildInvisibleOverride($profile, $invisible);
         }
@@ -279,13 +283,15 @@ class PdfAsApi implements LoggerAwareInterface
         }
 
         // add signature position data if there is any
+        $positionData = $request->getPositionData();
         if (count($positionData) !== 0) {
             array_walk($positionData, function (&$item, $key) { $item = "$key:$item"; });
             $params->setPosition(implode(';', $positionData));
         }
 
         $event = $this->stopwatch->start('pdf-as.sign-advanced', 'esign');
-        $request = new SignRequest($data, $params, $requestId);
+        $requestId = $request->getRequestId();
+        $request = new SignRequest($request->getData(), $params, $requestId);
         try {
             // can and will throw a SoapFault "looks like we got no XML document"
             $response = $service->signSingle($request, self::PDF_AS_TIMEOUT);

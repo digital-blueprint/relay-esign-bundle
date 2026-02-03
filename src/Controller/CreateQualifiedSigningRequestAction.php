@@ -10,6 +10,7 @@ use Dbp\Relay\EsignBundle\Entity\QualifiedSigningRequest;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\PdfAsApi;
 use Dbp\Relay\EsignBundle\Service\SigningException;
+use Dbp\Relay\EsignBundle\Service\SigningRequest;
 use Dbp\Relay\EsignBundle\Service\SigningUnavailableException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -107,13 +108,18 @@ final class CreateQualifiedSigningRequestAction extends BaseSigningController
             throw new BadRequestHttpException('Position parameters are not allowed in case the signature block is set to invisible');
         }
 
+        $data = @file_get_contents($uploadedFile->getPathname());
+        if ($data === false) {
+            throw new \RuntimeException('Failed to read file');
+        }
+
         // generate a request id for the signing process
         $requestId = Tools::generateRequestId();
+        $request = new SigningRequest($data, $profileName, $requestId, $positionData, $userText, invisible: $invisible);
 
         // create redirect url for signing request
         try {
-            $url = $this->api->createQualifiedSigningRequestRedirectUrl(
-                file_get_contents($uploadedFile->getPathname()), $profileName, $requestId, $positionData, $userText, invisible: $invisible);
+            $url = $this->api->createQualifiedSigningRequestRedirectUrl($request);
         } catch (SigningUnavailableException $e) {
             throw new ServiceUnavailableHttpException(100, $e->getMessage());
         } catch (SigningException $e) {

@@ -7,6 +7,7 @@ namespace Dbp\Relay\EsignBundle\Commands;
 use Dbp\Relay\EsignBundle\Controller\BaseSigningController;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\PdfAsApi;
+use Dbp\Relay\EsignBundle\Service\SigningRequest;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Console\Command\Command;
@@ -85,14 +86,14 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
                 throw new \RuntimeException("Failed to read '$inputPath'");
             }
 
-            $result = $this->api->advancedlySignPdfData(
-                $inputData,
+            $request = new SigningRequest($inputData,
                 $profile,
                 $requestId,
                 userText: $userText,
                 userImageData: $userImageData,
-                invisible: $invisible
-            );
+                invisible: $invisible);
+
+            $result = $this->api->advancedlySignPdfData($request);
 
             $filesystem->dumpFile($outputPath, $result->getSignedPDF());
             $output->writeln("Created signed file '$outputPath' from '$inputPath'");
