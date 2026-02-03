@@ -51,14 +51,10 @@ class VerifyRequest
 
     /**
      * @param string $inputData
-     *
-     * @return VerifyRequest
      */
-    public function setInputData($inputData)
+    public function setInputData($inputData): void
     {
         $this->inputData = $inputData;
-
-        return $this;
     }
 
     /**
@@ -71,14 +67,10 @@ class VerifyRequest
 
     /**
      * @param PropertyMap $preprocessorArguments
-     *
-     * @return VerifyRequest
      */
-    public function setPreprocessorArguments($preprocessorArguments)
+    public function setPreprocessorArguments($preprocessorArguments): void
     {
         $this->preprocessorArguments = $preprocessorArguments;
-
-        return $this;
     }
 
     /**
@@ -91,14 +83,10 @@ class VerifyRequest
 
     /**
      * @param string $requestID
-     *
-     * @return VerifyRequest
      */
-    public function setRequestID($requestID)
+    public function setRequestID($requestID): void
     {
         $this->requestID = $requestID;
-
-        return $this;
     }
 
     /**
@@ -111,14 +99,10 @@ class VerifyRequest
 
     /**
      * @param int $signatureIndex
-     *
-     * @return VerifyRequest
      */
-    public function setSignatureIndex($signatureIndex)
+    public function setSignatureIndex($signatureIndex): void
     {
         $this->signatureIndex = $signatureIndex;
-
-        return $this;
     }
 
     /**
@@ -131,13 +115,9 @@ class VerifyRequest
 
     /**
      * @param VerificationLevel $verificationLevel
-     *
-     * @return VerifyRequest
      */
-    public function setVerificationLevel($verificationLevel)
+    public function setVerificationLevel($verificationLevel): void
     {
         $this->verificationLevel = $verificationLevel->value;
-
-        return $this;
     }
 }

@@ -49,14 +49,10 @@ class SignResponse
 
     /**
      * @param ?string $error
-     *
-     * @return SignResponse
      */
-    public function setError($error)
+    public function setError($error): void
     {
         $this->error = $error;
-
-        return $this;
     }
 
     /**
@@ -69,14 +65,10 @@ class SignResponse
 
     /**
      * @param ?string $redirectUrl
-     *
-     * @return SignResponse
      */
-    public function setRedirectUrl($redirectUrl)
+    public function setRedirectUrl($redirectUrl): void
     {
         $this->redirectUrl = $redirectUrl;
-
-        return $this;
     }
 
     /**
@@ -89,14 +81,10 @@ class SignResponse
 
     /**
      * @param ?string $requestID
-     *
-     * @return SignResponse
      */
-    public function setRequestID($requestID)
+    public function setRequestID($requestID): void
     {
         $this->requestID = $requestID;
-
-        return $this;
     }
 
     /**
@@ -109,14 +97,10 @@ class SignResponse
 
     /**
      * @param ?string $signedPDF
-     *
-     * @return ?SignResponse
      */
-    public function setSignedPDF($signedPDF)
+    public function setSignedPDF($signedPDF): void
     {
         $this->signedPDF = $signedPDF;
-
-        return $this;
     }
 
     /**
@@ -129,13 +113,9 @@ class SignResponse
 
     /**
      * @param ?VerificationResponse $verificationResponse
-     *
-     * @return SignResponse
      */
-    public function setVerificationResponse($verificationResponse)
+    public function setVerificationResponse($verificationResponse): void
     {
         $this->verificationResponse = $verificationResponse;
-
-        return $this;
     }
 }

@@ -36,14 +36,10 @@ class PropertyEntry
 
     /**
      * @param string $key
-     *
-     * @return PropertyEntry
      */
-    public function setKey($key)
+    public function setKey($key): void
     {
         $this->key = $key;
-
-        return $this;
     }
 
     /**
@@ -56,13 +52,9 @@ class PropertyEntry
 
     /**
      * @param string $value
-     *
-     * @return PropertyEntry
      */
-    public function setValue($value)
+    public function setValue($value): void
     {
         $this->value = $value;
-
-        return $this;
     }
 }

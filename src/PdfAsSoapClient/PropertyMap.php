@@ -29,13 +29,9 @@ class PropertyMap
 
     /**
      * @param PropertyEntry[] $propertyEntries
-     *
-     * @return PropertyMap
      */
-    public function setPropertyEntries(array $propertyEntries)
+    public function setPropertyEntries(array $propertyEntries): void
     {
         $this->propertyEntries = $propertyEntries;
-
-        return $this;
     }
 }

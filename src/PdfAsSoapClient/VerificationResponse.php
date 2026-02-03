@@ -41,14 +41,10 @@ class VerificationResponse
 
     /**
      * @param int $certificateCode
-     *
-     * @return VerificationResponse
      */
-    public function setCertificateCode($certificateCode)
+    public function setCertificateCode($certificateCode): void
     {
         $this->certificateCode = $certificateCode;
-
-        return $this;
     }
 
     /**
@@ -61,14 +57,10 @@ class VerificationResponse
 
     /**
      * @param string $signerCertificate
-     *
-     * @return VerificationResponse
      */
-    public function setSignerCertificate($signerCertificate)
+    public function setSignerCertificate($signerCertificate): void
     {
         $this->signerCertificate = $signerCertificate;
-
-        return $this;
     }
 
     /**
@@ -81,13 +73,9 @@ class VerificationResponse
 
     /**
      * @param int $valueCode
-     *
-     * @return VerificationResponse
      */
-    public function setValueCode($valueCode)
+    public function setValueCode($valueCode): void
     {
         $this->valueCode = $valueCode;
-
-        return $this;
     }
 }
