@@ -23,17 +23,17 @@ class PdfAsApiTest extends ApiTestCase
     public function testGetCallbackUrl()
     {
         $api = $this->getApi([]);
-        $this->assertSame($api->getCallbackUrl(), 'http://localhost/esign/_success');
+        $this->assertSame($api->getCallbackUrl('foo'), 'http://localhost/esign/_success?_dbpRelayEsignId=foo');
         $api = $this->getApi(['qualified_signature' => ['callback_url' => 'https://foo.bar']]);
-        $this->assertSame($api->getCallbackUrl(), 'https://foo.bar');
+        $this->assertSame($api->getCallbackUrl('bar'), 'https://foo.bar');
     }
 
     public function testGetErrorCallbackUrl()
     {
         $api = $this->getApi([]);
-        $this->assertSame($api->getErrorCallbackUrl(), 'http://localhost/esign/_error');
+        $this->assertSame($api->getErrorCallbackUrl('foo'), 'http://localhost/esign/_error?_dbpRelayEsignId=foo');
         $api = $this->getApi(['qualified_signature' => ['error_callback_url' => 'https://foo.bar.error']]);
-        $this->assertSame($api->getErrorCallbackUrl(), 'https://foo.bar.error');
+        $this->assertSame($api->getErrorCallbackUrl('bar'), 'https://foo.bar.error');
     }
 
     public function testFetchQualifiedlySignedDocument()

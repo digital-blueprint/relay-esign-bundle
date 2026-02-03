@@ -46,24 +46,24 @@ class PdfAsApi implements LoggerAwareInterface
         $this->router = $router;
     }
 
-    public function getCallbackUrl(): string
+    public function getCallbackUrl(string $requestId): string
     {
         $qualifiedConfig = $this->bundleConfig->getQualified();
         if ($qualifiedConfig !== null && $qualifiedConfig->getCallbackUrl() !== null) {
             return $qualifiedConfig->getCallbackUrl();
         }
 
-        return $this->router->generate('esign_callback_success', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->router->generate('esign_callback_success', ['_dbpRelayEsignId' => $requestId], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
-    public function getErrorCallbackUrl(): string
+    public function getErrorCallbackUrl(string $requestId): string
     {
         $qualifiedConfig = $this->bundleConfig->getQualified();
         if ($qualifiedConfig !== null && $qualifiedConfig->getErrorCallbackUrl() !== null) {
             return $qualifiedConfig->getErrorCallbackUrl();
         }
 
-        return $this->router->generate('esign_callback_error', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        return $this->router->generate('esign_callback_error', ['_dbpRelayEsignId' => $requestId], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     public function checkPdfAsConnection()
@@ -155,9 +155,10 @@ class PdfAsApi implements LoggerAwareInterface
             $params->setConfigurationOverrides($configurationOverrides);
         }
 
-        $params->setInvokeUrl($this->getCallbackUrl());
+        $requestId = $request->getRequestId();
+        $params->setInvokeUrl($this->getCallbackUrl($requestId));
         // it's important to add the port "443", PDF-AS has a bug that will set the port to "-1" if it isn't set
-        $params->setInvokeErrorUrl(Tools::getUriWithPort($this->getErrorCallbackUrl()));
+        $params->setInvokeErrorUrl(Tools::getUriWithPort($this->getErrorCallbackUrl($requestId)));
 
         // add signature position data if there is any
         $positionData = $request->getPositionData();
@@ -166,7 +167,6 @@ class PdfAsApi implements LoggerAwareInterface
             $params->setPosition(implode(';', $positionData));
         }
 
-        $requestId = $request->getRequestId();
         $request = new SignRequest($request->getData(), $params, $requestId);
 
         $event = $this->stopwatch->start('pdf-as.sign-qualified', 'esign');
