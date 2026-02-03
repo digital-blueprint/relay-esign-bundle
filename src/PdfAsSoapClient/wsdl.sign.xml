@@ -1,139 +1,278 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.web.pdfas.egiz.gv.at/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://ws.api.pdfas.egiz.gv.at/" name="PDFASSigningImplService" targetNamespace="http://ws.web.pdfas.egiz.gv.at/">
-  <wsdl:types>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.api.pdfas.egiz.gv.at/" targetNamespace="http://ws.api.pdfas.egiz.gv.at/" version="1.0">
-      <xs:complexType name="SignRequest">
-        <xs:sequence>
-          <xs:element name="inputData" type="xs:base64Binary"/>
-          <xs:element name="parameters" type="tns:SignParameters"/>
-          <xs:element name="requestID" type="xs:string"/>
-          <xs:element minOccurs="0" name="verificationLevel" nillable="true" type="tns:VerificationLevel"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="SignParameters">
-        <xs:sequence>
-          <xs:element name="connector" type="tns:Connector"/>
-          <xs:element minOccurs="0" name="invoke-error-url" nillable="true" type="xs:string"/>
-          <xs:element minOccurs="0" name="invoke-target" nillable="true" type="xs:string"/>
-          <xs:element minOccurs="0" name="invoke-url" nillable="true" type="xs:string"/>
-          <xs:element minOccurs="0" name="keyIdentifier" nillable="true" type="xs:string"/>
-          <xs:element minOccurs="0" name="configurationOverrides" nillable="true" type="tns:PropertyMap"/>
-          <xs:element minOccurs="0" name="position" nillable="true" type="xs:string"/>
-          <xs:element minOccurs="0" name="preprocessorArguments" nillable="true" type="tns:PropertyMap"/>
-          <xs:element minOccurs="0" name="profile" nillable="true" type="xs:string"/>
-          <xs:element minOccurs="0" name="qrCodeContent" nillable="true" type="xs:string"/>
-          <xs:element minOccurs="0" name="transactionId" nillable="true" type="xs:string"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="PropertyMap">
-        <xs:sequence>
-          <xs:element maxOccurs="unbounded" name="propertyEntries" type="tns:PropertyEntry"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="PropertyEntry">
-        <xs:sequence>
-          <xs:element name="key" type="xs:string"/>
-          <xs:element name="value" type="xs:string"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="SignResponse">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="error" type="xs:string"/>
-          <xs:element minOccurs="0" name="redirectUrl" type="xs:string"/>
-          <xs:element name="requestID" type="xs:string"/>
-          <xs:element minOccurs="0" name="signedPDF" type="xs:base64Binary"/>
-          <xs:element minOccurs="0" name="verificationResponse" type="tns:VerificationResponse"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="VerificationResponse">
-        <xs:sequence>
-          <xs:element name="certificateCode" type="xs:int"/>
-          <xs:element minOccurs="0" name="signerCertificate" type="xs:base64Binary"/>
-          <xs:element name="valueCode" type="xs:int"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="BulkSignRequest">
-        <xs:sequence>
-          <xs:element maxOccurs="unbounded" name="signRequests" type="tns:SignRequest"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="BulkSignResponse">
-        <xs:sequence>
-          <xs:element maxOccurs="unbounded" name="signResponses" type="tns:SignResponse"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:simpleType name="Connector">
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="jks"/>
-          <xs:enumeration value="moa"/>
-          <xs:enumeration value="bku"/>
-          <xs:enumeration value="mobilebku"/>
-          <xs:enumeration value="onlinebku"/>
-          <xs:enumeration value="sl20"/>
-        </xs:restriction>
-      </xs:simpleType>
-      <xs:simpleType name="VerificationLevel">
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="intOnly"/>
-          <xs:enumeration value="full"/>
-        </xs:restriction>
-      </xs:simpleType>
-    </xs:schema>
-  </wsdl:types>
-  <wsdl:message name="signSingleResponse">
-    <wsdl:part name="signResponse" type="ns1:SignResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="signBulkResponse">
-    <wsdl:part name="bulkResponse" type="ns1:BulkSignResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="signBulk">
-    <wsdl:part name="signBulkRequest" type="ns1:BulkSignRequest">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="signSingle">
-    <wsdl:part name="signRequest" type="ns1:SignRequest">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:portType name="PDFASSigning">
-    <wsdl:operation name="signSingle">
-      <wsdl:input message="ns1:signSingle" name="signSingle">
-    </wsdl:input>
-      <wsdl:output message="ns1:signSingleResponse" name="signSingleResponse">
-    </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="signBulk">
-      <wsdl:input message="ns1:signBulk" name="signBulk">
-    </wsdl:input>
-      <wsdl:output message="ns1:signBulkResponse" name="signBulkResponse">
-    </wsdl:output>
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:binding name="PDFASSigningImplServiceSoapBinding" type="ns1:PDFASSigning">
-    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="signSingle">
-      <soap:operation soapAction="" style="rpc"/>
-      <wsdl:input name="signSingle">
-        <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="signSingleResponse">
-        <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="signBulk">
-      <soap:operation soapAction="" style="rpc"/>
-      <wsdl:input name="signBulk">
-        <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="signBulkResponse">
-        <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:service name="PDFASSigningImplService">
-    <wsdl:port binding="tns:PDFASSigningImplServiceSoapBinding" name="PDFASSigningImplPort">
-      <soap:address location=""/>
-    </wsdl:port>
-  </wsdl:service>
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:tns="http://ws.web.pdfas.egiz.gv.at/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://ws.api.pdfas.egiz.gv.at/"
+                  name="PDFASSigningImplService" targetNamespace="http://ws.web.pdfas.egiz.gv.at/">
+    <wsdl:types>
+        <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.api.pdfas.egiz.gv.at/"
+                   targetNamespace="http://ws.api.pdfas.egiz.gv.at/" version="1.0">
+
+            <xs:complexType name="SignRequest">
+                <xs:sequence>
+                    <xs:element name="inputData" type="xs:base64Binary"/>
+                    <xs:element name="parameters" type="tns:SignParameters"/>
+                    <xs:element name="requestID" type="xs:string"/>
+                    <xs:element name="signatureBlockParameters">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element minOccurs="0" name="key" type="xs:string"/>
+                                            <xs:element minOccurs="0" name="value" type="xs:string"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="verificationLevel" nillable="true" type="tns:VerificationLevel"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="SignParameters">
+                <xs:sequence>
+                    <xs:element name="connector" type="tns:Connector"/>
+                    <xs:element minOccurs="0" name="invoke-error-url" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="invoke-target" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="invoke-url" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="keyIdentifier" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="configurationOverrides" nillable="true" type="tns:PropertyMap"/>
+                    <xs:element minOccurs="0" name="position" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="preprocessorArguments" nillable="true" type="tns:PropertyMap"/>
+                    <xs:element minOccurs="0" name="profile" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="qrCodeContent" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="transactionId" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="PropertyMap">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="propertyEntries" type="tns:PropertyEntry"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="PropertyEntry">
+                <xs:sequence>
+                    <xs:element name="key" type="xs:string"/>
+                    <xs:element name="value" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="SignResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="error" type="xs:string"/>
+                    <xs:element minOccurs="0" name="redirectUrl" type="xs:string"/>
+                    <xs:element name="requestID" type="xs:string"/>
+                    <xs:element minOccurs="0" name="signedPDF" type="xs:base64Binary"/>
+                    <xs:element minOccurs="0" name="verificationResponse" type="tns:VerificationResponse"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="VerificationResponse">
+                <xs:sequence>
+                    <xs:element name="certificateCode" type="xs:int"/>
+                    <xs:element minOccurs="0" name="signerCertificate" type="xs:base64Binary"/>
+                    <xs:element name="valueCode" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="getMultipleRequest">
+                <xs:sequence>
+                    <xs:element name="token" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="signMultipleResponse">
+                <xs:sequence>
+                    <xs:element name="requestID" type="xs:string"/>
+                    <xs:element minOccurs="0" name="transactionId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="error" type="xs:string"/>
+                    <xs:element minOccurs="0" name="redirectUrl" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" name="documents" type="tns:signedMultipleFile"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="signedMultipleFile">
+                <xs:sequence>
+                    <xs:element name="outputData" type="xs:base64Binary"/>
+                    <xs:element minOccurs="0" name="fileName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="verificationResponse" type="tns:VerificationResponse"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="signMultipleRequest">
+                <xs:sequence>
+                    <xs:element name="requestID" type="xs:string"/>
+                    <xs:element minOccurs="0" name="transactionId" nillable="true" type="xs:string"/>
+                    <xs:element name="connector" type="tns:Connector"/>
+                    <xs:element minOccurs="0" name="invoke-url" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="invoke-target" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="invoke-error-url" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="keyIdentifier" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="preprocessorArguments" nillable="true" type="tns:PropertyMap"/>
+                    <xs:element minOccurs="0" name="configurationOverrides" nillable="true" type="tns:PropertyMap"/>
+                    <xs:element name="signatureBlockParameters">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+                                    <xs:complexType>
+                                        <xs:sequence>
+                                            <xs:element minOccurs="0" name="key" type="xs:string"/>
+                                            <xs:element minOccurs="0" name="value" type="xs:string"/>
+                                        </xs:sequence>
+                                    </xs:complexType>
+                                </xs:element>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                    <xs:element minOccurs="0" name="verificationLevel" nillable="true" type="tns:VerificationLevel"/>
+                    <xs:element maxOccurs="unbounded" name="documents" type="tns:signMultipleFile"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="signMultipleFile">
+                <xs:sequence>
+                    <xs:element name="inputData" type="xs:base64Binary"/>
+                    <xs:element name="fileName" type="xs:string"/>
+                    <xs:element minOccurs="0" name="position" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="qrCodeContent" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="profile" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="BulkSignRequest">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="signRequests" type="tns:SignRequest"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="BulkSignResponse">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" name="signResponses" type="tns:SignResponse"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:simpleType name="Connector">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="jks"/>
+                    <xs:enumeration value="moa"/>
+                    <xs:enumeration value="bku"/>
+                    <xs:enumeration value="mobilebku"/>
+                    <xs:enumeration value="onlinebku"/>
+                    <xs:enumeration value="sl20"/>
+                </xs:restriction>
+            </xs:simpleType>
+
+            <xs:simpleType name="VerificationLevel">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="intOnly"/>
+                    <xs:enumeration value="full"/>
+                </xs:restriction>
+            </xs:simpleType>
+
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="signSingleResponse">
+        <wsdl:part name="signResponse" type="ns1:SignResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="signMultiple">
+        <wsdl:part name="signMultipleRequest" type="ns1:signMultipleRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="signMultipleResponse">
+        <wsdl:part name="signMultipleResponse" type="ns1:signMultipleResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="signBulkResponse">
+        <wsdl:part name="bulkResponse" type="ns1:BulkSignResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="signBulk">
+        <wsdl:part name="signBulkRequest" type="ns1:BulkSignRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="signSingle">
+        <wsdl:part name="signRequest" type="ns1:SignRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMultiple">
+        <wsdl:part name="getMultipleRequest" type="ns1:getMultipleRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMultipleResponse">
+        <wsdl:part name="getMultipleResponse" type="ns1:signMultipleResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="PDFASSigning">
+        <wsdl:operation name="signSingle">
+            <wsdl:input message="ns1:signSingle" name="signSingle">
+            </wsdl:input>
+            <wsdl:output message="ns1:signSingleResponse" name="signSingleResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMultiple">
+            <wsdl:input message="ns1:getMultiple" name="getMultiple">
+            </wsdl:input>
+            <wsdl:output message="ns1:getMultipleResponse" name="getMultipleResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="signMultiple">
+            <wsdl:input message="ns1:signMultiple" name="signMultiple">
+            </wsdl:input>
+            <wsdl:output message="ns1:signMultipleResponse" name="signMultipleResponse">
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="signBulk">
+            <wsdl:input message="ns1:signBulk" name="signBulk">
+            </wsdl:input>
+            <wsdl:output message="ns1:signBulkResponse" name="signBulkResponse">
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="PDFASSigningImplServiceSoapBinding" type="ns1:PDFASSigning">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="signSingle">
+            <soap:operation soapAction="" style="rpc"/>
+            <wsdl:input name="signSingle">
+                <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="signSingleResponse">
+                <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMultiple">
+            <soap:operation soapAction="" style="rpc"/>
+            <wsdl:input name="getMultiple">
+                <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="getMultipleResponse">
+                <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="signMultiple">
+            <soap:operation soapAction="" style="rpc"/>
+            <wsdl:input name="signMultiple">
+                <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="signMultipleResponse">
+                <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="signBulk">
+            <soap:operation soapAction="" style="rpc"/>
+            <wsdl:input name="signBulk">
+                <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="signBulkResponse">
+                <soap:body namespace="http://ws.api.pdfas.egiz.gv.at/" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="PDFASSigningImplService">
+        <wsdl:port binding="tns:PDFASSigningImplServiceSoapBinding" name="PDFASSigningImplPort">
+            <soap:address location=""/>
+        </wsdl:port>
+    </wsdl:service>
 </wsdl:definitions>

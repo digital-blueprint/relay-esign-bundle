@@ -6,6 +6,7 @@ namespace Dbp\Relay\EsignBundle\Tests;
 
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\Connector;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASSigningImplService;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignatureBlockParameter;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignParameters;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SoapResponseParser;
@@ -142,6 +143,23 @@ class SoapClientSignTest extends TestCase
         $this->assertStringContainsString('http://invoke-error-url', $lastRequest);
         $this->assertStringContainsString('http://invoke-url', $lastRequest);
 
+        $this->assertNotFalse($response);
+    }
+
+    public function testSingleSignXMLOutput()
+    {
+        $soapClientMock = $this->getMockSigningService(self::$FAKE_RESPONSE);
+
+        $params = new SignParameters(Connector::jks);
+        $params->setInvokeTarget('http://invoke-target');
+        $params->setInvokeErrorUrl('http://invoke-error-url');
+        $params->setInvokeUrl('http://invoke-url');
+
+        $blockParams = [new SignatureBlockParameter('foo1', 'bar1'), new SignatureBlockParameter('foo2', 'bar2')];
+        $request = new SignRequest('foobar', $params, 'my-id', $blockParams);
+        $response = $soapClientMock->signSingle($request, 42);
+        $lastRequest = $soapClientMock->__getLastRequest();
+        $this->assertStringContainsString('<signatureBlockParameters><entry><key>foo1</key><value>bar1</value></entry><entry><key>foo2</key><value>bar2</value></entry></signatureBlockParameters>', $lastRequest);
         $this->assertNotFalse($response);
     }
 }
