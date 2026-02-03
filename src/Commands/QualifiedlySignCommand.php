@@ -7,6 +7,7 @@ namespace Dbp\Relay\EsignBundle\Commands;
 use Dbp\Relay\EsignBundle\Controller\BaseSigningController;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\PdfAsApi;
+use Dbp\Relay\EsignBundle\Service\SigningRequest;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Console\Command\Command;
@@ -44,7 +45,6 @@ class QualifiedlySignCommand extends Command implements LoggerAwareInterface
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $requestId = Tools::generateRequestId();
         $inputPath = $input->getArgument('input-path');
         $outputPath = $input->getArgument('output-path');
         $profile = $input->getArgument('profile-id');
@@ -72,16 +72,18 @@ class QualifiedlySignCommand extends Command implements LoggerAwareInterface
             $userText = [];
         }
 
-        $url = $this->api->createQualifiedSigningRequestRedirectUrl($inputData, $profile, $requestId, userText: $userText, userImageData: $userImageData, invisible: $invisible);
+        $requestId = Tools::generateRequestId();
+        $request = new SigningRequest($inputData, $profile, $requestId, userText: $userText, userImageData: $userImageData, invisible: $invisible);
+        $url = $this->api->createQualifiedSigningRequestRedirectUrl($request);
         $output->writeln("Open the following URL in your browser:\n    ".$url);
         $question = new Question('After confirming your identity please enter the session ID: ');
         $helper = $this->getHelper('question');
         assert($helper instanceof QuestionHelper);
         $sessionId = $helper->ask($input, $output, $question);
 
-        $signedData = $this->api->fetchQualifiedlySignedDocument($sessionId);
+        $result = $this->api->fetchQualifiedlySignedDocument($sessionId);
         $filesystem = new Filesystem();
-        $filesystem->dumpFile($outputPath, $signedData);
+        $filesystem->dumpFile($outputPath, $result->getSignedPDF());
         $output->writeln("Created signed file '$outputPath'");
 
         return 0;

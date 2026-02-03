@@ -10,6 +10,7 @@ use Dbp\Relay\EsignBundle\Entity\AdvancedlySignedDocument;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\PdfAsApi;
 use Dbp\Relay\EsignBundle\Service\SigningException;
+use Dbp\Relay\EsignBundle\Service\SigningRequest;
 use Dbp\Relay\EsignBundle\Service\SigningUnavailableException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,9 +68,6 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
             throw new BadRequestHttpException('Empty files cannot be signed!');
         }
 
-        // generate a request id for the signing process
-        $requestId = Tools::generateRequestId();
-
         $positionData = [];
 
         if (self::requestGet($request, 'x', '') !== '') {
@@ -104,10 +102,16 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
             throw new BadRequestHttpException('Position parameters are not allowed in case the signature block is set to invisible');
         }
 
+        $data = @file_get_contents($uploadedFile->getPathname());
+        if ($data === false) {
+            throw new \RuntimeException('Failed to read file');
+        }
+
         // sign the pdf data
+        $requestId = Tools::generateRequestId();
+        $request = new SigningRequest($data, $profileName, $requestId, $positionData, $userText, invisible: $invisible);
         try {
-            $result = $this->api->advancedlySignPdfData(
-                file_get_contents($uploadedFile->getPathname()), $profileName, $requestId, $positionData, $userText, invisible: $invisible);
+            $result = $this->api->advancedlySignPdfData($request);
         } catch (SigningUnavailableException $e) {
             throw new ServiceUnavailableHttpException(100, $e->getMessage());
         } catch (SigningException $e) {
