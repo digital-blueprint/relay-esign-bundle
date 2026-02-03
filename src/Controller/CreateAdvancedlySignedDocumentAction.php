@@ -111,7 +111,7 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
         $requestId = Tools::generateRequestId();
         $request = new SigningRequest($data, $profileName, $requestId, $positionData, $userText, invisible: $invisible);
         try {
-            $result = $this->api->advancedlySignPdfData($request);
+            $result = $this->api->advancedlySignPdf($request);
         } catch (SigningUnavailableException $e) {
             throw new ServiceUnavailableHttpException(100, $e->getMessage());
         } catch (SigningException $e) {
