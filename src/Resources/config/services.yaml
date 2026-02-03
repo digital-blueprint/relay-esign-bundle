@@ -8,9 +8,6 @@ services:
         autowire: true
         autoconfigure: true
 
-    Dbp\Relay\EsignBundle\Service\SignatureProviderInterface:
-        '@Dbp\Relay\EsignBundle\Service\PdfAsApi'
-
     Dbp\Relay\EsignBundle\Controller\:
         resource: '../../Controller'
         autowire: true

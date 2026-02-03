@@ -31,7 +31,7 @@ use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-class PdfAsApi implements SignatureProviderInterface, LoggerAwareInterface
+class PdfAsApi implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 

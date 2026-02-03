@@ -6,7 +6,7 @@ namespace Dbp\Relay\EsignBundle\Commands;
 
 use Dbp\Relay\EsignBundle\Controller\BaseSigningController;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
-use Dbp\Relay\EsignBundle\Service\SignatureProviderInterface;
+use Dbp\Relay\EsignBundle\Service\PdfAsApi;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Console\Command\Command;
@@ -22,7 +22,7 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
 
     protected $api;
 
-    public function __construct(SignatureProviderInterface $api)
+    public function __construct(PdfAsApi $api)
     {
         parent::__construct();
         $this->api = $api;

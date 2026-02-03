@@ -10,7 +10,7 @@ use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\Entity\QualifiedlySignedDocument;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
-use Dbp\Relay\EsignBundle\Service\SignatureProviderInterface;
+use Dbp\Relay\EsignBundle\Service\PdfAsApi;
 use Dbp\Relay\EsignBundle\Service\SigningException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,11 +20,11 @@ use Symfony\Component\HttpFoundation\Response;
 class QualifiedlySignedDocumentProvider implements ProviderInterface
 {
     /**
-     * @var SignatureProviderInterface
+     * @var PdfAsApi
      */
     private $api;
 
-    public function __construct(SignatureProviderInterface $api, private readonly AuthorizationService $authorizationService)
+    public function __construct(PdfAsApi $api, private readonly AuthorizationService $authorizationService)
     {
         $this->api = $api;
     }
