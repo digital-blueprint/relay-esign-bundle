@@ -31,10 +31,10 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
     protected function configure(): void
     {
         $this->setName('dbp:relay:esign:sign:advanced');
-        $this->setDescription('Sign a PDF file');
+        $this->setDescription('Sign one or more PDF files');
         $this->addArgument('profile-id', InputArgument::REQUIRED, 'Signing profile ID');
-        $this->addArgument('input-path', InputArgument::REQUIRED, 'Input PDF file path');
-        $this->addArgument('output-path', InputArgument::REQUIRED, 'Output PDF file path');
+        $this->addArgument('input-paths', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'Input PDF file paths');
+        $this->addOption('output', 'o', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Output PDF file paths (matched by order)');
         $this->addOption('user-image-path', null, InputOption::VALUE_REQUIRED, 'Signature image path (PNG)');
         $this->addOption('user-text', null, InputOption::VALUE_REQUIRED, 'User text JSON');
         $this->addOption('invisible', null, InputOption::VALUE_NONE, 'Create an invisible signature');
@@ -42,17 +42,20 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $requestId = Tools::generateRequestId();
-        $inputPath = $input->getArgument('input-path');
-        $outputPath = $input->getArgument('output-path');
         $profile = $input->getArgument('profile-id');
+        $inputPaths = $input->getArgument('input-paths');
+        $outputPaths = $input->getOption('output');
         $userImagePath = $input->getOption('user-image-path');
         $userText = $input->getOption('user-text');
         $invisible = $input->getOption('invisible');
 
-        $inputData = @file_get_contents($inputPath);
-        if ($inputData === false) {
-            throw new \RuntimeException("Failed to read '$inputPath'");
+        // Validate that we have the same number of inputs and outputs
+        if (count($inputPaths) !== count($outputPaths)) {
+            throw new \RuntimeException(sprintf(
+                'Number of input files (%d) must match number of output files (%d)',
+                count($inputPaths),
+                count($outputPaths)
+            ));
         }
 
         if ($userImagePath !== null) {
@@ -70,11 +73,30 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
             $userText = [];
         }
 
-        $signedData = $this->api->advancedlySignPdfData($inputData, $profile, $requestId, userText: $userText, userImageData: $userImageData, invisible: $invisible);
-
         $filesystem = new Filesystem();
-        $filesystem->dumpFile($outputPath, $signedData);
-        $output->writeln("Created signed file '$outputPath'");
+
+        // Process each input/output pair
+        foreach ($inputPaths as $index => $inputPath) {
+            $outputPath = $outputPaths[$index];
+            $requestId = Tools::generateRequestId();
+
+            $inputData = @file_get_contents($inputPath);
+            if ($inputData === false) {
+                throw new \RuntimeException("Failed to read '$inputPath'");
+            }
+
+            $signedData = $this->api->advancedlySignPdfData(
+                $inputData,
+                $profile,
+                $requestId,
+                userText: $userText,
+                userImageData: $userImageData,
+                invisible: $invisible
+            );
+
+            $filesystem->dumpFile($outputPath, $signedData);
+            $output->writeln("Created signed file '$outputPath' from '$inputPath'");
+        }
 
         return 0;
     }
