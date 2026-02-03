@@ -8,7 +8,7 @@ use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\Entity\AdvancedlySignedDocument;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
-use Dbp\Relay\EsignBundle\Service\SignatureProviderInterface;
+use Dbp\Relay\EsignBundle\Service\PdfAsApi;
 use Dbp\Relay\EsignBundle\Service\SigningException;
 use Dbp\Relay\EsignBundle\Service\SigningUnavailableException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -25,7 +25,7 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
 {
     protected $api;
 
-    public function __construct(SignatureProviderInterface $api, private readonly AuthorizationService $authorizationService)
+    public function __construct(PdfAsApi $api, private readonly AuthorizationService $authorizationService)
     {
         $this->api = $api;
     }

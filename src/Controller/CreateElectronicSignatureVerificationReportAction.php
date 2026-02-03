@@ -10,7 +10,7 @@ use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\Entity\ElectronicSignature;
 use Dbp\Relay\EsignBundle\Entity\ElectronicSignatureVerificationReport;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
-use Dbp\Relay\EsignBundle\Service\SignatureProviderInterface;
+use Dbp\Relay\EsignBundle\Service\PdfAsApi;
 use Dbp\Relay\EsignBundle\Service\SigningException;
 use Dbp\Relay\EsignBundle\Service\SigningUnavailableException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -27,7 +27,7 @@ final class CreateElectronicSignatureVerificationReportAction
 {
     private $api;
 
-    public function __construct(SignatureProviderInterface $api, private readonly AuthorizationService $authorizationService, private readonly BundleConfig $bundleConfig)
+    public function __construct(PdfAsApi $api, private readonly AuthorizationService $authorizationService, private readonly BundleConfig $bundleConfig)
     {
         $this->api = $api;
     }
