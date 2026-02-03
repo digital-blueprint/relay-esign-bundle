@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Service;
 
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignResponse;
 use Psr\Http\Message\ResponseInterface;
 
 class PDFDataResponse
@@ -44,6 +45,17 @@ class PDFDataResponse
         }
 
         return new PDFDataResponse($signedPdfData, $valueCode, $certificateCode, $signerCertificate);
+    }
+
+    public static function fromSoapResponse(SignResponse $response): PDFDataResponse
+    {
+        assert($response->getError() === null);
+
+        $verificationResponse = $response->getVerificationResponse();
+
+        return new PDFDataResponse(
+            $response->getSignedPDF(), $verificationResponse->getValueCode(),
+            $verificationResponse->getCertificateCode(), $verificationResponse->getSignerCertificate());
     }
 
     public function getSignedPDF(): string

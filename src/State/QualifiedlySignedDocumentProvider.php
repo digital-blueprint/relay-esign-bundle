@@ -43,11 +43,12 @@ class QualifiedlySignedDocumentProvider implements ProviderInterface
         $fileName = $filters['fileName'] ?? 'document.pdf';
 
         try {
-            $signedPdfData = $api->fetchQualifiedlySignedDocument($id);
+            $result = $api->fetchQualifiedlySignedDocument($id);
         } catch (SigningException $e) {
             throw new ApiError(Response::HTTP_BAD_GATEWAY, $e->getMessage());
         }
 
+        $signedPdfData = $result->getSignedPDF();
         $document = new QualifiedlySignedDocument();
         $document->setIdentifier($id);
         $document->setContentUrl(Tools::getDataURI($signedPdfData, 'application/pdf'));

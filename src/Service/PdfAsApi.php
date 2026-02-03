@@ -232,7 +232,7 @@ class PdfAsApi implements LoggerAwareInterface
      *
      * @throws SigningException
      */
-    public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = [], ?string $userImageData = null, bool $invisible = false): string
+    public function advancedlySignPdfData(string $data, string $profileName, string $requestId = '', array $positionData = [], array $userText = [], ?string $userImageData = null, bool $invisible = false): PDFDataResponse
     {
         $profile = null;
         $advancedConfig = $this->bundleConfig->getAdvanced();
@@ -309,7 +309,9 @@ class PdfAsApi implements LoggerAwareInterface
 
         $this->log('PDF was signed', ['request_id' => $requestId, 'signed_content_size' => $contentSize]);
 
-        return $signedPdfData;
+        $pdfDataResponse = PDFDataResponse::fromSoapResponse($response);
+
+        return $pdfDataResponse;
     }
 
     /**
@@ -387,7 +389,7 @@ class PdfAsApi implements LoggerAwareInterface
     /**
      * @throws SigningException
      */
-    public function fetchQualifiedlySignedDocument(string $sessionId, ?callable $handler = null): string
+    public function fetchQualifiedlySignedDocument(string $sessionId, ?callable $handler = null): PDFDataResponse
     {
         $stack = HandlerStack::create($handler);
         $stack->push(Tools::createStopwatchMiddleware($this->stopwatch, 'pdf-as.fetch-qualified', 'esign'));
@@ -411,7 +413,7 @@ class PdfAsApi implements LoggerAwareInterface
 
         $this->log('PDF was qualifiedly signed', ['session_id' => $sessionId, 'signed_content_size' => strlen($signedPdfData)]);
 
-        return $signedPdfData;
+        return $pdfResponse;
     }
 
     public function createPreviewImage(string $profileName, int $resolution): string
