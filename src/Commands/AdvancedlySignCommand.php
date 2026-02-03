@@ -74,12 +74,10 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
             $userText = [];
         }
 
-        $filesystem = new Filesystem();
-
-        // Process each input/output pair
+        $requests = [];
+        $requestId = Tools::generateRequestId();
         foreach ($inputPaths as $index => $inputPath) {
-            $outputPath = $outputPaths[$index];
-            $requestId = Tools::generateRequestId();
+            $subRequestId = $requestId.'-'.$index;
 
             $inputData = @file_get_contents($inputPath);
             if ($inputData === false) {
@@ -88,12 +86,19 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
 
             $request = new SigningRequest($inputData,
                 $profile,
-                $requestId,
+                $subRequestId,
                 userText: $userText,
                 userImageData: $userImageData,
                 invisible: $invisible);
+            $requests[] = $request;
+        }
 
-            $result = $this->api->advancedlySignPdfData($request);
+        $results = $this->api->advancedlySignPdfMultiple($requests);
+
+        $filesystem = new Filesystem();
+        foreach ($inputPaths as $index => $inputPath) {
+            $outputPath = $outputPaths[$index];
+            $result = $results[$index];
 
             $filesystem->dumpFile($outputPath, $result->getSignedPDF());
             $output->writeln("Created signed file '$outputPath' from '$inputPath'");

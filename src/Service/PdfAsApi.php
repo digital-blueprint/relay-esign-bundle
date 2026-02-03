@@ -11,6 +11,7 @@ use Dbp\Relay\EsignBundle\Configuration\AdvancedProfile;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\Configuration\Profile;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\BulkSignRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\Connector;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASSigningImplService;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASVerificationImplService;
@@ -175,7 +176,6 @@ class PdfAsApi implements LoggerAwareInterface
             $response = $service->signSingle($request, self::PDF_AS_TIMEOUT);
         } catch (\SoapFault $e) {
             $this->handleSoapFault($e);
-            throw new SigningException();
         } finally {
             $event->stop();
         }
@@ -233,98 +233,117 @@ class PdfAsApi implements LoggerAwareInterface
     }
 
     /**
-     * Signs $data.
+     * @param SigningRequest[] $requests
      *
-     * @throws SigningException
+     * @return PDFDataResponse[]
      */
-    public function advancedlySignPdfData(SigningRequest $request): PDFDataResponse
+    public function advancedlySignPdfMultiple(array $requests): array
     {
-        $profile = null;
         $advancedConfig = $this->bundleConfig->getAdvanced();
-        if ($advancedConfig !== null) {
-            $profile = $advancedConfig->getProfile($request->getProfileName());
-        }
-        if ($advancedConfig === null || $profile === null) {
+        if ($advancedConfig === null) {
             throw new SigningException('Unknown profile');
         }
+        $service = new PDFASSigningImplService($advancedConfig->getServerUrl().'/services/wssign', self::PDF_AS_TIMEOUT);
 
-        try {
-            $service = new PDFASSigningImplService($advancedConfig->getServerUrl().'/services/wssign', self::PDF_AS_TIMEOUT);
-        } catch (\SoapFault $e) {
-            throw new SigningException('Signing soap call failed, wsdl URI cannot be loaded!');
-        }
+        $signRequests = [];
+        foreach ($requests as $request) {
+            $profile = null;
 
-        $params = new SignParameters(Connector::jks);
-        $params->setKeyIdentifier($profile->getKeyId());
-        $params->setProfile($profile->getProfileId());
+            $profile = $advancedConfig->getProfile($request->getProfileName());
+            if ($profile === null) {
+                throw new SigningException('Unknown profile');
+            }
 
-        // Add custom user defined text if needed
-        $userText = $request->getUserText();
-        if ($userText !== []) {
-            $overrides = UserText::buildUserTextConfigOverride($profile, $userText);
-        } else {
-            $overrides = [];
-        }
+            $params = new SignParameters(Connector::jks);
+            $params->setKeyIdentifier($profile->getKeyId());
+            $params->setProfile($profile->getProfileId());
 
-        // Add the custom signature image
-        $userImageData = $request->getUserImageData();
-        if ($userImageData !== null) {
-            $overrides[] = UserText::buildUserImageConfigOverride($profile, $userImageData);
-        }
+            // Add custom user defined text if needed
+            $userText = $request->getUserText();
+            if ($userText !== []) {
+                $overrides = UserText::buildUserTextConfigOverride($profile, $userText);
+            } else {
+                $overrides = [];
+            }
 
-        $invisible = $request->isInvisible();
-        if ($invisible) {
-            $overrides[] = self::buildInvisibleOverride($profile, $invisible);
-        }
+            // Add the custom signature image
+            $userImageData = $request->getUserImageData();
+            if ($userImageData !== null) {
+                $overrides[] = UserText::buildUserImageConfigOverride($profile, $userImageData);
+            }
 
-        if (count($overrides) > 0) {
-            $configurationOverrides = new PropertyMap($overrides);
-            $params->setConfigurationOverrides($configurationOverrides);
-        }
+            $invisible = $request->isInvisible();
+            if ($invisible) {
+                $overrides[] = self::buildInvisibleOverride($profile, $invisible);
+            }
 
-        // add signature position data if there is any
-        $positionData = $request->getPositionData();
-        if (count($positionData) !== 0) {
-            array_walk($positionData, function (&$item, $key) { $item = "$key:$item"; });
-            $params->setPosition(implode(';', $positionData));
+            if (count($overrides) > 0) {
+                $configurationOverrides = new PropertyMap($overrides);
+                $params->setConfigurationOverrides($configurationOverrides);
+            }
+
+            // add signature position data if there is any
+            $positionData = $request->getPositionData();
+            if (count($positionData) !== 0) {
+                array_walk($positionData, function (&$item, $key) { $item = "$key:$item"; });
+                $params->setPosition(implode(';', $positionData));
+            }
+
+            $requestId = $request->getRequestId();
+            $signRequest = new SignRequest($request->getData(), $params, $requestId);
+            $signRequests[] = $signRequest;
         }
 
         $event = $this->stopwatch->start('pdf-as.sign-advanced', 'esign');
-        $requestId = $request->getRequestId();
-        $request = new SignRequest($request->getData(), $params, $requestId);
+        $bulkRequest = new BulkSignRequest($signRequests);
         try {
             // can and will throw a SoapFault "looks like we got no XML document"
-            $response = $service->signSingle($request, self::PDF_AS_TIMEOUT);
+            $bulkResponse = $service->signBulk($bulkRequest, self::PDF_AS_TIMEOUT);
         } catch (\SoapFault $e) {
             $this->handleSoapFault($e);
-            throw new SigningException();
         } finally {
             $event->stop();
         }
 
-        if ($response->getError() !== null) {
-            throw new SigningException('Signing failed!');
+        $responses = $bulkResponse->getSignResponses();
+        $pdfDataResponses = [];
+        foreach ($responses as $response) {
+            if ($response->getError() !== null) {
+                throw new SigningException('Signing failed!');
+            }
+
+            $signedPdfData = $response->getSignedPDF();
+            if ($signedPdfData === null) {
+                // This likely means pdf-as failed uncontrolled (check the logs)
+                throw new SigningException('Signing failed!');
+            }
+
+            $contentSize = strlen($signedPdfData);
+            $requestId = $response->getRequestID();
+
+            $this->log('PDF was signed', ['request_id' => $requestId, 'signed_content_size' => $contentSize]);
+
+            $pdfDataResponses[] = PDFDataResponse::fromSoapResponse($response);
         }
 
-        $signedPdfData = $response->getSignedPDF();
-        if ($signedPdfData === null) {
-            // This likely means pdf-as failed uncontrolled (check the logs)
-            throw new SigningException('Signing failed!');
-        }
-        $contentSize = strlen($signedPdfData);
+        return $pdfDataResponses;
+    }
 
-        $this->log('PDF was signed', ['request_id' => $requestId, 'signed_content_size' => $contentSize]);
-
-        $pdfDataResponse = PDFDataResponse::fromSoapResponse($response);
-
-        return $pdfDataResponse;
+    /**
+     * Signs $data.
+     *
+     * @throws SigningException
+     */
+    public function advancedlySignPdf(SigningRequest $request): PDFDataResponse
+    {
+        return $this->advancedlySignPdfMultiple([$request])[0];
     }
 
     /**
      * @throws SigningException
      * @throws SigningUnavailableException
      */
-    private function handleSoapFault(\SoapFault $e)
+    private function handleSoapFault(\SoapFault $e): never
     {
         switch (strtolower($e->getMessage())) {
             // we get that on a socket timeout
@@ -359,7 +378,6 @@ class PdfAsApi implements LoggerAwareInterface
             return $client->verify($request, self::PDF_AS_TIMEOUT);
         } catch (\SoapFault $e) {
             $this->handleSoapFault($e);
-            throw new SigningException();
         } finally {
             $event->stop();
         }
