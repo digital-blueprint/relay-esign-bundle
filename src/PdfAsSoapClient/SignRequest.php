@@ -27,15 +27,22 @@ class SignRequest
     protected $verificationLevel;
 
     /**
-     * @param string         $inputData
-     * @param SignParameters $parameters
-     * @param string         $requestID
+     * @var SignatureBlockParameter[]
      */
-    public function __construct($inputData, $parameters, $requestID)
+    protected $signatureBlockParameters;
+
+    /**
+     * @param string                    $inputData
+     * @param SignParameters            $parameters
+     * @param string                    $requestID
+     * @param SignatureBlockParameter[] $signatureBlockParameters
+     */
+    public function __construct($inputData, $parameters, $requestID, $signatureBlockParameters = [])
     {
         $this->inputData = $inputData;
         $this->parameters = $parameters;
         $this->requestID = $requestID;
+        $this->signatureBlockParameters = $signatureBlockParameters;
     }
 
     /**
@@ -116,5 +123,21 @@ class SignRequest
         $this->verificationLevel = $verificationLevel->value;
 
         return $this;
+    }
+
+    /**
+     * @return SignatureBlockParameter[]
+     */
+    public function getSignatureBlockParameters(): array
+    {
+        return $this->signatureBlockParameters;
+    }
+
+    /**
+     * @param SignatureBlockParameter[] $signatureBlockParameters
+     */
+    public function setSignatureBlockParameters(array $signatureBlockParameters): void
+    {
+        $this->signatureBlockParameters = $signatureBlockParameters;
     }
 }
