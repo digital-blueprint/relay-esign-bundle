@@ -29,13 +29,9 @@ class BulkSignResponse
 
     /**
      * @param SignResponse[] $signResponses
-     *
-     * @return BulkSignResponse
      */
-    public function setSignResponses(array $signResponses)
+    public function setSignResponses(array $signResponses): void
     {
         $this->signResponses = $signResponses;
-
-        return $this;
     }
 }

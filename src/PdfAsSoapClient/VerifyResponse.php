@@ -33,13 +33,9 @@ class VerifyResponse
 
     /**
      * @param VerifyResult[] $verifyResults
-     *
-     * @return VerifyResponse
      */
-    public function setVerifyResults(array $verifyResults)
+    public function setVerifyResults(array $verifyResults): void
     {
         $this->verifyResults = $verifyResults;
-
-        return $this;
     }
 }

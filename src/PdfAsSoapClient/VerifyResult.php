@@ -99,14 +99,10 @@ class VerifyResult
 
     /**
      * @param string $certificate
-     *
-     * @return VerifyResult
      */
-    public function setCertificate($certificate)
+    public function setCertificate($certificate): void
     {
         $this->certificate = $certificate;
-
-        return $this;
     }
 
     /**
@@ -119,14 +115,10 @@ class VerifyResult
 
     /**
      * @param int $certificateCode
-     *
-     * @return VerifyResult
      */
-    public function setCertificateCode($certificateCode)
+    public function setCertificateCode($certificateCode): void
     {
         $this->certificateCode = $certificateCode;
-
-        return $this;
     }
 
     /**
@@ -139,14 +131,10 @@ class VerifyResult
 
     /**
      * @param string $certificateMessage
-     *
-     * @return VerifyResult
      */
-    public function setCertificateMessage($certificateMessage)
+    public function setCertificateMessage($certificateMessage): void
     {
         $this->certificateMessage = $certificateMessage;
-
-        return $this;
     }
 
     /**
@@ -159,14 +147,10 @@ class VerifyResult
 
     /**
      * @param string $error
-     *
-     * @return VerifyResult
      */
-    public function setError($error)
+    public function setError($error): void
     {
         $this->error = $error;
-
-        return $this;
     }
 
     /**
@@ -179,14 +163,10 @@ class VerifyResult
 
     /**
      * @param bool $processed
-     *
-     * @return VerifyResult
      */
-    public function setProcessed($processed)
+    public function setProcessed($processed): void
     {
         $this->processed = $processed;
-
-        return $this;
     }
 
     /**
@@ -199,14 +179,10 @@ class VerifyResult
 
     /**
      * @param string $requestID
-     *
-     * @return VerifyResult
      */
-    public function setRequestID($requestID)
+    public function setRequestID($requestID): void
     {
         $this->requestID = $requestID;
-
-        return $this;
     }
 
     /**
@@ -219,14 +195,10 @@ class VerifyResult
 
     /**
      * @param int $signatureIndex
-     *
-     * @return VerifyResult
      */
-    public function setSignatureIndex($signatureIndex)
+    public function setSignatureIndex($signatureIndex): void
     {
         $this->signatureIndex = $signatureIndex;
-
-        return $this;
     }
 
     /**
@@ -239,14 +211,10 @@ class VerifyResult
 
     /**
      * @param string $signedBy
-     *
-     * @return VerifyResult
      */
-    public function setSignedBy($signedBy)
+    public function setSignedBy($signedBy): void
     {
         $this->signedBy = $signedBy;
-
-        return $this;
     }
 
     /**
@@ -259,14 +227,10 @@ class VerifyResult
 
     /**
      * @param string $signedData
-     *
-     * @return VerifyResult
      */
-    public function setSignedData($signedData)
+    public function setSignedData($signedData): void
     {
         $this->signedData = $signedData;
-
-        return $this;
     }
 
     /**
@@ -279,14 +243,10 @@ class VerifyResult
 
     /**
      * @param int $valueCode
-     *
-     * @return VerifyResult
      */
-    public function setValueCode($valueCode)
+    public function setValueCode($valueCode): void
     {
         $this->valueCode = $valueCode;
-
-        return $this;
     }
 
     /**
@@ -299,13 +259,9 @@ class VerifyResult
 
     /**
      * @param string $valueMessage
-     *
-     * @return VerifyResult
      */
-    public function setValueMessage($valueMessage)
+    public function setValueMessage($valueMessage): void
     {
         $this->valueMessage = $valueMessage;
-
-        return $this;
     }
 }

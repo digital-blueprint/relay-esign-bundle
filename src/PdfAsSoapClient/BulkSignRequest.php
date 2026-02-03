@@ -29,13 +29,9 @@ class BulkSignRequest
 
     /**
      * @param SignRequest[] $signRequests
-     *
-     * @return BulkSignRequest
      */
-    public function setSignRequests(array $signRequests)
+    public function setSignRequests(array $signRequests): void
     {
         $this->signRequests = $signRequests;
-
-        return $this;
     }
 }

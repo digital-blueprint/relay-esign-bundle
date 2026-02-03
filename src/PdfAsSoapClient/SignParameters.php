@@ -79,14 +79,10 @@ class SignParameters
 
     /**
      * @param Connector $connector
-     *
-     * @return SignParameters
      */
-    public function setConnector($connector)
+    public function setConnector($connector): void
     {
         $this->connector = $connector->value;
-
-        return $this;
     }
 
     /**
@@ -116,14 +112,10 @@ class SignParameters
 
     /**
      * @param string $invokeErrorUrl
-     *
-     * @return SignParameters
      */
-    public function setInvokeErrorUrl($invokeErrorUrl)
+    public function setInvokeErrorUrl($invokeErrorUrl): void
     {
         $this->invokeErrorUrl = $invokeErrorUrl;
-
-        return $this;
     }
 
     /**
@@ -136,14 +128,10 @@ class SignParameters
 
     /**
      * @param string $invokeTarget
-     *
-     * @return SignParameters
      */
-    public function setInvokeTarget($invokeTarget)
+    public function setInvokeTarget($invokeTarget): void
     {
         $this->invokeTarget = $invokeTarget;
-
-        return $this;
     }
 
     /**
@@ -156,14 +144,10 @@ class SignParameters
 
     /**
      * @param string $invokeUrl
-     *
-     * @return ?SignParameters
      */
-    public function setInvokeUrl($invokeUrl)
+    public function setInvokeUrl($invokeUrl): void
     {
         $this->invokeUrl = $invokeUrl;
-
-        return $this;
     }
 
     /**
@@ -176,14 +160,10 @@ class SignParameters
 
     /**
      * @param string $keyIdentifier
-     *
-     * @return ?SignParameters
      */
-    public function setKeyIdentifier($keyIdentifier)
+    public function setKeyIdentifier($keyIdentifier): void
     {
         $this->keyIdentifier = $keyIdentifier;
-
-        return $this;
     }
 
     /**
@@ -196,14 +176,10 @@ class SignParameters
 
     /**
      * @param PropertyMap $configurationOverrides
-     *
-     * @return ?SignParameters
      */
-    public function setConfigurationOverrides($configurationOverrides)
+    public function setConfigurationOverrides($configurationOverrides): void
     {
         $this->configurationOverrides = $configurationOverrides;
-
-        return $this;
     }
 
     /**
@@ -216,14 +192,10 @@ class SignParameters
 
     /**
      * @param string $position
-     *
-     * @return ?SignParameters
      */
-    public function setPosition($position)
+    public function setPosition($position): void
     {
         $this->position = $position;
-
-        return $this;
     }
 
     /**
@@ -236,14 +208,10 @@ class SignParameters
 
     /**
      * @param PropertyMap $preprocessorArguments
-     *
-     * @return ?SignParameters
      */
-    public function setPreprocessorArguments($preprocessorArguments)
+    public function setPreprocessorArguments($preprocessorArguments): void
     {
         $this->preprocessorArguments = $preprocessorArguments;
-
-        return $this;
     }
 
     /**
@@ -256,14 +224,10 @@ class SignParameters
 
     /**
      * @param string $profile
-     *
-     * @return ?SignParameters
      */
-    public function setProfile($profile)
+    public function setProfile($profile): void
     {
         $this->profile = $profile;
-
-        return $this;
     }
 
     /**
@@ -276,14 +240,10 @@ class SignParameters
 
     /**
      * @param string $qrCodeContent
-     *
-     * @return ?SignParameters
      */
-    public function setQrCodeContent($qrCodeContent)
+    public function setQrCodeContent($qrCodeContent): void
     {
         $this->qrCodeContent = $qrCodeContent;
-
-        return $this;
     }
 
     /**
@@ -296,13 +256,9 @@ class SignParameters
 
     /**
      * @param string $transactionId
-     *
-     * @return SignParameters
      */
-    public function setTransactionId($transactionId)
+    public function setTransactionId($transactionId): void
     {
         $this->transactionId = $transactionId;
-
-        return $this;
     }
 }

@@ -55,14 +55,10 @@ class SignRequest
 
     /**
      * @param string $inputData
-     *
-     * @return SignRequest
      */
-    public function setInputData($inputData)
+    public function setInputData($inputData): void
     {
         $this->inputData = $inputData;
-
-        return $this;
     }
 
     /**
@@ -75,14 +71,10 @@ class SignRequest
 
     /**
      * @param SignParameters $parameters
-     *
-     * @return SignRequest
      */
-    public function setParameters($parameters)
+    public function setParameters($parameters): void
     {
         $this->parameters = $parameters;
-
-        return $this;
     }
 
     /**
@@ -95,14 +87,10 @@ class SignRequest
 
     /**
      * @param string $requestID
-     *
-     * @return SignRequest
      */
-    public function setRequestID($requestID)
+    public function setRequestID($requestID): void
     {
         $this->requestID = $requestID;
-
-        return $this;
     }
 
     /**
@@ -115,14 +103,10 @@ class SignRequest
 
     /**
      * @param VerificationLevel $verificationLevel
-     *
-     * @return SignRequest
      */
-    public function setVerificationLevel($verificationLevel)
+    public function setVerificationLevel($verificationLevel): void
     {
         $this->verificationLevel = $verificationLevel->value;
-
-        return $this;
     }
 
     /**
