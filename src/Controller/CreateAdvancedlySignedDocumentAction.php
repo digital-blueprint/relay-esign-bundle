@@ -106,7 +106,7 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
 
         // sign the pdf data
         try {
-            $signedPdfData = $this->api->advancedlySignPdfData(
+            $result = $this->api->advancedlySignPdfData(
                 file_get_contents($uploadedFile->getPathname()), $profileName, $requestId, $positionData, $userText, invisible: $invisible);
         } catch (SigningUnavailableException $e) {
             throw new ServiceUnavailableHttpException(100, $e->getMessage());
@@ -116,6 +116,7 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
 
         // add some suffix for signed documents
         $signedFileName = Tools::generateSignedFileName($uploadedFile->getClientOriginalName());
+        $signedPdfData = $result->getSignedPDF();
 
         $document = new AdvancedlySignedDocument();
         $document->setIdentifier($requestId);

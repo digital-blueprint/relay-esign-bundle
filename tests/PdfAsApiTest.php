@@ -51,7 +51,7 @@ class PdfAsApiTest extends ApiTestCase
         ];
         $handler = new MockHandler([new Response(200, $headers, $content)]);
         $result = $api->fetchQualifiedlySignedDocument('1234', $handler);
-        $this->assertSame($content, $result);
+        $this->assertSame($content, $result->getSignedPDF());
     }
 
     public function testFetchQualifiedlySignedDocumentNotFound()

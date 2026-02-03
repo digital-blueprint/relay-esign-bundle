@@ -85,7 +85,7 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
                 throw new \RuntimeException("Failed to read '$inputPath'");
             }
 
-            $signedData = $this->api->advancedlySignPdfData(
+            $result = $this->api->advancedlySignPdfData(
                 $inputData,
                 $profile,
                 $requestId,
@@ -94,7 +94,7 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
                 invisible: $invisible
             );
 
-            $filesystem->dumpFile($outputPath, $signedData);
+            $filesystem->dumpFile($outputPath, $result->getSignedPDF());
             $output->writeln("Created signed file '$outputPath' from '$inputPath'");
         }
 
