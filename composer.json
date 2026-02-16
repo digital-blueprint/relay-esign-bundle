@@ -28,7 +28,7 @@
         "symfony/serializer": "^6.4 || ^7.4",
         "symfony/stopwatch": "^6.4 || ^7.4",
         "symfony/uid": "^6.4 || ^7.4",
-        "zbateson/mail-mime-parser": "^2.2 || ^3"
+        "zbateson/mail-mime-parser": "^2.2 || ^3 || ^4"
     },
     "require-dev": {
         "symfony/framework-bundle": "^6.4 || ^7.4",
