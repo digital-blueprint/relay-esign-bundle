@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.4.9
+
+* Add support for zbateson/mail-mime-parser v4
+
 ## v0.4.8
 
 * Dependency cleanups
