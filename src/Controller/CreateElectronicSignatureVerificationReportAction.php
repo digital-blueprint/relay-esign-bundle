@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 #[AsController]
 final class CreateElectronicSignatureVerificationReportAction
 {
-    protected $api;
+    private $api;
 
     public function __construct(SignatureProviderInterface $api, private readonly AuthorizationService $authorizationService, private readonly BundleConfig $bundleConfig)
     {

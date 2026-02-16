@@ -31,8 +31,8 @@ class DummyVerifyProvider implements ProviderInterface
 
         if ($operation instanceof CollectionOperationInterface) {
             return [];
-        } else {
-            return null;
         }
+
+        return null;
     }
 }

@@ -69,17 +69,16 @@ class Tools
 
         if (str_ends_with($name, '-sig')) {
             return $fileName;
-        } else {
-            $prefix = '';
-            if (count($prevName) > 0) {
-                $prefix = implode('.', $prevName).'.';
-            }
-            if (!empty($ext)) {
-                $ext = '.'.$ext;
-            }
-
-            return $prefix.$name.'-sig'.$ext;
         }
+        $prefix = '';
+        if (count($prevName) > 0) {
+            $prefix = implode('.', $prevName).'.';
+        }
+        if (!empty($ext)) {
+            $ext = '.'.$ext;
+        }
+
+        return $prefix.$name.'-sig'.$ext;
     }
 
     /**
