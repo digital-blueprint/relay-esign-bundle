@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Tests;
 
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\BulkSignRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\Connector;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASSigningImplService;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignatureBlockParameter;
@@ -28,6 +29,39 @@ class SoapClientSignTest extends TestCase
       </signResponse>
     </ns1:signSingleResponse>
   </soap:Body>
+</soap:Envelope>
+';
+
+    private static $FAKE_RESPONSE_BULK = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <ns1:signBulkResponse xmlns:ns1="http://ws.api.pdfas.egiz.gv.at/">
+            <bulkResponse>
+                <signResponses>
+                    <requestID>e8db3773-33e8-4952-a772-752652fead20-0</requestID>
+                    <signedPDF>
+                        dGVzdA==
+                    </signedPDF>
+                    <verificationResponse>
+                        <certificateCode>0</certificateCode>
+                        <signerCertificate>
+                            dGVzdA==</signerCertificate>
+                        <valueCode>0</valueCode>
+                    </verificationResponse>
+                </signResponses>
+                <signResponses>
+                    <requestID>e8db3773-33e8-4952-a772-752652fead20-1</requestID>
+                    <signedPDF>
+                        dGVzdA==</signedPDF>
+                    <verificationResponse>
+                        <certificateCode>0</certificateCode>
+                        <signerCertificate>
+                            dGVzdA==</signerCertificate>
+                        <valueCode>0</valueCode>
+                    </verificationResponse>
+                </signResponses>
+            </bulkResponse>
+        </ns1:signBulkResponse>
+    </soap:Body>
 </soap:Envelope>
 ';
 
@@ -161,5 +195,28 @@ class SoapClientSignTest extends TestCase
         $lastRequest = $soapClientMock->__getLastRequest();
         $this->assertStringContainsString('<signatureBlockParameters><entry><key>foo1</key><value>bar1</value></entry><entry><key>foo2</key><value>bar2</value></entry></signatureBlockParameters>', $lastRequest);
         $this->assertNotFalse($response);
+    }
+
+    public function testSignBulk()
+    {
+        $soapClientMock = $this->getMockSigningService(self::$FAKE_RESPONSE_BULK);
+
+        $params = new SignParameters(Connector::jks);
+        $request = new SignRequest('foobar', $params, 'my-id');
+        $bulkRequest = new BulkSignRequest([$request, $request]);
+        $bulkResponse = $soapClientMock->signBulk($bulkRequest);
+
+        $responses = $bulkResponse->getSignResponses();
+        $this->assertCount(2, $responses);
+
+        $this->assertEquals('e8db3773-33e8-4952-a772-752652fead20-0', $responses[0]->getRequestID());
+        $this->assertEquals('test', $responses[0]->getSignedPDF());
+        $veriResponse = $responses[0]->getVerificationResponse();
+        $this->assertEquals('test', $veriResponse->getSignerCertificate());
+
+        $this->assertEquals('e8db3773-33e8-4952-a772-752652fead20-1', $responses[1]->getRequestID());
+        $this->assertEquals('test', $responses[1]->getSignedPDF());
+        $veriResponse = $responses[1]->getVerificationResponse();
+        $this->assertEquals('test', $veriResponse->getSignerCertificate());
     }
 }
