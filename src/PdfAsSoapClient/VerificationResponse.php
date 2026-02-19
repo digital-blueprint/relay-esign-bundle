@@ -6,75 +6,44 @@ namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 
 class VerificationResponse
 {
-    /**
-     * @var int
-     */
-    protected $certificateCode;
+    protected int $certificateCode;
 
-    /**
-     * @var string
-     */
-    protected $signerCertificate;
+    protected ?string $signerCertificate = null;
 
-    /**
-     * @var int
-     */
-    protected $valueCode;
+    protected int $valueCode;
 
-    /**
-     * @param int $certificateCode
-     * @param int $valueCode
-     */
-    public function __construct($certificateCode, $valueCode)
+    public function __construct(int $certificateCode, int $valueCode)
     {
         $this->certificateCode = $certificateCode;
         $this->valueCode = $valueCode;
     }
 
-    /**
-     * @return int
-     */
-    public function getCertificateCode()
+    public function getCertificateCode(): int
     {
         return $this->certificateCode;
     }
 
-    /**
-     * @param int $certificateCode
-     */
-    public function setCertificateCode($certificateCode): void
+    public function setCertificateCode(int $certificateCode): void
     {
         $this->certificateCode = $certificateCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getSignerCertificate()
+    public function getSignerCertificate(): ?string
     {
         return $this->signerCertificate;
     }
 
-    /**
-     * @param string $signerCertificate
-     */
-    public function setSignerCertificate($signerCertificate): void
+    public function setSignerCertificate(?string $signerCertificate): void
     {
         $this->signerCertificate = $signerCertificate;
     }
 
-    /**
-     * @return int
-     */
-    public function getValueCode()
+    public function getValueCode(): int
     {
         return $this->valueCode;
     }
 
-    /**
-     * @param int $valueCode
-     */
-    public function setValueCode($valueCode): void
+    public function setValueCode(int $valueCode): void
     {
         $this->valueCode = $valueCode;
     }

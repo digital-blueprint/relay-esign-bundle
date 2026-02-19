@@ -6,8 +6,11 @@ namespace Dbp\Relay\EsignBundle\Tests\PdfAsSoapClient;
 
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\BulkSignRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\Connector;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\GetMultipleRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASSigningImplService;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignatureBlockParameter;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignMultipleFile;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignMultipleRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignParameters;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SoapResponseParser;
@@ -64,6 +67,45 @@ class SoapClientSignTest extends TestCase
     </soap:Body>
 </soap:Envelope>
 ';
+
+    private static $FAKE_SIGN_MULTIPLE_RESPONSE = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <ns1:signMultipleResponse xmlns:ns1="http://ws.api.pdfas.egiz.gv.at/">
+            <signMultipleResponse>
+                <requestID>893e5003-c72e-4938-b2fc-e22bb3d7bfaa</requestID>
+                <transactionId xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+                <redirectUrl>https://my.pdf.as/pdf-as-web/userentry?reqId=7d2aa85d-35fa-4ce3-9f43-93a8c6790883</redirectUrl>
+            </signMultipleResponse>
+        </ns1:signMultipleResponse>
+    </soap:Body>
+</soap:Envelope>';
+
+    private static $FAKE_GET_MULTIPLE_RESPONSE = '<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <ns1:getMultipleResponse xmlns:ns1="http://ws.api.pdfas.egiz.gv.at/">
+            <getMultipleResponse>
+                <requestID>75de7806-b369-4a17-b46e-e548c4549b43</requestID>
+                <transactionId xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true" />
+                <documents>
+                    <outputData>c29tZWRhdGE=</outputData>
+                    <fileName>75de7806-b369-4a17-b46e-e548c4549b43-0</fileName>
+                    <verificationResponse>
+                        <certificateCode>99</certificateCode>
+                        <valueCode>0</valueCode>
+                    </verificationResponse>
+                </documents>
+                <documents>
+                    <outputData>c29tZWRhdGE=</outputData>
+                    <fileName>75de7806-b369-4a17-b46e-e548c4549b43-1</fileName>
+                    <verificationResponse>
+                        <certificateCode>99</certificateCode>
+                        <valueCode>0</valueCode>
+                    </verificationResponse>
+                </documents>
+            </getMultipleResponse>
+        </ns1:getMultipleResponse>
+    </soap:Body>
+</soap:Envelope>';
 
     private function getExampleMTOMResponse(): string
     {
@@ -218,5 +260,43 @@ class SoapClientSignTest extends TestCase
         $this->assertEquals('test', $responses[1]->getSignedPDF());
         $veriResponse = $responses[1]->getVerificationResponse();
         $this->assertEquals('test', $veriResponse->getSignerCertificate());
+    }
+
+    public function testSignMultiple()
+    {
+        $soapClientMock = $this->getMockSigningService(self::$FAKE_SIGN_MULTIPLE_RESPONSE);
+
+        $file = new SignMultipleFile('data', 'filename');
+        $request = new SignMultipleRequest('893e5003-c72e-4938-b2fc-e22bb3d7bfaa', Connector::mobilebku, [$file]);
+        $response = $soapClientMock->signMultiple($request);
+        $this->assertNull($response->getError());
+        $this->assertSame('893e5003-c72e-4938-b2fc-e22bb3d7bfaa', $response->getRequestID());
+        $this->assertNull($response->getTransactionId());
+        $this->assertSame('https://my.pdf.as/pdf-as-web/userentry?reqId=7d2aa85d-35fa-4ce3-9f43-93a8c6790883', $response->getRedirectUrl());
+        $this->assertSame([], $response->getDocuments());
+    }
+
+    public function testGetMultiple()
+    {
+        $soapClientMock = $this->getMockSigningService(self::$FAKE_GET_MULTIPLE_RESPONSE);
+        $response = $soapClientMock->getMultiple(new GetMultipleRequest('sometoken'));
+
+        $this->assertNull($response->getError());
+        $this->assertSame('75de7806-b369-4a17-b46e-e548c4549b43', $response->getRequestID());
+        $this->assertNull($response->getTransactionId());
+        $this->assertNull($response->getRedirectUrl());
+        $this->assertCount(2, $response->getDocuments());
+
+        $this->assertSame('somedata', $response->getDocuments()[0]->getOutputData());
+        $this->assertSame('75de7806-b369-4a17-b46e-e548c4549b43-0', $response->getDocuments()[0]->getFileName());
+        $this->assertNull($response->getDocuments()[0]->getVerificationResponse()->getSignerCertificate());
+        $this->assertSame(99, $response->getDocuments()[0]->getVerificationResponse()->getCertificateCode());
+        $this->assertSame(0, $response->getDocuments()[0]->getVerificationResponse()->getValueCode());
+
+        $this->assertSame('somedata', $response->getDocuments()[1]->getOutputData());
+        $this->assertSame('75de7806-b369-4a17-b46e-e548c4549b43-1', $response->getDocuments()[1]->getFileName());
+        $this->assertNull($response->getDocuments()[1]->getVerificationResponse()->getSignerCertificate());
+        $this->assertSame(99, $response->getDocuments()[1]->getVerificationResponse()->getCertificateCode());
+        $this->assertSame(0, $response->getDocuments()[1]->getVerificationResponse()->getValueCode());
     }
 }

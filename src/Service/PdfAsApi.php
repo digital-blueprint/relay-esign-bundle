@@ -13,10 +13,13 @@ use Dbp\Relay\EsignBundle\Configuration\Profile;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\BulkSignRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\Connector;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\GetMultipleRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASSigningImplService;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PDFASVerificationImplService;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyEntry;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyMap;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignMultipleFile;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignMultipleRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignParameters;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\VerificationLevel;
@@ -110,28 +113,62 @@ class PdfAsApi implements LoggerAwareInterface
     }
 
     /**
+     * @param SigningRequest[] $requests
+     *
      * @throws SigningException
      */
-    public function createQualifiedSigningRequestRedirectUrl(SigningRequest $request): string
+    public function createQualifiedSigningRequestsRedirectUrl(string $requestId, array $requests): string
     {
-        $profile = null;
         $qualifiedConfig = $this->bundleConfig->getQualified();
-        if ($qualifiedConfig !== null) {
-            $profile = $qualifiedConfig->getProfile($request->getProfileName());
-        }
-        if ($qualifiedConfig === null || $profile === null) {
+        if ($qualifiedConfig === null) {
             throw new SigningException('Unknown profile');
         }
 
-        try {
-            $service = new PDFASSigningImplService($qualifiedConfig->getServerUrl().'/services/wssign', self::PDF_AS_TIMEOUT);
-        } catch (\SoapFault $e) {
-            throw new SigningException('Signing soap call failed, wsdl URI cannot be loaded!');
+        $multiRequest = new SignMultipleRequest($requestId, Connector::mobilebku, []);
+        $multiRequest->setInvokeUrl($this->getCallbackUrl($requestId));
+        $multiRequest->setInvokeErrorUrl(Tools::getUriWithPort($this->getErrorCallbackUrl($requestId)));
+
+        $i = 0;
+        foreach ($requests as $request) {
+            $profile = $qualifiedConfig->getProfile($request->getProfileName());
+            if ($profile === null) {
+                throw new SigningException('Unknown profile');
+            }
+            $subRequest = new SignMultipleFile($request->getData(), $request->getRequestId());
+            $subRequest->setPosition(self::buildPositionString($request));
+            $subRequest->setProfile($profile->getProfileId());
+            $multiRequest->addDocument($subRequest);
         }
 
-        $params = new SignParameters(Connector::mobilebku);
-        $params->setProfile($profile->getProfileId());
+        $event = $this->stopwatch->start('pdf-as.sign-qualified', 'esign');
+        try {
+            $service = new PDFASSigningImplService($qualifiedConfig->getServerUrl().'/services/wssign', self::PDF_AS_TIMEOUT);
+            $response = $service->signMultiple($multiRequest, self::PDF_AS_TIMEOUT);
+        } catch (\SoapFault $e) {
+            $this->handleSoapFault($e);
+        } finally {
+            $event->stop();
+        }
 
+        if ($response->getError() !== null) {
+            throw new SigningException('Failed fetching redirectURL: '.$response->getError());
+        }
+
+        // get the redirect url
+        $redirectUrl = $response->getRedirectUrl();
+
+        // Sometimes pdf-as just returns nothing and also no error
+        if ($redirectUrl === null) {
+            throw new SigningException('Invalid signing response');
+        }
+
+        $this->log('QualifiedSigningRequest redirectUrl was created', ['request_id' => $requestId]);
+
+        return $redirectUrl;
+    }
+
+    public static function buildConfigurationOverrides(Profile $profile, SigningRequest $request): PropertyMap
+    {
         // Add custom user defined text if needed
         $userText = $request->getUserText();
         if ($userText !== []) {
@@ -151,27 +188,38 @@ class PdfAsApi implements LoggerAwareInterface
             $overrides[] = self::buildInvisibleOverride($profile, $invisible);
         }
 
-        if (count($overrides) > 0) {
-            $configurationOverrides = new PropertyMap($overrides);
-            $params->setConfigurationOverrides($configurationOverrides);
+        return new PropertyMap($overrides);
+    }
+
+    /**
+     * @throws SigningException
+     */
+    public function createQualifiedSigningRequestRedirectUrl(SigningRequest $request): string
+    {
+        $profile = null;
+        $qualifiedConfig = $this->bundleConfig->getQualified();
+        if ($qualifiedConfig !== null) {
+            $profile = $qualifiedConfig->getProfile($request->getProfileName());
         }
+        if ($qualifiedConfig === null || $profile === null) {
+            throw new SigningException('Unknown profile');
+        }
+
+        $params = new SignParameters(Connector::mobilebku);
+        $params->setProfile($profile->getProfileId());
+        $params->setConfigurationOverrides(self::buildConfigurationOverrides($profile, $request));
+        $params->setPosition(self::buildPositionString($request));
 
         $requestId = $request->getRequestId();
         $params->setInvokeUrl($this->getCallbackUrl($requestId));
         // it's important to add the port "443", PDF-AS has a bug that will set the port to "-1" if it isn't set
         $params->setInvokeErrorUrl(Tools::getUriWithPort($this->getErrorCallbackUrl($requestId)));
 
-        // add signature position data if there is any
-        $positionData = $request->getPositionData();
-        if (count($positionData) !== 0) {
-            array_walk($positionData, function (&$item, $key) { $item = "$key:$item"; });
-            $params->setPosition(implode(';', $positionData));
-        }
-
         $request = new SignRequest($request->getData(), $params, $requestId);
 
         $event = $this->stopwatch->start('pdf-as.sign-qualified', 'esign');
         try {
+            $service = new PDFASSigningImplService($qualifiedConfig->getServerUrl().'/services/wssign', self::PDF_AS_TIMEOUT);
             // can and will throw a SoapFault "looks like we got no XML document"
             $response = $service->signSingle($request, self::PDF_AS_TIMEOUT);
         } catch (\SoapFault $e) {
@@ -232,6 +280,18 @@ class PdfAsApi implements LoggerAwareInterface
         return new PropertyEntry("sig_obj.$profileId.isvisible", !$invisible ? 'true' : 'false');
     }
 
+    public static function buildPositionString(SigningRequest $request): ?string
+    {
+        $positionData = $request->getPositionData();
+        if (count($positionData) !== 0) {
+            array_walk($positionData, function (&$item, $key) { $item = "$key:$item"; });
+
+            return implode(';', $positionData);
+        }
+
+        return null;
+    }
+
     /**
      * @param SigningRequest[] $requests
      *
@@ -243,7 +303,6 @@ class PdfAsApi implements LoggerAwareInterface
         if ($advancedConfig === null) {
             throw new SigningException('Unknown profile');
         }
-        $service = new PDFASSigningImplService($advancedConfig->getServerUrl().'/services/wssign', self::PDF_AS_TIMEOUT);
 
         $signRequests = [];
         foreach ($requests as $request) {
@@ -257,37 +316,8 @@ class PdfAsApi implements LoggerAwareInterface
             $params = new SignParameters(Connector::jks);
             $params->setKeyIdentifier($profile->getKeyId());
             $params->setProfile($profile->getProfileId());
-
-            // Add custom user defined text if needed
-            $userText = $request->getUserText();
-            if ($userText !== []) {
-                $overrides = UserText::buildUserTextConfigOverride($profile, $userText);
-            } else {
-                $overrides = [];
-            }
-
-            // Add the custom signature image
-            $userImageData = $request->getUserImageData();
-            if ($userImageData !== null) {
-                $overrides[] = UserText::buildUserImageConfigOverride($profile, $userImageData);
-            }
-
-            $invisible = $request->isInvisible();
-            if ($invisible) {
-                $overrides[] = self::buildInvisibleOverride($profile, $invisible);
-            }
-
-            if (count($overrides) > 0) {
-                $configurationOverrides = new PropertyMap($overrides);
-                $params->setConfigurationOverrides($configurationOverrides);
-            }
-
-            // add signature position data if there is any
-            $positionData = $request->getPositionData();
-            if (count($positionData) !== 0) {
-                array_walk($positionData, function (&$item, $key) { $item = "$key:$item"; });
-                $params->setPosition(implode(';', $positionData));
-            }
+            $params->setConfigurationOverrides(self::buildConfigurationOverrides($profile, $request));
+            $params->setPosition(self::buildPositionString($request));
 
             $requestId = $request->getRequestId();
             $signRequest = new SignRequest($request->getData(), $params, $requestId);
@@ -297,6 +327,7 @@ class PdfAsApi implements LoggerAwareInterface
         $event = $this->stopwatch->start('pdf-as.sign-advanced', 'esign');
         $bulkRequest = new BulkSignRequest($signRequests);
         try {
+            $service = new PDFASSigningImplService($advancedConfig->getServerUrl().'/services/wssign', self::PDF_AS_TIMEOUT);
             // can and will throw a SoapFault "looks like we got no XML document"
             $bulkResponse = $service->signBulk($bulkRequest, self::PDF_AS_TIMEOUT);
         } catch (\SoapFault $e) {
@@ -323,7 +354,7 @@ class PdfAsApi implements LoggerAwareInterface
 
             $this->log('PDF was signed', ['request_id' => $requestId, 'signed_content_size' => $contentSize]);
 
-            $pdfDataResponses[] = PDFDataResponse::fromSoapResponse($response);
+            $pdfDataResponses[] = PDFDataResponse::fromSoapSignResponse($response);
         }
 
         return $pdfDataResponses;
@@ -408,6 +439,39 @@ class PdfAsApi implements LoggerAwareInterface
         return $qualifiedConfig->getServerUrl().$uriTemplate->expand([
             'sessionId' => $sessionId,
         ]);
+    }
+
+    /**
+     * @return PDFDataResponse[]
+     */
+    public function fetchQualifiedlySignedDocuments(string $token): array
+    {
+        $qualifiedConfig = $this->bundleConfig->getQualified();
+        if ($qualifiedConfig === null) {
+            throw new SigningException();
+        }
+
+        $request = new GetMultipleRequest($token);
+        $event = $this->stopwatch->start('pdf-as.fetch-qualified', 'esign');
+        try {
+            $service = new PDFASSigningImplService($qualifiedConfig->getServerUrl().'/services/wssign', self::PDF_AS_TIMEOUT);
+            $response = $service->getMultiple($request, self::PDF_AS_TIMEOUT);
+        } catch (\SoapFault $e) {
+            $this->handleSoapFault($e);
+        } finally {
+            $event->stop();
+        }
+
+        if ($response->getError() !== null) {
+            throw new SigningException('Signing failed!');
+        }
+
+        $responses = [];
+        foreach ($response->getDocuments() as $document) {
+            $responses[] = PDFDataResponse::fromSoapSignMultipleResponse($document);
+        }
+
+        return $responses;
     }
 
     /**

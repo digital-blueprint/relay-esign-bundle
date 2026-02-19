@@ -18,6 +18,11 @@ class PDFASSigningImplService extends PDFASBaseService
         'VerificationResponse' => __NAMESPACE__.'\\VerificationResponse',
         'BulkSignRequest' => __NAMESPACE__.'\\BulkSignRequest',
         'BulkSignResponse' => __NAMESPACE__.'\\BulkSignResponse',
+        'signedMultipleFile' => __NAMESPACE__.'\\SignedMultipleFile',
+        'signMultipleFile' => __NAMESPACE__.'\\SignMultipleFile',
+        'signMultipleRequest' => __NAMESPACE__.'\\SignMultipleRequest',
+        'signMultipleResponse' => __NAMESPACE__.'\\SignMultipleResponse',
+        'getMultipleRequest' => __NAMESPACE__.'\\GetMultipleRequest',
     ];
 
     /**
@@ -72,5 +77,25 @@ class PDFASSigningImplService extends PDFASBaseService
     public function signBulk(BulkSignRequest $signBulkRequest, int $timeout = -1)
     {
         return $this->callWithTimeout('signBulk', [$signBulkRequest], $timeout);
+    }
+
+    /**
+     * @param int $timeout Timeout in seconds
+     *
+     * @throws \SoapFault
+     */
+    public function signMultiple(SignMultipleRequest $signMultipleRequest, int $timeout = -1): SignMultipleResponse
+    {
+        return $this->callWithTimeout('signMultiple', [$signMultipleRequest], $timeout);
+    }
+
+    /**
+     * @param int $timeout Timeout in seconds
+     *
+     * @throws \SoapFault
+     */
+    public function getMultiple(GetMultipleRequest $getMultipleRequest, int $timeout = -1): SignMultipleResponse
+    {
+        return $this->callWithTimeout('getMultiple', [$getMultipleRequest], $timeout);
     }
 }

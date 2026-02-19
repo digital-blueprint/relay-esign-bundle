@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Tests;
 
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignedMultipleFile;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignResponse;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\VerificationResponse;
 use Dbp\Relay\EsignBundle\Service\PDFDataResponse;
@@ -36,7 +37,7 @@ class PDFDataResponseTest extends TestCase
         $this->assertSame($signerCertificate, $result->getSignerCertificate());
     }
 
-    public function testFromSoapResponse(): void
+    public function testFromSoapSingleResponse(): void
     {
         $pdfContent = '%PDF-1.4 fake signed pdf content';
         $valueCode = 0;
@@ -51,11 +52,27 @@ class PDFDataResponseTest extends TestCase
         $soapResponse->setSignedPDF($pdfContent);
         $soapResponse->setVerificationResponse($verificationResponse);
 
-        $result = PDFDataResponse::fromSoapResponse($soapResponse);
+        $result = PDFDataResponse::fromSoapSignResponse($soapResponse);
 
         $this->assertSame($pdfContent, $result->getSignedPDF());
         $this->assertSame($valueCode, $result->getValueCode());
         $this->assertSame($certificateCode, $result->getCertificateCode());
         $this->assertSame($signerCertificate, $result->getSignerCertificate());
+    }
+
+    public function testFromSoapMultiResponse(): void
+    {
+        $pdfContent = '%PDF-1.4 fake signed pdf content';
+        $valueCode = 0;
+        $certificateCode = 0;
+        $verificationResponse = new VerificationResponse(0, 0);
+
+        $soapResponse = new SignedMultipleFile($pdfContent, 'filename', $verificationResponse);
+        $result = PDFDataResponse::fromSoapSignMultipleResponse($soapResponse);
+
+        $this->assertSame($pdfContent, $result->getSignedPDF());
+        $this->assertSame($valueCode, $result->getValueCode());
+        $this->assertSame($certificateCode, $result->getCertificateCode());
+        $this->assertNull($result->getSignerCertificate());
     }
 }

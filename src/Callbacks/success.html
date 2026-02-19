@@ -22,7 +22,7 @@
         font-family: sans-serif;
         font-size: 20px;
       }
-      #sessionid {
+      #code {
         background-color: #eee;
         padding: 4px;
         word-break: break-all;
@@ -32,67 +32,114 @@
 
   <body>
     <div class="center">
-      <div>Session ID: <span id="sessionid">-</span></div>
+      <div>Code: <span id="code">-</span></div>
       <div>
         <input
           type="button"
-          value="Copy Session ID to Clipboard"
-          onclick="copyToClipboard();"
+          value="Copy Code to Clipboard"
+          id="copy"
+          disabled
         />
       </div>
     </div>
   </body>
 
   <script type="module">
-    function getSessionId() {
-      // Example query: callback.html?pdfurl=https%253A%252F%252Fsig-dev.tugraz.at%252Fpdf-as-web%252FPDFData%253Bjsessionid%253D357873A48F30D0FFE6ABF1BF758742D7&pdflength=206242
-      const url = new URL(window.location.href);
+    function getSessionId(href) {
+      let url;
+      try {
+        url = new URL(href);
+      } catch {
+        return null;
+      }
       const pdfurl = url.searchParams.get("pdfurl");
       if (pdfurl === null) {
         return null;
       }
-      const sessionId = decodeURIComponent(pdfurl).split("jsessionid=")[1];
-      return sessionId;
+      let parserPdfUrl;
+      try {
+        parserPdfUrl = new URL(decodeURIComponent(pdfurl));
+      } catch {
+        return null;
+      }
+      const match = parserPdfUrl.pathname.match(/;jsessionid=([^?#;/]+)/i);
+      return match ? decodeURIComponent(match[1]) : null;
     }
 
-    function postToParent(sessionId) {
-      let message;
-      if (sessionId === null) {
-        message = {
+    function getToken(href) {
+      let url;
+      try {
+        url = new URL(href);
+      } catch {
+        return null;
+      }
+      return url.searchParams.get('token');
+    }
+
+    function buildMessage(href) {
+      const sessionId = getSessionId(href);
+      const token = getToken(href);
+      if (sessionId === null && token === null) {
+        return {
           type: "pdf-as-error",
           cause: "",
           error: "Failed to extract the session ID",
         };
-      } else {
-        message = { type: "pdf-as-callback", sessionId: sessionId };
       }
+      return { type: "pdf-as-callback", sessionId: sessionId, token: token }
+    }
+
+    function postToParent(message) {
       window.parent.postMessage(message, "*");
-
-      console.log("Callback - PostMessage Data:");
-      console.log(message);
+      console.log("Callback - PostMessage Data:", message);
     }
 
-    function showOnPage(sessionId) {
-      let element = document.getElementById("sessionid");
-      element.textContent = sessionId !== null ? sessionId : "-";
+    function getCode(message) {
+      if (message['type'] === "pdf-as-callback") {
+        return message.sessionId ?? message.token;
+      }
+      return null;
     }
 
-    function copyToClipboard() {
-      const sessionId = getSessionId();
-      if (sessionId !== null) {
-        navigator.clipboard.writeText(sessionId);
+    function showOnPage(message) {
+      let element = document.getElementById("code");
+      let button = document.getElementById("copy");
+      let code = getCode(message);
+      element.textContent = code ?? '-';
+      if (code !== null) {
+        button.disabled = false;
+        button.onclick = () => { navigator.clipboard.writeText(code); };
       }
     }
 
     function main() {
-      const sessionId = getSessionId();
-      postToParent(sessionId);
-      showOnPage(sessionId);
+      let href = window.location.href
+      console.log("Callback - URL: " + href);
+      const message = buildMessage(href);
+      postToParent(message);
+      showOnPage(message);
+    }
 
-      console.log("Callback - URL: " + window.location.href);
+    function test() {
+      console.assert('357873A48F30D0FFE6ABF1BF758742D7' === getSessionId('http://example.com/callback.html?pdfurl=https%253A%252F%252Fsig-dev.tugraz.at%252Fpdf-as-web%252FPDFData%253Bjsessionid%253D357873A48F30D0FFE6ABF1BF758742D7&pdflength=206242'));
+      console.assert(null === getSessionId('http://example.com'));
+      console.assert(null === getSessionId('http://example.com?pdfurl=nope'));
+      console.assert(null === getSessionId('http://example.com?pdfurl=nope;bla'));
+      console.assert(null === getSessionId('http://example.com?pdfurl=https%3A%2F%2Ffoo.bar'));
+      console.assert('42' === getSessionId('http://example.com?pdfurl=https%3A%2F%2Ffoo.bar%2Ffoo%3Bjsessionid%3D42'));
+      console.assert('+' === getSessionId('http://example.com?pdfurl=https%3A%2F%2Ffoo.bar%2Ffoo%3Bjsessionid%3D%252B'));
+      console.assert('24af0e51-744d-4f7c-9404-a2376c7d4918' === getToken('http://localhost:8000/esign/_success?reqId=b46e4962-9b17-4f44-903d-1a0ec1f92da2&token=24af0e51-744d-4f7c-9404-a2376c7d4918'));
+      console.assert(null === getToken('http://example.com'));
+      console.assert(' ' === getToken('http://example.com?token=%20'));
+      console.assert(buildMessage('http://example.com')['type'] === 'pdf-as-error');
+      console.assert(buildMessage('')['type'] === 'pdf-as-error');
+      console.assert(buildMessage('http://example.com?token=foo')['type'] === 'pdf-as-callback');
+      console.assert(buildMessage('http://example.com?token=foo')['token'] === 'foo');
+      console.assert(buildMessage('http://example.com?token=foo&pdfurl=https%3A%2F%2Ffoo.bar%2Ffoo%3Bjsessionid%3D%252B')['token'] === 'foo');
+      console.assert(buildMessage('http://example.com?token=foo&pdfurl=https%3A%2F%2Ffoo.bar%2Ffoo%3Bjsessionid%3D%252B')['sessionId'] === '+');
     }
 
     main();
-    window.copyToClipboard = copyToClipboard;
+    window.test = test;
   </script>
 </html>

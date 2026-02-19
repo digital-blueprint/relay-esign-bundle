@@ -36,8 +36,8 @@ class QualifiedlySignCommand extends Command implements LoggerAwareInterface
         $this->setName('dbp:relay:esign:sign:qualified');
         $this->setDescription('Sign a PDF file');
         $this->addArgument('profile-id', InputArgument::REQUIRED, 'Signing profile ID');
-        $this->addArgument('input-path', InputArgument::REQUIRED, 'Input PDF file path');
-        $this->addArgument('output-path', InputArgument::REQUIRED, 'Output PDF file path');
+        $this->addArgument('input-paths', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'Input PDF file paths');
+        $this->addOption('output-paths', 'o', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Output PDF file paths (matched by order)');
         $this->addOption('user-image-path', null, InputOption::VALUE_REQUIRED, 'Signature image path (PNG)');
         $this->addOption('user-text', null, InputOption::VALUE_REQUIRED, 'User text JSON');
         $this->addOption('invisible', null, InputOption::VALUE_NONE, 'Create an invisible signature');
@@ -45,46 +45,82 @@ class QualifiedlySignCommand extends Command implements LoggerAwareInterface
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $inputPath = $input->getArgument('input-path');
-        $outputPath = $input->getArgument('output-path');
+        $inputPaths = $input->getArgument('input-paths');
+        $outputPaths = $input->getOption('output-paths');
         $profile = $input->getArgument('profile-id');
         $userImagePath = $input->getOption('user-image-path');
         $userText = $input->getOption('user-text');
         $invisible = $input->getOption('invisible');
 
-        $inputData = @file_get_contents($inputPath);
-        if ($inputData === false) {
-            throw new \RuntimeException("Failed to read '$inputPath'");
+        // Validate that we have the same number of inputs and outputs
+        if (count($inputPaths) !== count($outputPaths)) {
+            throw new \RuntimeException(sprintf(
+                'Number of input files (%d) must match number of output files (%d)',
+                count($inputPaths),
+                count($outputPaths)
+            ));
         }
 
-        if ($userImagePath !== null) {
-            $userImageData = @file_get_contents($userImagePath);
-            if ($userImageData === false) {
-                throw new \RuntimeException("Failed to read '$userImagePath'");
-            }
-        } else {
-            $userImageData = null;
-        }
-
-        if ($userText !== null) {
-            $userText = BaseSigningController::parseUserText($userText);
-        } else {
-            $userText = [];
-        }
-
+        $requests = [];
         $requestId = Tools::generateRequestId();
-        $request = new SigningRequest($inputData, $profile, $requestId, userText: $userText, userImageData: $userImageData, invisible: $invisible);
-        $url = $this->api->createQualifiedSigningRequestRedirectUrl($request);
-        $output->writeln("Open the following URL in your browser:\n    ".$url);
-        $question = new Question('After confirming your identity please enter the session ID: ');
-        $helper = $this->getHelper('question');
-        assert($helper instanceof QuestionHelper);
-        $sessionId = $helper->ask($input, $output, $question);
+        foreach ($inputPaths as $index => $inputPath) {
+            $outputPath = $outputPaths[$index];
 
-        $result = $this->api->fetchQualifiedlySignedDocument($sessionId);
-        $filesystem = new Filesystem();
-        $filesystem->dumpFile($outputPath, $result->getSignedPDF());
-        $output->writeln("Created signed file '$outputPath'");
+            $inputData = @file_get_contents($inputPath);
+            if ($inputData === false) {
+                throw new \RuntimeException("Failed to read '$inputPath'");
+            }
+
+            if ($userImagePath !== null) {
+                $userImageData = @file_get_contents($userImagePath);
+                if ($userImageData === false) {
+                    throw new \RuntimeException("Failed to read '$userImagePath'");
+                }
+            } else {
+                $userImageData = null;
+            }
+
+            if ($userText !== null) {
+                $parsedUserText = BaseSigningController::parseUserText($userText);
+            } else {
+                $parsedUserText = [];
+            }
+
+            $request = new SigningRequest($inputData, $profile, $requestId.'-'.$index, userText: $parsedUserText, userImageData: $userImageData, invisible: $invisible);
+            $requests[] = $request;
+        }
+
+        if (count($requests) === 1) {
+            $request = $requests[0];
+            $outputPath = $outputPaths[0];
+            $url = $this->api->createQualifiedSigningRequestRedirectUrl($request);
+            $output->writeln("Open the following URL in your browser:\n    ".$url);
+            $question = new Question('After confirming your identity please enter the code: ');
+            $helper = $this->getHelper('question');
+            assert($helper instanceof QuestionHelper);
+            $sessionId = $helper->ask($input, $output, $question);
+
+            $result = $this->api->fetchQualifiedlySignedDocument($sessionId);
+            $filesystem = new Filesystem();
+            $filesystem->dumpFile($outputPath, $result->getSignedPDF());
+            $output->writeln("Created signed file '$outputPath'");
+        } else {
+            $url = $this->api->createQualifiedSigningRequestsRedirectUrl($requestId, $requests);
+            $output->writeln("Open the following URL in your browser:\n    ".$url);
+            $question = new Question('After confirming your identity please enter the code: ');
+            $helper = $this->getHelper('question');
+            assert($helper instanceof QuestionHelper);
+            $token = $helper->ask($input, $output, $question);
+
+            $responses = $this->api->fetchQualifiedlySignedDocuments($token);
+            foreach ($responses as $index => $response) {
+                $outputPath = $outputPaths[$index];
+
+                $filesystem = new Filesystem();
+                $filesystem->dumpFile($outputPath, $response->getSignedPDF());
+                $output->writeln("Created signed file '$outputPath'");
+            }
+        }
 
         return 0;
     }
