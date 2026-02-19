@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Service;
 
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignedMultipleFile;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignResponse;
 use Psr\Http\Message\ResponseInterface;
 
 class PDFDataResponse
 {
-    public function __construct(private readonly string $signedPDF, private readonly int $valueCode, private readonly int $certificateCode, private readonly string $signerCertificate)
+    public function __construct(private readonly string $signedPDF, private readonly int $valueCode, private readonly int $certificateCode, private readonly ?string $signerCertificate)
     {
     }
 
@@ -47,7 +48,7 @@ class PDFDataResponse
         return new PDFDataResponse($signedPdfData, $valueCode, $certificateCode, $signerCertificate);
     }
 
-    public static function fromSoapResponse(SignResponse $response): PDFDataResponse
+    public static function fromSoapSignResponse(SignResponse $response): PDFDataResponse
     {
         assert($response->getError() === null);
 
@@ -55,6 +56,15 @@ class PDFDataResponse
 
         return new PDFDataResponse(
             $response->getSignedPDF(), $verificationResponse->getValueCode(),
+            $verificationResponse->getCertificateCode(), $verificationResponse->getSignerCertificate());
+    }
+
+    public static function fromSoapSignMultipleResponse(SignedMultipleFile $response): PDFDataResponse
+    {
+        $verificationResponse = $response->getVerificationResponse();
+
+        return new PDFDataResponse(
+            $response->getOutputData(), $verificationResponse->getValueCode(),
             $verificationResponse->getCertificateCode(), $verificationResponse->getSignerCertificate());
     }
 
@@ -73,7 +83,7 @@ class PDFDataResponse
         return $this->certificateCode;
     }
 
-    public function getSignerCertificate(): string
+    public function getSignerCertificate(): ?string
     {
         return $this->signerCertificate;
     }

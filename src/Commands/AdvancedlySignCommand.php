@@ -35,7 +35,7 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
         $this->setDescription('Sign one or more PDF files');
         $this->addArgument('profile-id', InputArgument::REQUIRED, 'Signing profile ID');
         $this->addArgument('input-paths', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'Input PDF file paths');
-        $this->addOption('output', 'o', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Output PDF file paths (matched by order)');
+        $this->addOption('output-paths', 'o', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Output PDF file paths (matched by order)');
         $this->addOption('user-image-path', null, InputOption::VALUE_REQUIRED, 'Signature image path (PNG)');
         $this->addOption('user-text', null, InputOption::VALUE_REQUIRED, 'User text JSON');
         $this->addOption('invisible', null, InputOption::VALUE_NONE, 'Create an invisible signature');
@@ -45,7 +45,7 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
     {
         $profile = $input->getArgument('profile-id');
         $inputPaths = $input->getArgument('input-paths');
-        $outputPaths = $input->getOption('output');
+        $outputPaths = $input->getOption('output-paths');
         $userImagePath = $input->getOption('user-image-path');
         $userText = $input->getOption('user-text');
         $invisible = $input->getOption('invisible');

@@ -22,7 +22,7 @@ class SignParameters
     protected $configurationOverrides;
 
     /**
-     * @var string
+     * @var ?string
      */
     protected $position;
 
@@ -182,18 +182,12 @@ class SignParameters
         $this->configurationOverrides = $configurationOverrides;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getPosition()
+    public function getPosition(): ?string
     {
         return $this->position;
     }
 
-    /**
-     * @param string $position
-     */
-    public function setPosition($position): void
+    public function setPosition(?string $position): void
     {
         $this->position = $position;
     }
