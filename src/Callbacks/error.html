@@ -39,12 +39,9 @@
   </body>
 
   <script type="module">
-    // Example query (pdf-as 4.1.6): error.html?cause=&error=SecurityLayer%2BError%253A%2B%255B6001%255D%2BAbbruch%2Bdurch%2Bden%2BB%25C3%2583%25C2%25BCrger%2B%25C3%2583%25C2%25BCber%2Bdie%2BBenutzerschnittstelle.
-    // Example query (pdf-as 4.2.0): error.html?cause=&error=SecurityLayer%2BError%253A%2B%255B6001%255D%2BAbbruch%2Bdurch%2Bden%2BB%25C3%25BCrger%2B%25C3%25BCber%2Bdie%2BBenutzerschnittstelle.
-
     function fixupQueryEncoding(value) {
       try {
-        // With pdf-as 4.1.6 we get back a double URI encododed string that is encoded using latin-1 instead of
+        // With pdf-as 4.1.6 we get back a double URI encoded string that is encoded using latin-1 instead of
         // utf-8 and also encodes spaces with + instead of %20. This tries to reverse this madness.
         return decodeURIComponent(
           escape(decodeURIComponent(value.replace(/\+/g, "%20")))
@@ -55,8 +52,13 @@
       }
     }
 
-    function getCause() {
-      const url = new URL(window.location.href);
+    function getCause(href) {
+      let url;
+      try {
+        url = new URL(href);
+      } catch {
+        return "";
+      }
       const cause = url.searchParams.get("cause");
       if (cause === null) {
         return "";
@@ -64,8 +66,13 @@
       return fixupQueryEncoding(cause);
     }
 
-    function getError() {
-      const url = new URL(window.location.href);
+    function getError(href) {
+      let url;
+      try {
+        url = new URL(href);
+      } catch {
+        return "";
+      }
       const error = url.searchParams.get("error");
       if (error === null) {
         return "";
@@ -73,28 +80,51 @@
       return fixupQueryEncoding(error);
     }
 
-    function postToParent(cause, error) {
-      const message = { type: "pdf-as-error", cause: cause, error: error };
-      window.parent.postMessage(message, "*");
-      console.log("Error - PostMessage Data:");
-      console.log(message);
+    function buildMessage(href) {
+      return { type: "pdf-as-error", cause: getCause(href), error: getError(href) };
     }
 
-    function showOnPage(cause, error) {
+    function postToParent(message) {
+      window.parent.postMessage(message, "*");
+      console.log("Error - PostMessage Data:", message);
+    }
+
+    function showOnPage(message) {
+      let cause = message['cause'];
+      let error = message['error'];
       document.getElementById("cause").textContent = cause ? cause : "-";
       document.getElementById("error").textContent = error ? error : "-";
     }
 
     function main() {
-      let cause = getCause();
-      let error = getError();
+      let href = window.location.href;
+      console.log("Error - URL: " + href);
+      let message = buildMessage(href);
+      postToParent(message);
+      showOnPage(message);
+    }
 
-      postToParent(cause, error);
-      showOnPage(cause, error);
+    function test() {
+      let message;
+      // Example query (pdf-as 4.1.6)
+      message = buildMessage('https://foo.bar/error.html?cause=&error=SecurityLayer%2BError%253A%2B%255B6001%255D%2BAbbruch%2Bdurch%2Bden%2BB%25C3%2583%25C2%25BCrger%2B%25C3%2583%25C2%25BCber%2Bdie%2BBenutzerschnittstelle.')
+      console.assert(message.type === "pdf-as-error");
+      console.assert(message.cause === "");
+      console.assert(message.error === "SecurityLayer Error: [6001] Abbruch durch den Bürger über die Benutzerschnittstelle.");
 
-      console.log("Error - URL: " + window.location.href);
+      // Example query (pdf-as 4.2.0):
+      message = buildMessage('https://foo.bar/error.html?cause=&error=SecurityLayer%2BError%253A%2B%255B6001%255D%2BAbbruch%2Bdurch%2Bden%2BB%25C3%25BCrger%2B%25C3%25BCber%2Bdie%2BBenutzerschnittstelle.')
+      console.assert(message.type === "pdf-as-error");
+      console.assert(message.cause === "");
+      console.assert(message.error === "SecurityLayer Error: [6001] Abbruch durch den Bürger über die Benutzerschnittstelle.");
+
+      console.assert(getCause('https://foo.bar/error.html?cause=something') === 'something');
+      console.assert(buildMessage('').type === 'pdf-as-error');
+      console.assert(buildMessage('').cause === '');
+      console.assert(buildMessage('').error === '');
     }
 
     main();
+    window.test = test;
   </script>
 </html>
