@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Service;
+namespace Dbp\Relay\EsignBundle\PdfAsApi;
 
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignedMultipleFile;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignResponse;

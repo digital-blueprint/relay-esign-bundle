@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Dbp\Relay\EsignBundle\Tests;
 
 use Dbp\Relay\EsignBundle\Configuration\AdvancedProfile;
-use Dbp\Relay\EsignBundle\Service\SigningException;
-use Dbp\Relay\EsignBundle\Service\UserDefinedText;
-use Dbp\Relay\EsignBundle\Service\UserText;
+use Dbp\Relay\EsignBundle\PdfAsApi\SigningException;
+use Dbp\Relay\EsignBundle\PdfAsApi\UserDefinedText;
+use Dbp\Relay\EsignBundle\PdfAsApi\UserText;
 use PHPUnit\Framework\TestCase;
 
 class UserTextTest extends TestCase

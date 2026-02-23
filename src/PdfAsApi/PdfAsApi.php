@@ -5,7 +5,7 @@ declare(strict_types=1);
  * PDF AS service.
  */
 
-namespace Dbp\Relay\EsignBundle\Service;
+namespace Dbp\Relay\EsignBundle\PdfAsApi;
 
 use Dbp\Relay\EsignBundle\Configuration\AdvancedProfile;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;

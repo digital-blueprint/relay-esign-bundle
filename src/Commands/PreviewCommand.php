@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Commands;
 
-use Dbp\Relay\EsignBundle\Service\PdfAsApi;
+use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Console\Command\Command;

@@ -6,7 +6,7 @@ namespace Dbp\Relay\EsignBundle\Tests;
 
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
-use Dbp\Relay\EsignBundle\Service\PdfAsApi;
+use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\Stopwatch\Stopwatch;

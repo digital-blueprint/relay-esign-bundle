@@ -7,7 +7,7 @@ namespace Dbp\Relay\EsignBundle\HealthCheck;
 use Dbp\Relay\CoreBundle\HealthCheck\CheckInterface;
 use Dbp\Relay\CoreBundle\HealthCheck\CheckOptions;
 use Dbp\Relay\CoreBundle\HealthCheck\CheckResult;
-use Dbp\Relay\EsignBundle\Service\PdfAsApi;
+use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 
 class HealthCheck implements CheckInterface
 {

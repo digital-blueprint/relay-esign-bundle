@@ -1,5 +1,5 @@
 services:
-    Dbp\Relay\EsignBundle\Service\PdfAsApi:
+    Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi:
         public: false
         autowire: true
         autoconfigure: true

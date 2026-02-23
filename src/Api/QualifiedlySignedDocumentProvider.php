@@ -9,8 +9,8 @@ use ApiPlatform\State\ProviderInterface;
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
-use Dbp\Relay\EsignBundle\Service\PdfAsApi;
-use Dbp\Relay\EsignBundle\Service\SigningException;
+use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
+use Dbp\Relay\EsignBundle\PdfAsApi\SigningException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

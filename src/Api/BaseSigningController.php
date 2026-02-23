@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dbp\Relay\EsignBundle\Api;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
-use Dbp\Relay\EsignBundle\Service\UserDefinedText;
+use Dbp\Relay\EsignBundle\PdfAsApi\UserDefinedText;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

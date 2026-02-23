@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Tests;
 
+use Dbp\Relay\EsignBundle\PdfAsApi\PDFDataResponse;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignedMultipleFile;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignResponse;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\VerificationResponse;
-use Dbp\Relay\EsignBundle\Service\PDFDataResponse;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 

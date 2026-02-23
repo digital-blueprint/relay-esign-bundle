@@ -6,8 +6,8 @@ namespace Dbp\Relay\EsignBundle\Commands;
 
 use Dbp\Relay\EsignBundle\Api\BaseSigningController;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
-use Dbp\Relay\EsignBundle\Service\PdfAsApi;
-use Dbp\Relay\EsignBundle\Service\SigningRequest;
+use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
+use Dbp\Relay\EsignBundle\PdfAsApi\SigningRequest;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Console\Command\Command;
