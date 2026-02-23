@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Commands;
 
-use Dbp\Relay\EsignBundle\Controller\BaseSigningController;
+use Dbp\Relay\EsignBundle\Api\BaseSigningController;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\PdfAsApi;
 use Dbp\Relay\EsignBundle\Service\SigningRequest;

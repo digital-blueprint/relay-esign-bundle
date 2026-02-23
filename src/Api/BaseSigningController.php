@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Controller;
+namespace Dbp\Relay\EsignBundle\Api;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Service\UserDefinedText;

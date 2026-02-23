@@ -18,7 +18,7 @@ class DbpRelayEsignExtension extends ConfigurableExtension
 
     public function loadInternal(array $mergedConfig, ContainerBuilder $container): void
     {
-        $this->addResourceClassDirectory($container, __DIR__.'/../Entity');
+        $this->addResourceClassDirectory($container, __DIR__.'/../Api');
 
         $pathsToHide = [];
         if (!BundleConfig::hasVerification()) {

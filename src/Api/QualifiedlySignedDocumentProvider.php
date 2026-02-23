@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\State;
+namespace Dbp\Relay\EsignBundle\Api;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
-use Dbp\Relay\EsignBundle\Entity\QualifiedlySignedDocument;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\PdfAsApi;
 use Dbp\Relay\EsignBundle\Service\SigningException;

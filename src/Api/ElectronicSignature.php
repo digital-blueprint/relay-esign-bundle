@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Entity;
+namespace Dbp\Relay\EsignBundle\Api;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use Dbp\Relay\EsignBundle\State\DummyVerifyProvider;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Entity;
+namespace Dbp\Relay\EsignBundle\Api;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
@@ -12,8 +12,6 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\RequestBody;
 use ApiPlatform\OpenApi\Model\Response;
-use Dbp\Relay\EsignBundle\Controller\CreateAdvancedlySignedDocumentAction;
-use Dbp\Relay\EsignBundle\State\DummySignProvider;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(

@@ -2,13 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Controller;
+namespace Dbp\Relay\EsignBundle\Api;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
-use Dbp\Relay\EsignBundle\Entity\ElectronicSignature;
-use Dbp\Relay\EsignBundle\Entity\ElectronicSignatureVerificationReport;
 use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\Service\PdfAsApi;
 use Dbp\Relay\EsignBundle\Service\SigningException;

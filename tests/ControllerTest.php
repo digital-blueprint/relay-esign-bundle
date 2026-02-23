@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Dbp\Relay\EsignBundle\Tests;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
-use Dbp\Relay\EsignBundle\Controller\BaseSigningController;
+use Dbp\Relay\EsignBundle\Api\BaseSigningController;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 

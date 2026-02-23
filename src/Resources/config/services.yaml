@@ -8,13 +8,8 @@ services:
         autowire: true
         autoconfigure: true
 
-    Dbp\Relay\EsignBundle\Controller\:
-        resource: '../../Controller'
-        autowire: true
-        autoconfigure: true
-
-    Dbp\Relay\EsignBundle\State\:
-        resource: '../../State'
+    Dbp\Relay\EsignBundle\Api\:
+        resource: '../../Api'
         autowire: true
         autoconfigure: true
 
