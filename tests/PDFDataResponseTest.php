@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Tests;
 
-use Dbp\Relay\EsignBundle\PdfAsApi\PDFDataResponse;
+use Dbp\Relay\EsignBundle\PdfAsApi\SigningResponse;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignedMultipleFile;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignMultipleResponse;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignResponse;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\VerificationResponse;
 use GuzzleHttp\Psr7\Response;
@@ -29,7 +30,7 @@ class PDFDataResponseTest extends TestCase
             'Signer-Certificate' => $signerCertificateBase64,
         ], $pdfContent);
 
-        $result = PDFDataResponse::fromResponse($response, $sessionId);
+        $result = SigningResponse::fromPdfDataResponse($response, $sessionId);
 
         $this->assertSame($pdfContent, $result->getSignedPDF());
         $this->assertSame($valueCode, $result->getValueCode());
@@ -52,7 +53,7 @@ class PDFDataResponseTest extends TestCase
         $soapResponse->setSignedPDF($pdfContent);
         $soapResponse->setVerificationResponse($verificationResponse);
 
-        $result = PDFDataResponse::fromSoapSignResponse($soapResponse);
+        $result = SigningResponse::fromSoapSignResponse($soapResponse);
 
         $this->assertSame($pdfContent, $result->getSignedPDF());
         $this->assertSame($valueCode, $result->getValueCode());
@@ -67,12 +68,13 @@ class PDFDataResponseTest extends TestCase
         $certificateCode = 0;
         $verificationResponse = new VerificationResponse(0, 0);
 
-        $soapResponse = new SignedMultipleFile($pdfContent, 'filename', $verificationResponse);
-        $result = PDFDataResponse::fromSoapSignMultipleResponse($soapResponse);
+        $soapDocument = new SignedMultipleFile($pdfContent, 'filename', $verificationResponse);
+        $soapResponse = new SignMultipleResponse('42', documents: [$soapDocument]);
+        $result = SigningResponse::fromSoapSignMultipleResponse($soapResponse);
 
-        $this->assertSame($pdfContent, $result->getSignedPDF());
-        $this->assertSame($valueCode, $result->getValueCode());
-        $this->assertSame($certificateCode, $result->getCertificateCode());
-        $this->assertNull($result->getSignerCertificate());
+        $this->assertSame($pdfContent, $result[0]->getSignedPDF());
+        $this->assertSame($valueCode, $result[0]->getValueCode());
+        $this->assertSame($certificateCode, $result[0]->getCertificateCode());
+        $this->assertNull($result[0]->getSignerCertificate());
     }
 }

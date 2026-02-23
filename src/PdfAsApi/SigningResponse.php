@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\PdfAsApi;
 
-use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignedMultipleFile;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignMultipleResponse;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignResponse;
 use Psr\Http\Message\ResponseInterface;
 
-class PDFDataResponse
+class SigningResponse
 {
     public function __construct(private readonly string $signedPDF, private readonly int $valueCode, private readonly int $certificateCode, private readonly ?string $signerCertificate)
     {
     }
 
-    public static function fromResponse(ResponseInterface $response, string $sessionId): PDFDataResponse
+    public static function fromPdfDataResponse(ResponseInterface $response, string $sessionId): SigningResponse
     {
         $signedPdfData = (string) $response->getBody();
 
@@ -45,27 +45,46 @@ class PDFDataResponse
             throw new SigningException('Invalid signer certificate: '.$signerCertificateBase64);
         }
 
-        return new PDFDataResponse($signedPdfData, $valueCode, $certificateCode, $signerCertificate);
+        return new SigningResponse($signedPdfData, $valueCode, $certificateCode, $signerCertificate);
     }
 
-    public static function fromSoapSignResponse(SignResponse $response): PDFDataResponse
+    public static function fromSoapSignResponse(SignResponse $response): SigningResponse
     {
-        assert($response->getError() === null);
+        if ($response->getError() !== null) {
+            throw new SigningException('Signing failed!');
+        }
+
+        $signedPdfData = $response->getSignedPDF();
+        if ($signedPdfData === null) {
+            // This likely means pdf-as failed uncontrolled (check the logs)
+            throw new SigningException('Signing failed!');
+        }
 
         $verificationResponse = $response->getVerificationResponse();
 
-        return new PDFDataResponse(
+        return new SigningResponse(
             $response->getSignedPDF(), $verificationResponse->getValueCode(),
             $verificationResponse->getCertificateCode(), $verificationResponse->getSignerCertificate());
     }
 
-    public static function fromSoapSignMultipleResponse(SignedMultipleFile $response): PDFDataResponse
+    /**
+     * @return SigningResponse[]
+     */
+    public static function fromSoapSignMultipleResponse(SignMultipleResponse $response): array
     {
-        $verificationResponse = $response->getVerificationResponse();
+        if ($response->getError() !== null) {
+            throw new SigningException('Signing failed!');
+        }
 
-        return new PDFDataResponse(
-            $response->getOutputData(), $verificationResponse->getValueCode(),
-            $verificationResponse->getCertificateCode(), $verificationResponse->getSignerCertificate());
+        $responses = [];
+        foreach ($response->getDocuments() as $document) {
+            $verificationResponse = $document->getVerificationResponse();
+            $responses[] = new SigningResponse(
+                $document->getOutputData(), $verificationResponse->getValueCode(),
+                $verificationResponse->getCertificateCode(), $verificationResponse->getSignerCertificate());
+        }
+
+        return $responses;
     }
 
     public function getSignedPDF(): string

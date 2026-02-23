@@ -294,7 +294,7 @@ class PdfAsApi implements LoggerAwareInterface
     /**
      * @param SigningRequest[] $requests
      *
-     * @return PDFDataResponse[]
+     * @return SigningResponse[]
      */
     public function advancedlySignPdfMultiple(array $requests): array
     {
@@ -338,22 +338,11 @@ class PdfAsApi implements LoggerAwareInterface
         $responses = $bulkResponse->getSignResponses();
         $pdfDataResponses = [];
         foreach ($responses as $response) {
-            if ($response->getError() !== null) {
-                throw new SigningException('Signing failed!');
-            }
+            $pdfDataResponses[] = SigningResponse::fromSoapSignResponse($response);
 
-            $signedPdfData = $response->getSignedPDF();
-            if ($signedPdfData === null) {
-                // This likely means pdf-as failed uncontrolled (check the logs)
-                throw new SigningException('Signing failed!');
-            }
-
-            $contentSize = strlen($signedPdfData);
+            $contentSize = strlen($response->getSignedPDF());
             $requestId = $response->getRequestID();
-
             $this->log('PDF was signed', ['request_id' => $requestId, 'signed_content_size' => $contentSize]);
-
-            $pdfDataResponses[] = PDFDataResponse::fromSoapSignResponse($response);
         }
 
         return $pdfDataResponses;
@@ -364,7 +353,7 @@ class PdfAsApi implements LoggerAwareInterface
      *
      * @throws SigningException
      */
-    public function advancedlySignPdf(SigningRequest $request): PDFDataResponse
+    public function advancedlySignPdf(SigningRequest $request): SigningResponse
     {
         return $this->advancedlySignPdfMultiple([$request])[0];
     }
@@ -441,7 +430,7 @@ class PdfAsApi implements LoggerAwareInterface
     }
 
     /**
-     * @return PDFDataResponse[]
+     * @return SigningResponse[]
      */
     public function fetchQualifiedlySignedDocuments(string $token): array
     {
@@ -461,22 +450,13 @@ class PdfAsApi implements LoggerAwareInterface
             $event->stop();
         }
 
-        if ($response->getError() !== null) {
-            throw new SigningException('Signing failed!');
-        }
-
-        $responses = [];
-        foreach ($response->getDocuments() as $document) {
-            $responses[] = PDFDataResponse::fromSoapSignMultipleResponse($document);
-        }
-
-        return $responses;
+        return SigningResponse::fromSoapSignMultipleResponse($response);
     }
 
     /**
      * @throws SigningException
      */
-    public function fetchQualifiedlySignedDocument(string $sessionId, ?callable $handler = null): PDFDataResponse
+    public function fetchQualifiedlySignedDocument(string $sessionId, ?callable $handler = null): SigningResponse
     {
         $stack = HandlerStack::create($handler);
         $stack->push(Utils::createStopwatchMiddleware($this->stopwatch, 'pdf-as.fetch-qualified', 'esign'));
@@ -495,7 +475,7 @@ class PdfAsApi implements LoggerAwareInterface
             throw new SigningException(sprintf("QualifiedlySignedDocument with id '%s' could not be loaded! Message: %s", $sessionId, $e->getMessage()));
         }
 
-        $pdfResponse = PDFDataResponse::fromResponse($response, $sessionId);
+        $pdfResponse = SigningResponse::fromPdfDataResponse($response, $sessionId);
         $signedPdfData = $pdfResponse->getSignedPDF();
 
         $this->log('PDF was qualifiedly signed', ['session_id' => $sessionId, 'signed_content_size' => strlen($signedPdfData)]);
