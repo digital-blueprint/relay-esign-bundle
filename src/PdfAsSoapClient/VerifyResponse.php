@@ -9,7 +9,7 @@ class VerifyResponse
     /**
      * @var VerifyResult[]
      */
-    protected $verifyResults;
+    protected array $verifyResults = [];
 
     /**
      * @param VerifyResult[] $verifyResults
@@ -19,15 +19,8 @@ class VerifyResponse
         $this->verifyResults = $verifyResults;
     }
 
-    /**
-     * @return VerifyResult[]
-     */
-    public function getVerifyResults()
+    public function getVerifyResults(): array
     {
-        if ($this->verifyResults === null) {
-            return [];
-        }
-
         return $this->verifyResults;
     }
 

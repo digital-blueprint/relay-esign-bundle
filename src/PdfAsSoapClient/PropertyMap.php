@@ -9,7 +9,7 @@ class PropertyMap
     /**
      * @var PropertyEntry[]
      */
-    protected $propertyEntries;
+    protected array $propertyEntries;
 
     /**
      * @param PropertyEntry[] $propertyEntries
@@ -22,7 +22,7 @@ class PropertyMap
     /**
      * @return PropertyEntry[]
      */
-    public function getPropertyEntries()
+    public function getPropertyEntries(): array
     {
         return $this->propertyEntries;
     }

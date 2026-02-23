@@ -6,115 +6,67 @@ namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 
 class SignResponse
 {
-    /**
-     * @var ?string
-     */
-    protected $error;
+    protected ?string $error = null;
 
-    /**
-     * @var ?string
-     */
-    protected $redirectUrl;
+    protected ?string $redirectUrl = null;
 
-    /**
-     * @var ?string
-     */
-    protected $requestID;
+    protected string $requestID;
 
-    /**
-     * @var ?string
-     */
-    protected $signedPDF;
+    protected ?string $signedPDF = null;
 
-    /**
-     * @var ?VerificationResponse
-     */
-    protected $verificationResponse;
+    protected ?VerificationResponse $verificationResponse = null;
 
-    /**
-     * @param ?string $requestID
-     */
-    public function __construct($requestID)
+    public function __construct(string $requestID)
     {
         $this->requestID = $requestID;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getError()
+    public function getError(): ?string
     {
         return $this->error;
     }
 
-    /**
-     * @param ?string $error
-     */
-    public function setError($error): void
+    public function setError(?string $error): void
     {
         $this->error = $error;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getRedirectUrl()
+    public function getRedirectUrl(): ?string
     {
         return $this->redirectUrl;
     }
 
-    /**
-     * @param ?string $redirectUrl
-     */
-    public function setRedirectUrl($redirectUrl): void
+    public function setRedirectUrl(?string $redirectUrl): void
     {
         $this->redirectUrl = $redirectUrl;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getRequestID()
+    public function getRequestID(): string
     {
         return $this->requestID;
     }
 
-    /**
-     * @param ?string $requestID
-     */
-    public function setRequestID($requestID): void
+    public function setRequestID(string $requestID): void
     {
         $this->requestID = $requestID;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getSignedPDF()
+    public function getSignedPDF(): ?string
     {
         return $this->signedPDF;
     }
 
-    /**
-     * @param ?string $signedPDF
-     */
-    public function setSignedPDF($signedPDF): void
+    public function setSignedPDF(?string $signedPDF): void
     {
         $this->signedPDF = $signedPDF;
     }
 
-    /**
-     * @return ?VerificationResponse
-     */
-    public function getVerificationResponse()
+    public function getVerificationResponse(): ?VerificationResponse
     {
         return $this->verificationResponse;
     }
 
-    /**
-     * @param ?VerificationResponse $verificationResponse
-     */
-    public function setVerificationResponse($verificationResponse): void
+    public function setVerificationResponse(?VerificationResponse $verificationResponse): void
     {
         $this->verificationResponse = $verificationResponse;
     }

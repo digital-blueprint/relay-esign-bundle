@@ -6,97 +6,49 @@ namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 
 class SignParameters
 {
-    /**
-     * @var string
-     */
-    protected $connector;
+    protected string $connector;
 
-    /**
-     * @var string
-     */
-    protected $keyIdentifier;
+    protected ?string $keyIdentifier = null;
 
-    /**
-     * @var PropertyMap
-     */
-    protected $configurationOverrides;
+    protected ?PropertyMap $configurationOverrides = null;
 
-    /**
-     * @var ?string
-     */
-    protected $position;
+    protected ?string $position = null;
 
-    /**
-     * @var PropertyMap
-     */
-    protected $preprocessorArguments;
+    protected ?PropertyMap $preprocessorArguments = null;
 
-    /**
-     * @var string
-     */
-    protected $profile;
+    protected ?string $profile = null;
 
-    /**
-     * @var string
-     */
-    protected $qrCodeContent;
+    protected ?string $qrCodeContent = null;
 
-    /**
-     * @var string
-     */
-    protected $transactionId;
+    protected ?string $transactionId = null;
 
-    /**
-     * @var string
-     */
-    protected $invokeErrorUrl;
+    protected ?string $invokeErrorUrl = null;
 
-    /**
-     * @var string
-     */
-    protected $invokeTarget;
+    protected ?string $invokeTarget = null;
 
-    /**
-     * @var string
-     */
-    protected $invokeUrl;
+    protected ?string $invokeUrl = null;
 
-    /**
-     * @param Connector $connector
-     */
-    public function __construct($connector)
+    public function __construct(Connector $connector)
     {
         $this->connector = $connector->value;
     }
 
-    /**
-     * @return Connector
-     */
-    public function getConnector()
+    public function getConnector(): Connector
     {
         return Connector::from($this->connector);
     }
 
-    /**
-     * @param Connector $connector
-     */
-    public function setConnector($connector): void
+    public function setConnector(Connector $connector): void
     {
         $this->connector = $connector->value;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getInvokeerrorurl()
+    public function getInvokeErrorUrl(): ?string
     {
         return $this->invokeErrorUrl;
     }
 
-    /**
-     * @return mixed
-     */
-    public function __get(string $name)
+    public function __get(string $name): mixed
     {
         // This is used by php-soap when serializing
         if ($name === 'invoke-error-url') {
@@ -110,74 +62,47 @@ class SignParameters
         return null;
     }
 
-    /**
-     * @param string $invokeErrorUrl
-     */
-    public function setInvokeErrorUrl($invokeErrorUrl): void
+    public function setInvokeErrorUrl(string $invokeErrorUrl): void
     {
         $this->invokeErrorUrl = $invokeErrorUrl;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getInvokeTarget()
+    public function getInvokeTarget(): ?string
     {
         return $this->invokeTarget;
     }
 
-    /**
-     * @param string $invokeTarget
-     */
-    public function setInvokeTarget($invokeTarget): void
+    public function setInvokeTarget(string $invokeTarget): void
     {
         $this->invokeTarget = $invokeTarget;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getInvokeUrl()
+    public function getInvokeUrl(): ?string
     {
         return $this->invokeUrl;
     }
 
-    /**
-     * @param string $invokeUrl
-     */
-    public function setInvokeUrl($invokeUrl): void
+    public function setInvokeUrl(string $invokeUrl): void
     {
         $this->invokeUrl = $invokeUrl;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getKeyIdentifier()
+    public function getKeyIdentifier(): ?string
     {
         return $this->keyIdentifier;
     }
 
-    /**
-     * @param string $keyIdentifier
-     */
-    public function setKeyIdentifier($keyIdentifier): void
+    public function setKeyIdentifier(?string $keyIdentifier): void
     {
         $this->keyIdentifier = $keyIdentifier;
     }
 
-    /**
-     * @return ?PropertyMap
-     */
-    public function getConfigurationOverrides()
+    public function getConfigurationOverrides(): ?PropertyMap
     {
         return $this->configurationOverrides;
     }
 
-    /**
-     * @param PropertyMap $configurationOverrides
-     */
-    public function setConfigurationOverrides($configurationOverrides): void
+    public function setConfigurationOverrides(?PropertyMap $configurationOverrides): void
     {
         $this->configurationOverrides = $configurationOverrides;
     }
@@ -192,66 +117,42 @@ class SignParameters
         $this->position = $position;
     }
 
-    /**
-     * @return ?PropertyMap
-     */
-    public function getPreprocessorArguments()
+    public function getPreprocessorArguments(): ?PropertyMap
     {
         return $this->preprocessorArguments;
     }
 
-    /**
-     * @param PropertyMap $preprocessorArguments
-     */
-    public function setPreprocessorArguments($preprocessorArguments): void
+    public function setPreprocessorArguments(?PropertyMap $preprocessorArguments): void
     {
         $this->preprocessorArguments = $preprocessorArguments;
     }
 
-    /**
-     * @return string
-     */
-    public function getProfile()
+    public function getProfile(): ?string
     {
         return $this->profile;
     }
 
-    /**
-     * @param string $profile
-     */
-    public function setProfile($profile): void
+    public function setProfile(?string $profile): void
     {
         $this->profile = $profile;
     }
 
-    /**
-     * @return string
-     */
-    public function getQrCodeContent()
+    public function getQrCodeContent(): ?string
     {
         return $this->qrCodeContent;
     }
 
-    /**
-     * @param string $qrCodeContent
-     */
-    public function setQrCodeContent($qrCodeContent): void
+    public function setQrCodeContent(?string $qrCodeContent): void
     {
         $this->qrCodeContent = $qrCodeContent;
     }
 
-    /**
-     * @return ?string
-     */
-    public function getTransactionId()
+    public function getTransactionId(): ?string
     {
         return $this->transactionId;
     }
 
-    /**
-     * @param string $transactionId
-     */
-    public function setTransactionId($transactionId): void
+    public function setTransactionId(?string $transactionId): void
     {
         $this->transactionId = $transactionId;
     }

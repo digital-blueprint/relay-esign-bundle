@@ -6,10 +6,7 @@ namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 
 class GetMultipleRequest
 {
-    /**
-     * @var string
-     */
-    private $token;
+    private string $token;
 
     public function __construct(string $token)
     {

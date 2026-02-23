@@ -6,38 +6,20 @@ namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 
 class SignRequest
 {
-    /**
-     * @var string
-     */
-    protected $inputData;
+    protected string $inputData;
 
-    /**
-     * @var SignParameters
-     */
-    protected $parameters;
+    protected SignParameters $parameters;
 
-    /**
-     * @var string
-     */
-    protected $requestID;
+    protected string $requestID;
 
-    /**
-     * @var string
-     */
-    protected $verificationLevel;
+    protected ?string $verificationLevel = null;
 
     /**
      * @var SignatureBlockParameter[]
      */
-    protected $signatureBlockParameters;
+    protected array $signatureBlockParameters;
 
-    /**
-     * @param string                    $inputData
-     * @param SignParameters            $parameters
-     * @param string                    $requestID
-     * @param SignatureBlockParameter[] $signatureBlockParameters
-     */
-    public function __construct($inputData, $parameters, $requestID, $signatureBlockParameters = [])
+    public function __construct(string $inputData, SignParameters $parameters, string $requestID, $signatureBlockParameters = [])
     {
         $this->inputData = $inputData;
         $this->parameters = $parameters;
@@ -45,68 +27,44 @@ class SignRequest
         $this->signatureBlockParameters = $signatureBlockParameters;
     }
 
-    /**
-     * @return string
-     */
-    public function getInputData()
+    public function getInputData(): string
     {
         return $this->inputData;
     }
 
-    /**
-     * @param string $inputData
-     */
-    public function setInputData($inputData): void
+    public function setInputData(string $inputData): void
     {
         $this->inputData = $inputData;
     }
 
-    /**
-     * @return SignParameters
-     */
-    public function getParameters()
+    public function getParameters(): SignParameters
     {
         return $this->parameters;
     }
 
-    /**
-     * @param SignParameters $parameters
-     */
-    public function setParameters($parameters): void
+    public function setParameters(SignParameters $parameters): void
     {
         $this->parameters = $parameters;
     }
 
-    /**
-     * @return string
-     */
-    public function getRequestID()
+    public function getRequestID(): string
     {
         return $this->requestID;
     }
 
-    /**
-     * @param string $requestID
-     */
-    public function setRequestID($requestID): void
+    public function setRequestID(string $requestID): void
     {
         $this->requestID = $requestID;
     }
 
-    /**
-     * @return VerificationLevel
-     */
-    public function getVerificationLevel()
+    public function getVerificationLevel(): ?VerificationLevel
     {
-        return VerificationLevel::from($this->verificationLevel);
+        return $this->verificationLevel === null ? null : VerificationLevel::from($this->verificationLevel);
     }
 
-    /**
-     * @param VerificationLevel $verificationLevel
-     */
-    public function setVerificationLevel($verificationLevel): void
+    public function setVerificationLevel(?VerificationLevel $verificationLevel): void
     {
-        $this->verificationLevel = $verificationLevel->value;
+        $this->verificationLevel = $verificationLevel === null ? null : $verificationLevel->value;
     }
 
     /**

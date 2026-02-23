@@ -6,118 +6,69 @@ namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 
 class VerifyRequest
 {
-    /**
-     * @var string
-     */
-    protected $inputData;
+    protected string $inputData;
 
-    /**
-     * @var PropertyMap
-     */
-    protected $preprocessorArguments;
+    protected ?PropertyMap $preprocessorArguments;
 
-    /**
-     * @var string
-     */
-    protected $requestID;
+    protected string $requestID;
 
-    /**
-     * @var int
-     */
-    protected $signatureIndex;
+    protected ?int $signatureIndex;
 
-    /**
-     * @var string
-     */
-    protected $verificationLevel;
+    protected ?string $verificationLevel;
 
-    /**
-     * @param string $inputData
-     * @param string $requestID
-     */
-    public function __construct($inputData, $requestID)
+    public function __construct(string $inputData, string $requestID)
     {
         $this->inputData = $inputData;
         $this->requestID = $requestID;
     }
 
-    /**
-     * @return string
-     */
-    public function getInputData()
+    public function getInputData(): string
     {
         return $this->inputData;
     }
 
-    /**
-     * @param string $inputData
-     */
-    public function setInputData($inputData): void
+    public function setInputData(string $inputData): void
     {
         $this->inputData = $inputData;
     }
 
-    /**
-     * @return PropertyMap
-     */
-    public function getPreprocessorArguments()
+    public function getPreprocessorArguments(): ?PropertyMap
     {
         return $this->preprocessorArguments;
     }
 
-    /**
-     * @param PropertyMap $preprocessorArguments
-     */
-    public function setPreprocessorArguments($preprocessorArguments): void
+    public function setPreprocessorArguments(?PropertyMap $preprocessorArguments): void
     {
         $this->preprocessorArguments = $preprocessorArguments;
     }
 
-    /**
-     * @return string
-     */
-    public function getRequestID()
+    public function getRequestID(): string
     {
         return $this->requestID;
     }
 
-    /**
-     * @param string $requestID
-     */
-    public function setRequestID($requestID): void
+    public function setRequestID(string $requestID): void
     {
         $this->requestID = $requestID;
     }
 
-    /**
-     * @return int
-     */
-    public function getSignatureIndex()
+    public function getSignatureIndex(): ?int
     {
         return $this->signatureIndex;
     }
 
-    /**
-     * @param int $signatureIndex
-     */
-    public function setSignatureIndex($signatureIndex): void
+    public function setSignatureIndex(?int $signatureIndex): void
     {
         $this->signatureIndex = $signatureIndex;
     }
 
-    /**
-     * @return VerificationLevel
-     */
-    public function getVerificationLevel()
+    public function getVerificationLevel(): ?VerificationLevel
     {
-        return VerificationLevel::from($this->verificationLevel);
+        return $this->verificationLevel === null ? null : VerificationLevel::from($this->verificationLevel);
     }
 
-    /**
-     * @param VerificationLevel $verificationLevel
-     */
-    public function setVerificationLevel($verificationLevel): void
+    public function setVerificationLevel(?VerificationLevel $verificationLevel): void
     {
-        $this->verificationLevel = $verificationLevel->value;
+        $this->verificationLevel = $verificationLevel === null ? null : $verificationLevel->value;
     }
 }

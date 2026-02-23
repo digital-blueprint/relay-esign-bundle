@@ -6,75 +6,30 @@ namespace Dbp\Relay\EsignBundle\PdfAsSoapClient;
 
 class VerifyResult
 {
-    /**
-     * @var string
-     */
-    protected $certificate;
+    protected string $certificate;
 
-    /**
-     * @var int
-     */
-    protected $certificateCode;
+    protected int $certificateCode;
 
-    /**
-     * @var string
-     */
-    protected $certificateMessage;
+    protected string $certificateMessage;
 
-    /**
-     * @var string
-     */
-    protected $error;
+    protected string $error;
 
-    /**
-     * @var bool
-     */
-    protected $processed;
+    protected bool $processed;
 
-    /**
-     * @var string
-     */
-    protected $requestID;
+    protected string $requestID;
+    protected int $signatureIndex;
 
-    /**
-     * @var int
-     */
-    protected $signatureIndex;
+    protected string $signedBy;
 
-    /**
-     * @var string
-     */
-    protected $signedBy;
+    protected string $signedData;
 
-    /**
-     * @var string
-     */
-    protected $signedData;
+    protected int $valueCode;
 
-    /**
-     * @var int
-     */
-    protected $valueCode;
+    protected string $valueMessage;
 
-    /**
-     * @var string
-     */
-    protected $valueMessage;
-
-    /**
-     * @param string $certificate
-     * @param int    $certificateCode
-     * @param string $certificateMessage
-     * @param string $error
-     * @param bool   $processed
-     * @param string $requestID
-     * @param int    $signatureIndex
-     * @param string $signedBy
-     * @param string $signedData
-     * @param int    $valueCode
-     * @param string $valueMessage
-     */
-    public function __construct($certificate, $certificateCode, $certificateMessage, $error, $processed, $requestID, $signatureIndex, $signedBy, $signedData, $valueCode, $valueMessage)
+    public function __construct(string $certificate, int $certificateCode, string $certificateMessage,
+        string $error, bool $processed, string $requestID, int $signatureIndex,
+        string $signedBy, string $signedData, int $valueCode, string $valueMessage)
     {
         $this->certificate = $certificate;
         $this->certificateCode = $certificateCode;
@@ -89,178 +44,112 @@ class VerifyResult
         $this->valueMessage = $valueMessage;
     }
 
-    /**
-     * @return string
-     */
-    public function getCertificate()
+    public function getCertificate(): string
     {
         return $this->certificate;
     }
 
-    /**
-     * @param string $certificate
-     */
-    public function setCertificate($certificate): void
+    public function setCertificate(string $certificate): void
     {
         $this->certificate = $certificate;
     }
 
-    /**
-     * @return int
-     */
-    public function getCertificateCode()
+    public function getCertificateCode(): int
     {
         return $this->certificateCode;
     }
 
-    /**
-     * @param int $certificateCode
-     */
-    public function setCertificateCode($certificateCode): void
+    public function setCertificateCode(int $certificateCode): void
     {
         $this->certificateCode = $certificateCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getCertificateMessage()
+    public function getCertificateMessage(): string
     {
         return $this->certificateMessage;
     }
 
-    /**
-     * @param string $certificateMessage
-     */
-    public function setCertificateMessage($certificateMessage): void
+    public function setCertificateMessage(string $certificateMessage): void
     {
         $this->certificateMessage = $certificateMessage;
     }
 
-    /**
-     * @return string
-     */
-    public function getError()
+    public function getError(): string
     {
         return $this->error;
     }
 
-    /**
-     * @param string $error
-     */
-    public function setError($error): void
+    public function setError(string $error): void
     {
         $this->error = $error;
     }
 
-    /**
-     * @return bool
-     */
-    public function getProcessed()
+    public function getProcessed(): bool
     {
         return $this->processed;
     }
 
-    /**
-     * @param bool $processed
-     */
-    public function setProcessed($processed): void
+    public function setProcessed(bool $processed): void
     {
         $this->processed = $processed;
     }
 
-    /**
-     * @return string
-     */
-    public function getRequestID()
+    public function getRequestID(): string
     {
         return $this->requestID;
     }
 
-    /**
-     * @param string $requestID
-     */
-    public function setRequestID($requestID): void
+    public function setRequestID(string $requestID): void
     {
         $this->requestID = $requestID;
     }
 
-    /**
-     * @return int
-     */
-    public function getSignatureIndex()
+    public function getSignatureIndex(): int
     {
         return $this->signatureIndex;
     }
 
-    /**
-     * @param int $signatureIndex
-     */
-    public function setSignatureIndex($signatureIndex): void
+    public function setSignatureIndex(int $signatureIndex): void
     {
         $this->signatureIndex = $signatureIndex;
     }
 
-    /**
-     * @return string
-     */
-    public function getSignedBy()
+    public function getSignedBy(): string
     {
         return $this->signedBy;
     }
 
-    /**
-     * @param string $signedBy
-     */
-    public function setSignedBy($signedBy): void
+    public function setSignedBy(string $signedBy): void
     {
         $this->signedBy = $signedBy;
     }
 
-    /**
-     * @return string
-     */
-    public function getSignedData()
+    public function getSignedData(): string
     {
         return $this->signedData;
     }
 
-    /**
-     * @param string $signedData
-     */
-    public function setSignedData($signedData): void
+    public function setSignedData(string $signedData): void
     {
         $this->signedData = $signedData;
     }
 
-    /**
-     * @return int
-     */
-    public function getValueCode()
+    public function getValueCode(): int
     {
         return $this->valueCode;
     }
 
-    /**
-     * @param int $valueCode
-     */
-    public function setValueCode($valueCode): void
+    public function setValueCode(int $valueCode): void
     {
         $this->valueCode = $valueCode;
     }
 
-    /**
-     * @return string
-     */
-    public function getValueMessage()
+    public function getValueMessage(): string
     {
         return $this->valueMessage;
     }
 
-    /**
-     * @param string $valueMessage
-     */
-    public function setValueMessage($valueMessage): void
+    public function setValueMessage(string $valueMessage): void
     {
         $this->valueMessage = $valueMessage;
     }

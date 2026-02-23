@@ -9,7 +9,7 @@ class BulkSignResponse
     /**
      * @var SignResponse[]
      */
-    protected $signResponses;
+    protected array $signResponses;
 
     /**
      * @param SignResponse[] $signResponses
