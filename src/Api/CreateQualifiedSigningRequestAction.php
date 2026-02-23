@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Dbp\Relay\EsignBundle\Api;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
+use Dbp\Relay\EsignBundle\Api\Utils as UtilsAlias;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
-use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningException;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningRequest;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningUnavailableException;
+use Dbp\Relay\EsignBundle\PdfAsApi\Utils;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +22,9 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
 #[AsController]
-final class CreateQualifiedSigningRequestAction extends BaseSigningController
+final class CreateQualifiedSigningRequestAction
 {
-    protected $api;
+    private $api;
 
     public function __construct(PdfAsApi $api, private readonly AuthorizationService $authorizationService)
     {
@@ -37,7 +38,7 @@ final class CreateQualifiedSigningRequestAction extends BaseSigningController
     {
         $this->authorizationService->checkCanSign();
 
-        $profileName = self::requestGet($request, 'profile');
+        $profileName = UtilsAlias::requestGet($request, 'profile');
 
         if ($profileName === null) {
             throw new BadRequestHttpException('Missing "profile"');
@@ -75,31 +76,31 @@ final class CreateQualifiedSigningRequestAction extends BaseSigningController
 
         $positionData = [];
 
-        if (self::requestGet($request, 'x', '') !== '') {
-            $positionData['x'] = (int) round((float) self::requestGet($request, 'x'));
+        if (UtilsAlias::requestGet($request, 'x', '') !== '') {
+            $positionData['x'] = (int) round((float) UtilsAlias::requestGet($request, 'x'));
         }
 
-        if (self::requestGet($request, 'y', '') !== '') {
-            $positionData['y'] = (int) round((float) self::requestGet($request, 'y'));
+        if (UtilsAlias::requestGet($request, 'y', '') !== '') {
+            $positionData['y'] = (int) round((float) UtilsAlias::requestGet($request, 'y'));
         }
 
         // there only is "w", no "h" allowed in PDF-AS
-        if (self::requestGet($request, 'w', '') !== '') {
-            $positionData['w'] = (int) round((float) self::requestGet($request, 'w'));
+        if (UtilsAlias::requestGet($request, 'w', '') !== '') {
+            $positionData['w'] = (int) round((float) UtilsAlias::requestGet($request, 'w'));
         }
 
-        if (self::requestGet($request, 'r', '') !== '') {
-            $positionData['r'] = (int) round((float) self::requestGet($request, 'r'));
+        if (UtilsAlias::requestGet($request, 'r', '') !== '') {
+            $positionData['r'] = (int) round((float) UtilsAlias::requestGet($request, 'r'));
         }
 
-        if (self::requestGet($request, 'p', '') !== '') {
-            $positionData['p'] = (int) self::requestGet($request, 'p');
+        if (UtilsAlias::requestGet($request, 'p', '') !== '') {
+            $positionData['p'] = (int) UtilsAlias::requestGet($request, 'p');
         }
 
         $userText = [];
         if ($request->request->has('user_text')) {
             $data = $request->request->all()['user_text'];
-            $userText = self::parseUserText($data);
+            $userText = UtilsAlias::parseUserText($data);
         }
 
         $invisible = $request->request->getBoolean('invisible');
@@ -113,7 +114,7 @@ final class CreateQualifiedSigningRequestAction extends BaseSigningController
         }
 
         // generate a request id for the signing process
-        $requestId = Tools::generateRequestId();
+        $requestId = Utils::generateRequestId();
         $request = new SigningRequest($data, $profileName, $requestId, $positionData, $userText, invisible: $invisible);
 
         // create redirect url for signing request

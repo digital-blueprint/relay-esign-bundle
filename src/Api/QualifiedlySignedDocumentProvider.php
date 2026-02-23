@@ -8,7 +8,6 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
-use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningException;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,9 +49,9 @@ class QualifiedlySignedDocumentProvider implements ProviderInterface
         $signedPdfData = $result->getSignedPDF();
         $document = new QualifiedlySignedDocument();
         $document->setIdentifier($id);
-        $document->setContentUrl(Tools::getDataURI($signedPdfData, 'application/pdf'));
+        $document->setContentUrl(Utils::getDataURI($signedPdfData, 'application/pdf'));
         $document->setContentSize(strlen($signedPdfData));
-        $document->setName(Tools::generateSignedFileName($fileName));
+        $document->setName(Utils::generateSignedFileName($fileName));
 
         return $document;
     }

@@ -6,11 +6,11 @@ namespace Dbp\Relay\EsignBundle\Api;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
-use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningException;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningRequest;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningUnavailableException;
+use Dbp\Relay\EsignBundle\PdfAsApi\Utils as PdfAsApiUtils;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,9 +21,9 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
 #[AsController]
-final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
+final class CreateAdvancedlySignedDocumentAction
 {
-    protected $api;
+    private $api;
 
     public function __construct(PdfAsApi $api, private readonly AuthorizationService $authorizationService)
     {
@@ -37,7 +37,7 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
     {
         $this->authorizationService->checkCanSign();
 
-        $profileName = self::requestGet($request, 'profile');
+        $profileName = Utils::requestGet($request, 'profile');
         if ($profileName === null) {
             throw new BadRequestHttpException('Missing "profile"');
         }
@@ -69,31 +69,31 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
 
         $positionData = [];
 
-        if (self::requestGet($request, 'x', '') !== '') {
-            $positionData['x'] = (int) round((float) self::requestGet($request, 'x'));
+        if (Utils::requestGet($request, 'x', '') !== '') {
+            $positionData['x'] = (int) round((float) Utils::requestGet($request, 'x'));
         }
 
-        if (self::requestGet($request, 'y', '') !== '') {
-            $positionData['y'] = (int) round((float) self::requestGet($request, 'y'));
+        if (Utils::requestGet($request, 'y', '') !== '') {
+            $positionData['y'] = (int) round((float) Utils::requestGet($request, 'y'));
         }
 
         // there only is "w", no "h" allowed in PDF-AS
-        if (self::requestGet($request, 'w', '') !== '') {
-            $positionData['w'] = (int) round((float) self::requestGet($request, 'w'));
+        if (Utils::requestGet($request, 'w', '') !== '') {
+            $positionData['w'] = (int) round((float) Utils::requestGet($request, 'w'));
         }
 
-        if (self::requestGet($request, 'r', '') !== '') {
-            $positionData['r'] = (int) round((float) self::requestGet($request, 'r'));
+        if (Utils::requestGet($request, 'r', '') !== '') {
+            $positionData['r'] = (int) round((float) Utils::requestGet($request, 'r'));
         }
 
-        if (self::requestGet($request, 'p', '') !== '') {
-            $positionData['p'] = (int) self::requestGet($request, 'p');
+        if (Utils::requestGet($request, 'p', '') !== '') {
+            $positionData['p'] = (int) Utils::requestGet($request, 'p');
         }
 
         $userText = [];
         if ($request->request->has('user_text')) {
             $data = $request->request->all()['user_text'];
-            $userText = self::parseUserText($data);
+            $userText = Utils::parseUserText($data);
         }
 
         $invisible = $request->request->getBoolean('invisible');
@@ -107,7 +107,7 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
         }
 
         // sign the pdf data
-        $requestId = Tools::generateRequestId();
+        $requestId = PdfAsApiUtils::generateRequestId();
         $request = new SigningRequest($data, $profileName, $requestId, $positionData, $userText, invisible: $invisible);
         try {
             $result = $this->api->advancedlySignPdf($request);
@@ -118,12 +118,12 @@ final class CreateAdvancedlySignedDocumentAction extends BaseSigningController
         }
 
         // add some suffix for signed documents
-        $signedFileName = Tools::generateSignedFileName($uploadedFile->getClientOriginalName());
+        $signedFileName = Utils::generateSignedFileName($uploadedFile->getClientOriginalName());
         $signedPdfData = $result->getSignedPDF();
 
         $document = new AdvancedlySignedDocument();
         $document->setIdentifier($requestId);
-        $document->setContentUrl(Tools::getDataURI($signedPdfData, 'application/pdf'));
+        $document->setContentUrl(Utils::getDataURI($signedPdfData, 'application/pdf'));
         $document->setName($signedFileName);
         $document->setContentSize(strlen($signedPdfData));
 

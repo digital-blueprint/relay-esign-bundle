@@ -7,10 +7,10 @@ namespace Dbp\Relay\EsignBundle\Api;
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
-use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningException;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningUnavailableException;
+use Dbp\Relay\EsignBundle\PdfAsApi\Utils;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,7 +67,7 @@ final class CreateElectronicSignatureVerificationReportAction
         }
 
         // generate a request id for the signing process
-        $requestId = Tools::generateRequestId();
+        $requestId = Utils::generateRequestId();
 
         // verify the pdf data
         try {

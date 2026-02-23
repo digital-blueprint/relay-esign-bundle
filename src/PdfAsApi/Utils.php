@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Helpers;
+namespace Dbp\Relay\EsignBundle\PdfAsApi;
 
 use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Psr7\Uri;
@@ -10,7 +10,7 @@ use Psr\Http\Message\RequestInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Uid\Uuid;
 
-class Tools
+class Utils
 {
     /**
      * Returns the same uri but with the default port included
@@ -36,49 +36,6 @@ class Tools
         }
 
         return $result;
-    }
-
-    /**
-     * Convert binary data to a data url.
-     */
-    public static function getDataURI(string $data, string $mime): string
-    {
-        return 'data:'.$mime.';base64,'.base64_encode($data);
-    }
-
-    public static function generateRequestId(): string
-    {
-        $uuid = Uuid::v4();
-
-        return $uuid->toRfc4122();
-    }
-
-    public static function generateSignedFileName(string $fileName): string
-    {
-        $parts = explode('.', $fileName);
-
-        if (count($parts) < 2) {
-            [$name, $ext] = [$parts[0], ''];
-        } else {
-            $ext = end($parts);
-            $name = prev($parts);
-        }
-        $parts = explode('.', $fileName);
-
-        $prevName = array_slice($parts, 0, -2);
-
-        if (str_ends_with($name, '-sig')) {
-            return $fileName;
-        }
-        $prefix = '';
-        if (count($prevName) > 0) {
-            $prefix = implode('.', $prevName).'.';
-        }
-        if (!empty($ext)) {
-            $ext = '.'.$ext;
-        }
-
-        return $prefix.$name.'-sig'.$ext;
     }
 
     /**
@@ -110,5 +67,12 @@ class Tools
                 );
             };
         };
+    }
+
+    public static function generateRequestId(): string
+    {
+        $uuid = Uuid::v4();
+
+        return $uuid->toRfc4122();
     }
 }

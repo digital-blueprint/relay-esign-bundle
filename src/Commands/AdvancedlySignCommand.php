@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Commands;
 
-use Dbp\Relay\EsignBundle\Api\BaseSigningController;
-use Dbp\Relay\EsignBundle\Helpers\Tools;
+use Dbp\Relay\EsignBundle\Api\Utils as UtilsAlias;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningRequest;
+use Dbp\Relay\EsignBundle\PdfAsApi\Utils;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Console\Command\Command;
@@ -69,13 +69,13 @@ class AdvancedlySignCommand extends Command implements LoggerAwareInterface
         }
 
         if ($userText !== null) {
-            $userText = BaseSigningController::parseUserText($userText);
+            $userText = UtilsAlias::parseUserText($userText);
         } else {
             $userText = [];
         }
 
         $requests = [];
-        $requestId = Tools::generateRequestId();
+        $requestId = Utils::generateRequestId();
         foreach ($inputPaths as $index => $inputPath) {
             $subRequestId = $requestId.'-'.$index;
 

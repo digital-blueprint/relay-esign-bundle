@@ -10,7 +10,6 @@ namespace Dbp\Relay\EsignBundle\PdfAsApi;
 use Dbp\Relay\EsignBundle\Configuration\AdvancedProfile;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\Configuration\Profile;
-use Dbp\Relay\EsignBundle\Helpers\Tools;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\BulkSignRequest;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\Connector;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\GetMultipleRequest;
@@ -126,7 +125,7 @@ class PdfAsApi implements LoggerAwareInterface
 
         $multiRequest = new SignMultipleRequest($requestId, Connector::mobilebku, []);
         $multiRequest->setInvokeUrl($this->getCallbackUrl($requestId));
-        $multiRequest->setInvokeErrorUrl(Tools::getUriWithPort($this->getErrorCallbackUrl($requestId)));
+        $multiRequest->setInvokeErrorUrl(Utils::getUriWithPort($this->getErrorCallbackUrl($requestId)));
 
         $i = 0;
         foreach ($requests as $request) {
@@ -213,7 +212,7 @@ class PdfAsApi implements LoggerAwareInterface
         $requestId = $request->getRequestId();
         $params->setInvokeUrl($this->getCallbackUrl($requestId));
         // it's important to add the port "443", PDF-AS has a bug that will set the port to "-1" if it isn't set
-        $params->setInvokeErrorUrl(Tools::getUriWithPort($this->getErrorCallbackUrl($requestId)));
+        $params->setInvokeErrorUrl(Utils::getUriWithPort($this->getErrorCallbackUrl($requestId)));
 
         $request = new SignRequest($request->getData(), $params, $requestId);
 
@@ -480,7 +479,7 @@ class PdfAsApi implements LoggerAwareInterface
     public function fetchQualifiedlySignedDocument(string $sessionId, ?callable $handler = null): PDFDataResponse
     {
         $stack = HandlerStack::create($handler);
-        $stack->push(Tools::createStopwatchMiddleware($this->stopwatch, 'pdf-as.fetch-qualified', 'esign'));
+        $stack->push(Utils::createStopwatchMiddleware($this->stopwatch, 'pdf-as.fetch-qualified', 'esign'));
         $client = new Client(['handler' => $stack]);
 
         $url = $this->getQualifiedlySignedDocumentUrl($sessionId);
