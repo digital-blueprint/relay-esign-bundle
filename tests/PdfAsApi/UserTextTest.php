@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests\PdfAsApi;
 
 use Dbp\Relay\EsignBundle\Configuration\AdvancedProfile;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningException;

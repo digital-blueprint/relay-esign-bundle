@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests\Api;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Api\Utils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class ControllerTest extends TestCase
+class UtilsTest extends TestCase
 {
     public function testUserText()
     {

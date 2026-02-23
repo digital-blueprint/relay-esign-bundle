@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests\Api;
 
 use Dbp\Relay\CoreBundle\TestUtils\AbstractApiTest;
 
-class ApiTest extends AbstractApiTest
+class ApiAuthTest extends AbstractApiTest
 {
     public function testNotAuth()
     {
