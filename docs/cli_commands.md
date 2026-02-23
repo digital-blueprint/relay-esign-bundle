@@ -13,17 +13,17 @@ This command will directly sign a PDF.
 ```console
 $ ./bin/console dbp:relay:esign:sign:advanced --help
 Description:
-  Sign a PDF file
+  Sign one or more PDF files
 
 Usage:
-  dbp:relay:esign:sign:advanced <profile-id> <input-path> <output-path>
+  dbp:relay:esign:sign:advanced [options] [--] <profile-id> <input-paths>...
 
 Arguments:
-  profile-id            Signing profile ID
-  input-path            Input PDF file path
-  output-path           Output PDF file path
+  profile-id                             Signing profile ID
+  input-paths                            Input PDF file paths
 
 Options:
+  -o, --output-paths=OUTPUT-PATHS        Output PDF file paths (matched by order) (multiple values allowed)
       --user-image-path=USER-IMAGE-PATH  Signature image path (PNG)
       --user-text=USER-TEXT              User text JSON
       --invisible                        Create an invisible signature
@@ -37,17 +37,17 @@ copy a session ID back to continue the process.
 ```console
 $ ./bin/console dbp:relay:esign:sign:qualified --help
 Description:
-  Sign a PDF file
+  Sign one or more PDF files
 
 Usage:
-  dbp:relay:esign:sign:qualified <profile-id> <input-path> <output-path>
+  dbp:relay:esign:sign:qualified [options] [--] <profile-id> <input-paths>...
 
 Arguments:
-  profile-id            Signing profile ID
-  input-path            Input PDF file path
-  output-path           Output PDF file path
+  profile-id                             Signing profile ID
+  input-paths                            Input PDF file paths
 
 Options:
+  -o, --output-paths=OUTPUT-PATHS        Output PDF file paths (matched by order) (multiple values allowed)
       --user-image-path=USER-IMAGE-PATH  Signature image path (PNG)
       --user-text=USER-TEXT              User text JSON
       --invisible                        Create an invisible signature

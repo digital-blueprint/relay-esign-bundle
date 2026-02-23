@@ -34,7 +34,7 @@ class QualifiedlySignCommand extends Command implements LoggerAwareInterface
     protected function configure(): void
     {
         $this->setName('dbp:relay:esign:sign:qualified');
-        $this->setDescription('Sign a PDF file');
+        $this->setDescription('Sign one or more PDF files');
         $this->addArgument('profile-id', InputArgument::REQUIRED, 'Signing profile ID');
         $this->addArgument('input-paths', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'Input PDF file paths');
         $this->addOption('output-paths', 'o', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Output PDF file paths (matched by order)');
