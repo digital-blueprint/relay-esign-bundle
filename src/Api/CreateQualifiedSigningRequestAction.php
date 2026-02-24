@@ -79,25 +79,25 @@ final class CreateQualifiedSigningRequestAction
 
         $x = SignatureBlockPosition::AUTO;
         if (UtilsAlias::requestGet($request, 'x', '') !== '') {
-            $x = (int) round((float) UtilsAlias::requestGet($request, 'x'));
+            $x = (float) UtilsAlias::requestGet($request, 'x');
             $hasPositionParams = true;
         }
 
         $y = SignatureBlockPosition::AUTO;
         if (UtilsAlias::requestGet($request, 'y', '') !== '') {
-            $y = (int) round((float) UtilsAlias::requestGet($request, 'y'));
+            $y = (float) UtilsAlias::requestGet($request, 'y');
             $hasPositionParams = true;
         }
 
         $width = SignatureBlockPosition::AUTO;
         if (UtilsAlias::requestGet($request, 'w', '') !== '') {
-            $width = (int) round((float) UtilsAlias::requestGet($request, 'w'));
+            $width = (float) UtilsAlias::requestGet($request, 'w');
             $hasPositionParams = true;
         }
 
         $rotation = 0.0;
         if (UtilsAlias::requestGet($request, 'r', '') !== '') {
-            $rotation = (int) round((float) UtilsAlias::requestGet($request, 'r'));
+            $rotation = (float) UtilsAlias::requestGet($request, 'r');
             $hasPositionParams = true;
         }
 
