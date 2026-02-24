@@ -405,6 +405,11 @@ class PdfAsApi implements LoggerAwareInterface
      */
     protected function getQualifiedlySignedDocumentUrl(string $sessionId): string
     {
+        if (str_starts_with($sessionId, 'sid_')) {
+            $sessionId = substr($sessionId, strlen('sid_'));
+        }
+        // We used to allow plain session IDs here, so avoid breaking that
+
         $uriTemplate = new UriTemplate('/PDFData;jsessionid={sessionId}');
         $qualifiedConfig = $this->bundleConfig->getQualified();
         if ($qualifiedConfig === null) {
@@ -424,6 +429,19 @@ class PdfAsApi implements LoggerAwareInterface
         $qualifiedConfig = $this->bundleConfig->getQualified();
         if ($qualifiedConfig === null) {
             throw new SigningException();
+        }
+
+        if (str_starts_with($token, 'sid_')) {
+            // XXX: in case a SignMultipleRequest is started with only one document, the redirect
+            // only gives us a session ID for the single API (tokens are UUID v4, session IDs are tomcat session IDs).
+            // To keep the API simple for the user, allow these also here and use the single API and wrap the result.
+            $sessionId = substr($token, strlen('sid_'));
+
+            return [$this->fetchQualifiedlySignedDocument($sessionId)];
+        } elseif (str_starts_with($token, 'tok_')) {
+            $token = substr($token, strlen('tok_'));
+        } else {
+            throw new SigningException('invalid token');
         }
 
         $request = new GetMultipleRequest($token);

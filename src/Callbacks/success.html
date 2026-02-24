@@ -86,7 +86,13 @@
           error: "Failed to extract the session ID",
         };
       }
-      return { type: "pdf-as-callback", sessionId: sessionId, token: token }
+      let code;
+      if (token) {
+        code = 'tok_' + token;
+      } else {
+        code = 'sid_' + sessionId;
+      }
+      return { type: "pdf-as-callback", sessionId: sessionId, code: code }
     }
 
     function postToParent(message) {
@@ -96,7 +102,7 @@
 
     function getCode(message) {
       if (message['type'] === "pdf-as-callback") {
-        return message.sessionId ?? message.token;
+        return message.code;
       }
       return null;
     }
@@ -134,9 +140,10 @@
       console.assert(buildMessage('http://example.com')['type'] === 'pdf-as-error');
       console.assert(buildMessage('')['type'] === 'pdf-as-error');
       console.assert(buildMessage('http://example.com?token=foo')['type'] === 'pdf-as-callback');
-      console.assert(buildMessage('http://example.com?token=foo')['token'] === 'foo');
-      console.assert(buildMessage('http://example.com?token=foo&pdfurl=https%3A%2F%2Ffoo.bar%2Ffoo%3Bjsessionid%3D%252B')['token'] === 'foo');
+      console.assert(buildMessage('http://example.com?token=foo')['code'] === 'tok_foo');
       console.assert(buildMessage('http://example.com?token=foo&pdfurl=https%3A%2F%2Ffoo.bar%2Ffoo%3Bjsessionid%3D%252B')['sessionId'] === '+');
+      console.assert(buildMessage('http://example.com?token=foo&pdfurl=https%3A%2F%2Ffoo.bar%2Ffoo%3Bjsessionid%3D%252B')['code'] === 'tok_foo');
+      console.assert(buildMessage('http://example.com?pdfurl=https%3A%2F%2Ffoo.bar%2Ffoo%3Bjsessionid%3D%252B')['code'] === 'sid_+');
     }
 
     main();
