@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v0.5.0
+
+* The frontend callback message gained a new `code` field, which replaces the `sessionId` field, which is now deprecated.
+  Pass the `code` value to the API endpoints instead of the `sessionId` value.
+* (potential API break) The CLI signing commands now take multiple input and output paths. Instead of passing
+  `in.pdf out.pdf` you now have to pass `in.pdf -o out.pdf`. You can also pass multiple PDFs at once, for example
+  `in.pdf in2.pdf -o out.pdf -o out2.pdf`, to sign multiple documents. They will be matched by the order they are
+  passed. Note that the same signing parameters are used for all passed documents.
+
 ## v0.4.9
 
 * Add support for zbateson/mail-mime-parser v4
