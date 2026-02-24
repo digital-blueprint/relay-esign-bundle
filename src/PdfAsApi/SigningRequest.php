@@ -9,7 +9,7 @@ class SigningRequest
     private string $data;
     private string $profileName;
     private string $requestId;
-    private array $positionData;
+    private SignatureBlockPosition $signatureBlockPosition;
     private array $userText;
     private ?string $userImageData;
     private bool $invisible;
@@ -18,7 +18,7 @@ class SigningRequest
         string $data,
         string $profileName,
         string $requestId,
-        array $positionData = [],
+        ?SignatureBlockPosition $positionData = null,
         array $userText = [],
         ?string $userImageData = null,
         bool $invisible = false
@@ -26,7 +26,7 @@ class SigningRequest
         $this->data = $data;
         $this->profileName = $profileName;
         $this->requestId = $requestId;
-        $this->positionData = $positionData;
+        $this->signatureBlockPosition = $positionData ?? new SignatureBlockPosition();
         $this->userText = $userText;
         $this->userImageData = $userImageData;
         $this->invisible = $invisible;
@@ -47,9 +47,9 @@ class SigningRequest
         return $this->requestId;
     }
 
-    public function getPositionData(): array
+    public function getSignatureBlockPosition(): SignatureBlockPosition
     {
-        return $this->positionData;
+        return $this->signatureBlockPosition;
     }
 
     public function getUserText(): array

@@ -8,6 +8,7 @@ use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Api\Utils as UtilsAlias;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
+use Dbp\Relay\EsignBundle\PdfAsApi\SignatureBlockPosition;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningException;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningRequest;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningUnavailableException;
@@ -74,27 +75,36 @@ final class CreateQualifiedSigningRequestAction
             throw new ApiError(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'PDF file too large to sign (32MB limit)!');
         }
 
-        $positionData = [];
+        $hasPositionParams = false;
 
+        $x = SignatureBlockPosition::AUTO;
         if (UtilsAlias::requestGet($request, 'x', '') !== '') {
-            $positionData['x'] = (int) round((float) UtilsAlias::requestGet($request, 'x'));
+            $x = (int) round((float) UtilsAlias::requestGet($request, 'x'));
+            $hasPositionParams = true;
         }
 
+        $y = SignatureBlockPosition::AUTO;
         if (UtilsAlias::requestGet($request, 'y', '') !== '') {
-            $positionData['y'] = (int) round((float) UtilsAlias::requestGet($request, 'y'));
+            $y = (int) round((float) UtilsAlias::requestGet($request, 'y'));
+            $hasPositionParams = true;
         }
 
-        // there only is "w", no "h" allowed in PDF-AS
+        $width = SignatureBlockPosition::AUTO;
         if (UtilsAlias::requestGet($request, 'w', '') !== '') {
-            $positionData['w'] = (int) round((float) UtilsAlias::requestGet($request, 'w'));
+            $width = (int) round((float) UtilsAlias::requestGet($request, 'w'));
+            $hasPositionParams = true;
         }
 
+        $rotation = 0.0;
         if (UtilsAlias::requestGet($request, 'r', '') !== '') {
-            $positionData['r'] = (int) round((float) UtilsAlias::requestGet($request, 'r'));
+            $rotation = (int) round((float) UtilsAlias::requestGet($request, 'r'));
+            $hasPositionParams = true;
         }
 
+        $page = SignatureBlockPosition::AUTO;
         if (UtilsAlias::requestGet($request, 'p', '') !== '') {
-            $positionData['p'] = (int) UtilsAlias::requestGet($request, 'p');
+            $page = (int) UtilsAlias::requestGet($request, 'p');
+            $hasPositionParams = true;
         }
 
         $userText = [];
@@ -104,7 +114,7 @@ final class CreateQualifiedSigningRequestAction
         }
 
         $invisible = $request->request->getBoolean('invisible');
-        if ($invisible && !empty($positionData)) {
+        if ($invisible && $hasPositionParams) {
             throw new BadRequestHttpException('Position parameters are not allowed in case the signature block is set to invisible');
         }
 
@@ -115,7 +125,8 @@ final class CreateQualifiedSigningRequestAction
 
         // generate a request id for the signing process
         $requestId = Utils::generateRequestId();
-        $request = new SigningRequest($data, $profileName, $requestId, $positionData, $userText, invisible: $invisible);
+        $blockPosition = new SignatureBlockPosition(x: $x, y: $y, width : $width, rotation: $rotation, page: $page);
+        $request = new SigningRequest($data, $profileName, $requestId, $blockPosition, $userText, invisible: $invisible);
 
         // create redirect url for signing request
         try {

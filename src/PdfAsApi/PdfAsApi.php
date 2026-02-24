@@ -127,14 +127,13 @@ class PdfAsApi implements LoggerAwareInterface
         $multiRequest->setInvokeUrl($this->getCallbackUrl($requestId));
         $multiRequest->setInvokeErrorUrl(Utils::getUriWithPort($this->getErrorCallbackUrl($requestId)));
 
-        $i = 0;
         foreach ($requests as $request) {
             $profile = $qualifiedConfig->getProfile($request->getProfileName());
             if ($profile === null) {
                 throw new SigningException('Unknown profile');
             }
             $subRequest = new SignMultipleFile($request->getData(), $request->getRequestId());
-            $subRequest->setPosition(self::buildPositionString($request));
+            $subRequest->setPosition($request->getSignatureBlockPosition()->toPdfAsFormat());
             $subRequest->setProfile($profile->getProfileId());
             $multiRequest->addDocument($subRequest);
         }
@@ -207,7 +206,7 @@ class PdfAsApi implements LoggerAwareInterface
         $params = new SignParameters(Connector::mobilebku);
         $params->setProfile($profile->getProfileId());
         $params->setConfigurationOverrides(self::buildConfigurationOverrides($profile, $request));
-        $params->setPosition(self::buildPositionString($request));
+        $params->setPosition($request->getSignatureBlockPosition()->toPdfAsFormat());
 
         $requestId = $request->getRequestId();
         $params->setInvokeUrl($this->getCallbackUrl($requestId));
@@ -279,18 +278,6 @@ class PdfAsApi implements LoggerAwareInterface
         return new PropertyEntry("sig_obj.$profileId.isvisible", !$invisible ? 'true' : 'false');
     }
 
-    public static function buildPositionString(SigningRequest $request): ?string
-    {
-        $positionData = $request->getPositionData();
-        if (count($positionData) !== 0) {
-            array_walk($positionData, function (&$item, $key) { $item = "$key:$item"; });
-
-            return implode(';', $positionData);
-        }
-
-        return null;
-    }
-
     /**
      * @param SigningRequest[] $requests
      *
@@ -316,7 +303,7 @@ class PdfAsApi implements LoggerAwareInterface
             $params->setKeyIdentifier($profile->getKeyId());
             $params->setProfile($profile->getProfileId());
             $params->setConfigurationOverrides(self::buildConfigurationOverrides($profile, $request));
-            $params->setPosition(self::buildPositionString($request));
+            $params->setPosition($request->getSignatureBlockPosition()->toPdfAsFormat());
 
             $requestId = $request->getRequestId();
             $signRequest = new SignRequest($request->getData(), $params, $requestId);

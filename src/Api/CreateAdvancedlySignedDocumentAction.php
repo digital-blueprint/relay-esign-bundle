@@ -7,6 +7,7 @@ namespace Dbp\Relay\EsignBundle\Api;
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
+use Dbp\Relay\EsignBundle\PdfAsApi\SignatureBlockPosition;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningException;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningRequest;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningUnavailableException;
@@ -67,27 +68,36 @@ final class CreateAdvancedlySignedDocumentAction
             throw new BadRequestHttpException('Empty files cannot be signed!');
         }
 
-        $positionData = [];
+        $hasPositionParams = false;
 
+        $x = SignatureBlockPosition::AUTO;
         if (Utils::requestGet($request, 'x', '') !== '') {
-            $positionData['x'] = (int) round((float) Utils::requestGet($request, 'x'));
+            $x = (int) round((float) Utils::requestGet($request, 'x'));
+            $hasPositionParams = true;
         }
 
+        $y = SignatureBlockPosition::AUTO;
         if (Utils::requestGet($request, 'y', '') !== '') {
-            $positionData['y'] = (int) round((float) Utils::requestGet($request, 'y'));
+            $y = (int) round((float) Utils::requestGet($request, 'y'));
+            $hasPositionParams = true;
         }
 
-        // there only is "w", no "h" allowed in PDF-AS
+        $width = SignatureBlockPosition::AUTO;
         if (Utils::requestGet($request, 'w', '') !== '') {
-            $positionData['w'] = (int) round((float) Utils::requestGet($request, 'w'));
+            $width = (int) round((float) Utils::requestGet($request, 'w'));
+            $hasPositionParams = true;
         }
 
+        $rotation = 0.0;
         if (Utils::requestGet($request, 'r', '') !== '') {
-            $positionData['r'] = (int) round((float) Utils::requestGet($request, 'r'));
+            $rotation = (int) round((float) Utils::requestGet($request, 'r'));
+            $hasPositionParams = true;
         }
 
+        $page = SignatureBlockPosition::AUTO;
         if (Utils::requestGet($request, 'p', '') !== '') {
-            $positionData['p'] = (int) Utils::requestGet($request, 'p');
+            $page = (int) Utils::requestGet($request, 'p');
+            $hasPositionParams = true;
         }
 
         $userText = [];
@@ -97,7 +107,7 @@ final class CreateAdvancedlySignedDocumentAction
         }
 
         $invisible = $request->request->getBoolean('invisible');
-        if ($invisible && !empty($positionData)) {
+        if ($invisible && $hasPositionParams) {
             throw new BadRequestHttpException('Position parameters are not allowed in case the signature block is set to invisible');
         }
 
@@ -108,7 +118,8 @@ final class CreateAdvancedlySignedDocumentAction
 
         // sign the pdf data
         $requestId = PdfAsApiUtils::generateRequestId();
-        $request = new SigningRequest($data, $profileName, $requestId, $positionData, $userText, invisible: $invisible);
+        $blockPosition = new SignatureBlockPosition(x: $x, y: $y, width : $width, rotation: $rotation, page: $page);
+        $request = new SigningRequest($data, $profileName, $requestId, $blockPosition, $userText, invisible: $invisible);
         try {
             $result = $this->api->advancedlySignPdf($request);
         } catch (SigningUnavailableException $e) {
