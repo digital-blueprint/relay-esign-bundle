@@ -83,19 +83,28 @@ final class CreateAdvancedlySignedDocumentAction
         }
 
         $width = SignatureBlockPosition::AUTO;
-        if (Utils::requestGet($request, 'w', '') !== '') {
+        if ($request->request->has('width')) {
+            $width = $request->request->filter('width', filter: \FILTER_VALIDATE_FLOAT);
+            $hasPositionParams = true;
+        } elseif (Utils::requestGet($request, 'w', '') !== '') {
             $width = (float) Utils::requestGet($request, 'w');
             $hasPositionParams = true;
         }
 
         $rotation = 0.0;
-        if (Utils::requestGet($request, 'r', '') !== '') {
+        if ($request->request->has('rotation')) {
+            $rotation = $request->request->filter('rotation', filter: \FILTER_VALIDATE_FLOAT);
+            $hasPositionParams = true;
+        } elseif (Utils::requestGet($request, 'r', '') !== '') {
             $rotation = (float) Utils::requestGet($request, 'r');
             $hasPositionParams = true;
         }
 
         $page = SignatureBlockPosition::AUTO;
-        if (Utils::requestGet($request, 'p', '') !== '') {
+        if ($request->request->has('page')) {
+            $page = $request->request->getInt('page');
+            $hasPositionParams = true;
+        } elseif (Utils::requestGet($request, 'p', '') !== '') {
             $page = (int) Utils::requestGet($request, 'p');
             $hasPositionParams = true;
         }

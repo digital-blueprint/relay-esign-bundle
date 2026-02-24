@@ -7,6 +7,7 @@
         "ext-fileinfo": "*",
         "ext-json": "*",
         "ext-soap": "*",
+        "ext-filter": "*",
         "api-platform/metadata": "^4.1",
         "api-platform/openapi": "^4.1",
         "api-platform/state": "^4.1",

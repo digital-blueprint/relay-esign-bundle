@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Dbp\Relay\EsignBundle\Api;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
-use Dbp\Relay\EsignBundle\Api\Utils as UtilsAlias;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Dbp\Relay\EsignBundle\PdfAsApi\SignatureBlockPosition;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningException;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningRequest;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningUnavailableException;
-use Dbp\Relay\EsignBundle\PdfAsApi\Utils;
+use Dbp\Relay\EsignBundle\PdfAsApi\Utils as PdfAsApiUtils;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +38,7 @@ final class CreateQualifiedSigningRequestAction
     {
         $this->authorizationService->checkCanSign();
 
-        $profileName = UtilsAlias::requestGet($request, 'profile');
+        $profileName = Utils::requestGet($request, 'profile');
 
         if ($profileName === null) {
             throw new BadRequestHttpException('Missing "profile"');
@@ -78,39 +77,48 @@ final class CreateQualifiedSigningRequestAction
         $hasPositionParams = false;
 
         $x = SignatureBlockPosition::AUTO;
-        if (UtilsAlias::requestGet($request, 'x', '') !== '') {
-            $x = (float) UtilsAlias::requestGet($request, 'x');
+        if (Utils::requestGet($request, 'x', '') !== '') {
+            $x = (float) Utils::requestGet($request, 'x');
             $hasPositionParams = true;
         }
 
         $y = SignatureBlockPosition::AUTO;
-        if (UtilsAlias::requestGet($request, 'y', '') !== '') {
-            $y = (float) UtilsAlias::requestGet($request, 'y');
+        if (Utils::requestGet($request, 'y', '') !== '') {
+            $y = (float) Utils::requestGet($request, 'y');
             $hasPositionParams = true;
         }
 
         $width = SignatureBlockPosition::AUTO;
-        if (UtilsAlias::requestGet($request, 'w', '') !== '') {
-            $width = (float) UtilsAlias::requestGet($request, 'w');
+        if ($request->request->has('width')) {
+            $width = $request->request->filter('width', filter: FILTER_VALIDATE_FLOAT);
+            $hasPositionParams = true;
+        } elseif (Utils::requestGet($request, 'w', '') !== '') {
+            $width = (float) Utils::requestGet($request, 'w');
             $hasPositionParams = true;
         }
 
         $rotation = 0.0;
-        if (UtilsAlias::requestGet($request, 'r', '') !== '') {
-            $rotation = (float) UtilsAlias::requestGet($request, 'r');
+        if ($request->request->has('rotation')) {
+            $rotation = $request->request->filter('rotation', filter: FILTER_VALIDATE_FLOAT);
+            $hasPositionParams = true;
+        } elseif (Utils::requestGet($request, 'r', '') !== '') {
+            $rotation = (float) Utils::requestGet($request, 'r');
             $hasPositionParams = true;
         }
 
         $page = SignatureBlockPosition::AUTO;
-        if (UtilsAlias::requestGet($request, 'p', '') !== '') {
-            $page = (int) UtilsAlias::requestGet($request, 'p');
+        if ($request->request->has('page')) {
+            $page = $request->request->getInt('page');
+            $hasPositionParams = true;
+        } elseif (Utils::requestGet($request, 'p', '') !== '') {
+            $page = (int) Utils::requestGet($request, 'p');
             $hasPositionParams = true;
         }
 
         $userText = [];
         if ($request->request->has('user_text')) {
             $data = $request->request->all()['user_text'];
-            $userText = UtilsAlias::parseUserText($data);
+            $userText = Utils::parseUserText($data);
         }
 
         $invisible = $request->request->getBoolean('invisible');
@@ -124,7 +132,7 @@ final class CreateQualifiedSigningRequestAction
         }
 
         // generate a request id for the signing process
-        $requestId = Utils::generateRequestId();
+        $requestId = PdfAsApiUtils::generateRequestId();
         $blockPosition = new SignatureBlockPosition(x: $x, y: $y, width : $width, rotation: $rotation, page: $page);
         $request = new SigningRequest($data, $profileName, $requestId, $blockPosition, $userText, invisible: $invisible);
 
