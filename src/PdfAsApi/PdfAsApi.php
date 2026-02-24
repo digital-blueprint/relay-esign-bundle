@@ -51,21 +51,11 @@ class PdfAsApi implements LoggerAwareInterface
 
     public function getCallbackUrl(string $requestId): string
     {
-        $qualifiedConfig = $this->bundleConfig->getQualified();
-        if ($qualifiedConfig !== null && $qualifiedConfig->getCallbackUrl() !== null) {
-            return $qualifiedConfig->getCallbackUrl();
-        }
-
         return $this->router->generate('esign_callback_success', ['_dbpRelayEsignId' => $requestId], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     public function getErrorCallbackUrl(string $requestId): string
     {
-        $qualifiedConfig = $this->bundleConfig->getQualified();
-        if ($qualifiedConfig !== null && $qualifiedConfig->getErrorCallbackUrl() !== null) {
-            return $qualifiedConfig->getErrorCallbackUrl();
-        }
-
         return $this->router->generate('esign_callback_error', ['_dbpRelayEsignId' => $requestId], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
@@ -93,21 +83,6 @@ class PdfAsApi implements LoggerAwareInterface
             $serverUrl = $advancedConfig->getServerUrl();
             $checkWSDL($serverUrl.'/services/wsverify?wsdl');
             $checkWSDL($serverUrl.'/services/wssign?wsdl');
-        }
-    }
-
-    public function checkCallbackUrls()
-    {
-        $client = new Client();
-        $qualifiedConfig = $this->bundleConfig->getQualified();
-        if ($qualifiedConfig !== null) {
-            // Only check if it's external, since we might not be deployed/public ourselves
-            if ($qualifiedConfig->getCallbackUrl() !== null) {
-                $client->request('GET', $qualifiedConfig->getCallbackUrl());
-            }
-            if ($qualifiedConfig->getErrorCallbackUrl() !== null) {
-                $client->request('GET', $qualifiedConfig->getErrorCallbackUrl());
-            }
         }
     }
 

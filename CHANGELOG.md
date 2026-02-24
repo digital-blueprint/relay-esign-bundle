@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+* The deprecated `callback_url` and `error_callback_url` options in the bundle config have been removed. The callback
+  handling is now handled by the bundle itself. In case pdf-as-web has URL whitelisting enabled make sure that the
+  bundle provided endpoints are allowed.
+
 ## v0.5.0
 
 * The frontend callback message gained a new `code` field, which replaces the `sessionId` field, which is now deprecated.

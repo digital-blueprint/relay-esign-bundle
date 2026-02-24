@@ -42,7 +42,6 @@ class HealthCheck implements CheckInterface
     {
         return [
             $this->checkMethod('Check if we can reach the pdf-as-web SOAP interface', [$this->api, 'checkPdfAsConnection']),
-            $this->checkMethod('Check if we can reach the callback URLs', [$this->api, 'checkCallbackUrls']),
         ];
     }
 }

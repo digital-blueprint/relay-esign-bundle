@@ -15,16 +15,6 @@ class QualifiedConfig
         return $this->config['server_url'];
     }
 
-    public function getCallbackUrl(): ?string
-    {
-        return $this->config['callback_url'] ?? null;
-    }
-
-    public function getErrorCallbackUrl(): ?string
-    {
-        return $this->config['error_callback_url'] ?? null;
-    }
-
     public function getProfile(string $name): ?QualifiedProfile
     {
         foreach ($this->getProfiles() as $profile) {

@@ -8,10 +8,6 @@ dbp_relay_esign:
   qualified_signature:
     # The URL to the PDF-AS server for qualified signatures
     server_url:           ~ # Required, Example: 'https://pdfas.example.com/pdf-as-web'
-    # The URL pdf-as will redirect to when the signature is done (optional)
-    callback_url:         ~ # Deprecated (Since dbp/relay-esign-bundle ???: The "callback_url" option is deprecated. The API server now provides the callback URL itself.), Example: 'https://pdfas.example.com/static/callback.html'
-    # The URL pdf-as will redirect to when the signature failed (optional)
-    error_callback_url:   ~ # Deprecated (Since dbp/relay-esign-bundle ???: The "error_callback_url" option is deprecated. The API server now provides the callback URL itself.), Example: 'https://pdfas.example.com/static/error.html'
     profiles:
       # Prototype
       -
