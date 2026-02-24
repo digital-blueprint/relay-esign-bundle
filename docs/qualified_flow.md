@@ -67,11 +67,12 @@ In case the authentication succeeded, the response is:
 ```js
 {
     type: 'pdf-as-callback',
-    sessionId: '<sessionId>',
+    code: '<code>',
+    sessionId: '<sessionId>' // deprecated, use "code" instead
 }
 ```
 
-The `sessionId` can be used to retrieve the signed document via the
+The `code` can be used to retrieve the signed document via the
 `/esign/qualifiedly-signed-documents` endpoint.
 
 In case of an error, the response is:

@@ -81,10 +81,10 @@ dbp_relay_esign:
 ```yaml
 dbp_relay_esign:
   qualified_signature:
-    server_url: 'https://sig.tugraz.at/pdf-as-web'
+    server_url: 'https://sig.myuni.at/pdf-as-web'
     profiles:
       - name: default
-        profile_id: 'SIGNATURBLOCK_SMALL_DE_NOTE_PDFA'
+        profile_id: 'SIGNATURBLOCK_MYUNI_QUAL'
   authorization:
     roles:
       ROLE_SIGNER: 'user.isAuthenticated()'
@@ -95,14 +95,14 @@ dbp_relay_esign:
 ```yaml
 dbp_relay_esign:
   advanced_signature:
-    server_url: 'https://pdfas.tugraz.at/pdf-as-web'
+    server_url: 'https://pdfas.myuni.at/pdf-as-web'
     profiles:
       - name: official
-        key_id: tugraz-official
-        profile_id: SIGNATURBLOCK_TUGRAZ_AMTSSIGNATUR
+        key_id: myuni-official
+        profile_id: SIGNATURBLOCK_MYUNI_AMTSSIGNATUR
       - name: sap
-        key_id: tugraz-sap
-        profile_id: SIGNATURBLOCK_TUGRAZ_SAP
+        key_id: myuni-sap
+        profile_id: SIGNATURBLOCK_MYUNI_SAP
   authorization:
     roles:
       ROLE_SIGNER: 'user.isAuthenticated()'
@@ -195,8 +195,8 @@ to whitelist these configuration objects in the `pdf-as-web.properties` file of
 
 ```ini
 allow.ext.overwrite=true
-ext.overwrite.wl.01=^sig_obj\\.SIGNATURBLOCK_TUGRAZ_AMTSSIGNATUR\\..*$
-ext.overwrite.wl.02=^sig_obj\\.SIGNATURBLOCK_TUGRAZ_SAP\\..*$
+ext.overwrite.wl.01=^sig_obj\\.SIGNATURBLOCK_MYUNI_AMTSSIGNATUR\\..*$
+ext.overwrite.wl.02=^sig_obj\\.SIGNATURBLOCK_MYUNI_SAP\\..*$
 ```
 
 Note that this allows changing everything regarding the signature profile, so
@@ -211,37 +211,70 @@ handy-signatur.at
 
 ### Qualified Server
 
-FIXME: other unrelated required options
-
-### Advanced Server
-
-FIXME: other unrelated required options
-
-The pdf-as-web service needs to be configured in `pdf-as-web.properties` to contain a keystore list
-containing the keys referenced in the bundle config file.
+In `pdf-as-web.properties` signing via SOAP and mobile signing needs to be enabled:
 
 ```ini
-# Local key store list
-ksl.tugraz-official.enabled=true
-ksl.tugraz-official.file=/path/to/tomcat/conf/pdf-as/my-pdf-cert.p12
-ksl.tugraz-official.type=PKCS12
-ksl.tugraz-official.pass=keystore-password
-ksl.tugraz-official.key.alias=mycert
-ksl.tugraz-official.key.pass=cert-password
+soap.sign.enabled=true
+mobile.sign.enabled=true
 ```
 
-In addition, in the pdf-as configuration (`config.properties`) the referenced profiles need to be defined.
-Usually they are defined in extra files under `./profiles` and then included in `config.properties`:
+If URL whitelisting is enabled (it's not by default, but recommended) then the esign bundle callback endpoints need to
+be explicitly allowed:
 
 ```ini
-include.01 = profiles/SIGNATURBLOCK_TUGRAZ_AMTSSIGNATUR.properties
-include.02 = profiles/SIGNATURBLOCK_TUGRAZ_SAP.properties
+whitelist.enabled=true
+whitelist.url.01=^https://my-api\\.my-uni\\.at.*$
+```
+
+In addition, in the pdf-as configuration (`cfg/config.properties`) the referenced profiles need to be defined.
+Usually they are defined in extra files under `cfg/profiles` and then included in `cfg/config.properties`:
+
+```ini
+include.01 = profiles/SIGNATURBLOCK_MYUNI_AMTSSIGNATUR.properties
+include.02 = profiles/SIGNATURBLOCK_MYUNI_SAP.properties
 ```
 
 The signature property files included need to use the profile key referenced in the bundle config:
 
 ```ini
 ...
-sig_obj.SIGNATURBLOCK_TUGRAZ_AMTSSIGNATUR = ...
+sig_obj.SIGNATURBLOCK_MYUNI_AMTSSIGNATUR = ...
+...
+```
+
+### Advanced Server
+
+The pdf-as-web service needs to be configured in `pdf-as-web.properties` to contain a keystore list
+containing the keys referenced in the bundle config file.
+
+```ini
+# Local key store list
+ksl.myuni-official.enabled=true
+ksl.myuni-official.file=/path/to/tomcat/conf/pdf-as/my-pdf-cert.p12
+ksl.myuni-official.type=PKCS12
+ksl.myuni-official.pass=keystore-password
+ksl.myuni-official.key.alias=mycert
+ksl.myuni-official.key.pass=cert-password
+```
+
+Signing via SOAP needs to be enabled:
+
+```ini
+soap.sign.enabled=true
+```
+
+In addition, in the pdf-as configuration (`cfg/config.properties`) the referenced profiles need to be defined.
+Usually they are defined in extra files under `cfg/profiles` and then included in `cfg/config.properties`:
+
+```ini
+include.01 = profiles/SIGNATURBLOCK_MYUNI_AMTSSIGNATUR.properties
+include.02 = profiles/SIGNATURBLOCK_MYUNI_SAP.properties
+```
+
+The signature property files included need to use the profile key referenced in the bundle config:
+
+```ini
+...
+sig_obj.SIGNATURBLOCK_MYUNI_AMTSSIGNATUR = ...
 ...
 ```
