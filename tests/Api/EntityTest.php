@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests\Api;
 
 use Dbp\Relay\EsignBundle\Api\ElectronicSignature;
 use Dbp\Relay\EsignBundle\Api\ElectronicSignatureVerificationReport;

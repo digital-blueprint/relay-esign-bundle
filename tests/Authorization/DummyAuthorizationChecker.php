@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests\Authorization;
 
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 

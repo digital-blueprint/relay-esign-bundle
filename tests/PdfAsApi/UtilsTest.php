@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests\PdfAsApi;
 
-use Dbp\Relay\EsignBundle\Api\Utils as UtilsAlias;
 use Dbp\Relay\EsignBundle\PdfAsApi\Utils;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -13,7 +12,7 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 
-class ToolsTest extends TestCase
+class UtilsTest extends TestCase
 {
     public function testGetUriWithPort()
     {
@@ -28,24 +27,9 @@ class ToolsTest extends TestCase
             Utils::getUriWithPort('https://tugraz.at/static/error.html'));
     }
 
-    public function testGetDataURI()
-    {
-        $this->assertSame('data:text/plain;base64,Zm9vYmFy', UtilsAlias::getDataURI('foobar', 'text/plain'));
-    }
-
     public function testGenerateRequestId()
     {
         $this->assertNotSame(Utils::generateRequestId(), Utils::generateRequestId());
-    }
-
-    public function testGenerateSignedFileName()
-    {
-        $this->assertSame('foo-sig.pdf', UtilsAlias::generateSignedFileName('foo.pdf'));
-        $this->assertSame('-sig.pdf', UtilsAlias::generateSignedFileName('.pdf'));
-        $this->assertSame('-sig.pdf', UtilsAlias::generateSignedFileName('-sig.pdf'));
-        $this->assertSame('-sig', UtilsAlias::generateSignedFileName(''));
-        $this->assertSame('foo.tar-sig.gz', UtilsAlias::generateSignedFileName('foo.tar.gz'));
-        $this->assertSame('foo-sig.sig', UtilsAlias::generateSignedFileName('foo.sig'));
     }
 
     public function testCreateStopwatchMiddleware()

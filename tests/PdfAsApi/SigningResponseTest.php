@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Dbp\Relay\EsignBundle\Tests;
+namespace Dbp\Relay\EsignBundle\Tests\PdfAsApi;
 
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningResponse;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\SignedMultipleFile;
@@ -12,7 +12,7 @@ use Dbp\Relay\EsignBundle\PdfAsSoapClient\VerificationResponse;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 
-class PDFDataResponseTest extends TestCase
+class SigningResponseTest extends TestCase
 {
     public function testFromResponse(): void
     {

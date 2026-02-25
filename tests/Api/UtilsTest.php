@@ -32,4 +32,19 @@ class UtilsTest extends TestCase
         $this->expectException(ApiError::class);
         Utils::parseUserText($input);
     }
+
+    public function testGenerateSignedFileName()
+    {
+        $this->assertSame('foo-sig.pdf', Utils::generateSignedFileName('foo.pdf'));
+        $this->assertSame('-sig.pdf', Utils::generateSignedFileName('.pdf'));
+        $this->assertSame('-sig.pdf', Utils::generateSignedFileName('-sig.pdf'));
+        $this->assertSame('-sig', Utils::generateSignedFileName(''));
+        $this->assertSame('foo.tar-sig.gz', Utils::generateSignedFileName('foo.tar.gz'));
+        $this->assertSame('foo-sig.sig', Utils::generateSignedFileName('foo.sig'));
+    }
+
+    public function testGetDataURI()
+    {
+        $this->assertSame('data:text/plain;base64,Zm9vYmFy', Utils::getDataURI('foobar', 'text/plain'));
+    }
 }
