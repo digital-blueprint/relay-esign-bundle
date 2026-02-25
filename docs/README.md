@@ -64,7 +64,9 @@ is used to sign documents.
 
 * [Bundle Configuration](./config.md)
 * [Advanced Signature Flow](./advanced_flow.md)
-* [Advanced Signature Example](./advanced_pdf_signing.md)
+* [Advanced Signature Example](./example_advanced.md)
 * [Qualified Signature Flow](./qualified_flow.md)
+* [Qualified Signature Example](./example_qualified.md)
+* [Qualified Batch Signature Example](./example_qualified_batch.md)
 * [Signature Block Positioning](./positioning.md)
 * [CLI Commands](./cli_commands.md)

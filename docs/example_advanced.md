@@ -16,12 +16,13 @@ import requests
 KEYCLOAK_URL = "https://auth-demo.tugraz.at/auth"
 API_URL = "https://api-demo.tugraz.at"
 PDF_IN_PATH = 'example.pdf'
+ESIGN_PROFILE = "sap"
 
 # Credentials
 CLIENT_ID="<keycloak-client-id>"
 CLIENT_SECRET="<keycloak-client-secret>"
 
-# Fetch a token pair
+# Fetch a token
 TOKEN_URL = KEYCLOAK_URL + "/realms/tugraz-vpu/protocol/openid-connect/token"
 r = requests.post(
     TOKEN_URL, auth=(CLIENT_ID, CLIENT_SECRET),
@@ -34,14 +35,13 @@ with open(PDF_IN_PATH, 'rb') as h:
     r = requests.post(
         API_URL + "/esign/advancedly-signed-documents",
         headers={'Authorization': 'Bearer ' + access_token},
-        params={"profile": "sap"},
+        params={"profile": ESIGN_PROFILE},
         files={'file': (PDF_IN_PATH, h)})
     r.raise_for_status()
     response = r.json()
 
 # Write the signed data to a file
 with urlopen(response["contentUrl"]) as h:
-    out_path = os.path.basename(response["name"])
-    with open(out_path, 'wb') as wh:
+    with open('signed.pdf', 'wb') as wh:
         wh.write(h.read())
 ```
