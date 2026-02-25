@@ -6,8 +6,11 @@ namespace Dbp\Relay\EsignBundle\Api;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\PdfAsApi\UserDefinedText;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
 class Utils
 {
@@ -95,5 +98,36 @@ class Utils
         }
 
         return $default;
+    }
+
+    public static function validateUploadedFile(?UploadedFile $uploadedFile): UploadedFile
+    {
+        // check if there is an uploaded file
+        if ($uploadedFile === null) {
+            throw new BadRequestHttpException('No file with parameter key "file" was received!');
+        }
+
+        // If the upload failed, figure out why
+        if ($uploadedFile->getError() !== UPLOAD_ERR_OK) {
+            throw new BadRequestHttpException($uploadedFile->getErrorMessage());
+        }
+
+        // check if file is a pdf
+        if ($uploadedFile->getMimeType() !== 'application/pdf') {
+            throw new UnsupportedMediaTypeHttpException('Only PDF files can be signed!');
+        }
+
+        // check if file is empty
+        if ($uploadedFile->getSize() === 0) {
+            throw new BadRequestHttpException('Empty files cannot be signed!');
+        }
+
+        // check if file is too large
+        $MAX_PDF_SIGN_FILE_SIZE = 32 * 1024 * 1024;
+        if ($uploadedFile->getSize() > $MAX_PDF_SIGN_FILE_SIZE) {
+            throw new ApiError(Response::HTTP_REQUEST_ENTITY_TOO_LARGE, 'PDF file too large to sign (32MB limit)!');
+        }
+
+        return $uploadedFile;
     }
 }

@@ -19,7 +19,6 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
-use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
 #[AsController]
 final class CreateAdvancedlySignedDocumentAction
@@ -47,26 +46,7 @@ final class CreateAdvancedlySignedDocumentAction
 
         /** @var ?UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');
-
-        // check if there is an uploaded file
-        if (!$uploadedFile) {
-            throw new BadRequestHttpException('No file with parameter key "file" was received!');
-        }
-
-        // If the upload failed, figure out why
-        if ($uploadedFile->getError() !== UPLOAD_ERR_OK) {
-            throw new BadRequestHttpException($uploadedFile->getErrorMessage());
-        }
-
-        // check if file is a pdf
-        if ($uploadedFile->getMimeType() !== 'application/pdf') {
-            throw new UnsupportedMediaTypeHttpException('Only PDF files can be signed!');
-        }
-
-        // check if file is empty
-        if ($uploadedFile->getSize() === 0) {
-            throw new BadRequestHttpException('Empty files cannot be signed!');
-        }
+        $uploadedFile = Utils::validateUploadedFile($uploadedFile);
 
         $hasPositionParams = false;
 
@@ -120,10 +100,7 @@ final class CreateAdvancedlySignedDocumentAction
             throw new BadRequestHttpException('Position parameters are not allowed in case the signature block is set to invisible');
         }
 
-        $data = @file_get_contents($uploadedFile->getPathname());
-        if ($data === false) {
-            throw new \RuntimeException('Failed to read file');
-        }
+        $data = $uploadedFile->getContent();
 
         // sign the pdf data
         $requestId = PdfAsApiUtils::generateRequestId();
