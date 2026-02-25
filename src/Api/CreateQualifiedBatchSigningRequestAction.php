@@ -6,6 +6,7 @@ namespace Dbp\Relay\EsignBundle\Api;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
+use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Dbp\Relay\EsignBundle\PdfAsApi\SignatureBlockPosition;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningException;
@@ -22,13 +23,17 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 #[AsController]
 final class CreateQualifiedBatchSigningRequestAction
 {
-    public function __construct(private readonly PdfAsApi $api, private readonly AuthorizationService $authorizationService)
+    public function __construct(private readonly PdfAsApi $api, private readonly AuthorizationService $authorizationService, private readonly BundleConfig $bundleConfig)
     {
     }
 
     public function __invoke(Request $request): QualifiedBatchSigningRequest
     {
         $this->authorizationService->checkCanSign();
+
+        if (!$this->bundleConfig->hasBatch()) {
+            throw new SigningException('batch is not enabled');
+        }
 
         $uploadedFiles = $this->extractUploadedFiles($request);
         if ($uploadedFiles === []) {

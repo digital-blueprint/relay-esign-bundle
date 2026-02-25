@@ -31,6 +31,15 @@ class DbpRelayEsignExtension extends ConfigurableExtension
             ];
         }
 
+        if (!BundleConfig::hasBatch()) {
+            $pathsToHide['GET'] = [
+                '/esign/qualified-batch-signing-results/{identifier}',
+            ];
+            $pathsToHide['POST'] = [
+                '/esign/qualified-batch-signing-requests',
+            ];
+        }
+
         foreach ($pathsToHide as $method => $paths) {
             foreach ($paths as $path) {
                 $this->addPathToHide($container, $path, $method);

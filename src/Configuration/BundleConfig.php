@@ -90,4 +90,9 @@ class BundleConfig
     {
         return ($_ENV['ESIGN_PDF_AS_VERIFICATION_ENABLE'] ?? 'false') === 'true';
     }
+
+    public static function hasBatch(): bool
+    {
+        return ($_ENV['ESIGN_PDF_AS_BATCH_ENABLE'] ?? 'false') === 'true';
+    }
 }
