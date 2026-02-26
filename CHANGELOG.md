@@ -2,9 +2,16 @@
 
 ## Unreleased
 
+## v0.6.0
+
 * The deprecated `callback_url` and `error_callback_url` options in the bundle config have been removed. The callback
   handling is now handled by the bundle itself. In case pdf-as-web has URL whitelisting enabled make sure that the
   bundle provided endpoints are allowed.
+* New experimental batch signing API, not enabled by default
+* The signing parameters w/r/p have been renamed to width/rotation/page, the old names still work as before.
+* docs: add examples for the qualified signature flow
+* For the qualified flow the identifier format for fetching the document has changed, though this format was never
+  documented to begin with.
 
 ## v0.5.0
 
