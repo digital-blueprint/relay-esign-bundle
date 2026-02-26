@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     description: 'Qualifiedly batch signed PDF documents',
     operations: [
         new GetCollection(
-            uriTemplate: 'y',
+            uriTemplate: '/qualified-batch-signing-results',
             openapi: false,
             provider: DummySignProvider::class
         ),
