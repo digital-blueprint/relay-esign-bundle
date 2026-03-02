@@ -1,6 +1,9 @@
 services:
     Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi:
-        public: false
+        autowire: true
+        autoconfigure: true
+
+    Dbp\Relay\EsignBundle\PdfAsApi\CallbackTokenService:
         autowire: true
         autoconfigure: true
 

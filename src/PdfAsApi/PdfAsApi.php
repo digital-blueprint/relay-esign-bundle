@@ -43,7 +43,7 @@ class PdfAsApi implements LoggerAwareInterface
     private $stopwatch;
     private $router;
 
-    public function __construct(Stopwatch $stopwatch, UrlGeneratorInterface $router, private BundleConfig $bundleConfig)
+    public function __construct(Stopwatch $stopwatch, UrlGeneratorInterface $router, private BundleConfig $bundleConfig, private CallbackTokenService $callbackTokenService)
     {
         $this->stopwatch = $stopwatch;
         $this->router = $router;
@@ -51,12 +51,24 @@ class PdfAsApi implements LoggerAwareInterface
 
     public function getCallbackUrl(string $requestId): string
     {
-        return $this->router->generate('esign_callback_success', ['_dbpRelayEsignId' => $requestId], UrlGeneratorInterface::ABSOLUTE_URL);
+        $expires = $this->callbackTokenService->getExpires('PT1H');
+        $token = $this->callbackTokenService->generateToken($requestId, $expires);
+        return $this->router->generate('esign_callback_success', [
+            '_dbpRelayEsignId' => $requestId,
+            '_dbpRelayEsignToken' => $token,
+            '_dbpRelayEsignExpires' => $expires,
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     public function getErrorCallbackUrl(string $requestId): string
     {
-        return $this->router->generate('esign_callback_error', ['_dbpRelayEsignId' => $requestId], UrlGeneratorInterface::ABSOLUTE_URL);
+        $expires = $this->callbackTokenService->getExpires('PT1H');
+        $token = $this->callbackTokenService->generateToken($requestId, $expires);
+        return $this->router->generate('esign_callback_error', [
+            '_dbpRelayEsignId' => $requestId,
+            '_dbpRelayEsignToken' => $token,
+            '_dbpRelayEsignExpires' => $expires,
+        ], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
     public function checkPdfAsConnection()
