@@ -23,11 +23,11 @@ class HealthCheck implements CheckInterface
         return 'esign';
     }
 
-    private function checkMethod(string $description, callable $func): CheckResult
+    private function checkMethod(string $description, callable $func, ...$args): CheckResult
     {
         $result = new CheckResult($description);
         try {
-            $func();
+            $func(...$args);
         } catch (\Throwable $e) {
             $result->set(CheckResult::STATUS_FAILURE, $e->getMessage(), ['exception' => $e]);
 
@@ -42,6 +42,9 @@ class HealthCheck implements CheckInterface
     {
         return [
             $this->checkMethod('Check if we can reach the pdf-as-web SOAP interface', [$this->api, 'checkPdfAsConnection']),
+            $this->checkMethod('Check if we can reach the pdf-as-web HTTP interface', [$this->api, 'checkPdfAsHttpConnection']),
+            $this->checkMethod('Check if all profiles are configured in pdf-as', [$this->api, 'checkPdfAsProfiles']),
+            $this->checkMethod('Check if all advanced profiles can sign successfully', [$this->api, 'checkPdfAsCanSign'], __DIR__.DIRECTORY_SEPARATOR.'test.pdf'),
         ];
     }
 }

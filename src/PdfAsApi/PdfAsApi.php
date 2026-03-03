@@ -31,6 +31,7 @@ use League\Uri\Contracts\UriException;
 use League\Uri\UriTemplate;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
 
@@ -84,6 +85,53 @@ class PdfAsApi implements LoggerAwareInterface
             $checkWSDL($serverUrl.'/services/wsverify?wsdl');
             $checkWSDL($serverUrl.'/services/wssign?wsdl');
         }
+    }
+
+    /**
+     * Check if we can access the /PDFData endpoint.
+     */
+    public function checkPdfAsHttpConnection()
+    {
+        $qualified = $this->bundleConfig->getQualified();
+        if ($qualified === null) {
+            // Nothing configured, skip
+            return;
+        }
+        $client = new Client();
+        $url = $this->getQualifiedlySignedDocumentUrl('sid_health_check');
+        $response = $client->request('GET', $url);
+        if ($response->getStatusCode() !== 200) {
+            throw new \RuntimeException('http request failed for '.$url);
+        }
+    }
+
+    /**
+     * Check if each configured profile exists by generating a preview image for it.
+     * Also tests that we can access the /visblock endpoint.
+     */
+    public function checkPdfAsProfiles()
+    {
+        foreach ($this->bundleConfig->getProfiles() as $profile) {
+            $this->createPreviewImage($profile->getName(), 16);
+        }
+    }
+
+    /**
+     * Check if we can sign a test PDF with every advanced profile.
+     */
+    public function checkPdfAsCanSign(string $testPdfPath)
+    {
+        $advanced = $this->bundleConfig->getAdvanced();
+        if ($advanced === null) {
+            // Nothing configured, skip
+            return;
+        }
+        $content = (new Filesystem())->readFile($testPdfPath);
+        $requests = [];
+        foreach ($advanced->getProfiles() as $profile) {
+            $requests[] = new SigningRequest($content, $profile->getName(), Utils::generateRequestId());
+        }
+        $this->advancedlySignPdfMultiple($requests);
     }
 
     /**
