@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## v0.6.1
+
+* Added three new health checks for pdf-as.
+  Checks if endpoints are accessible, signing works and all referenced profiles exist.
+
 ## v0.6.0
 
 * The deprecated `callback_url` and `error_callback_url` options in the bundle config have been removed. The callback
