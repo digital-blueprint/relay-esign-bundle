@@ -11,6 +11,7 @@ to a PDF file.
 ```python
 import os
 from urllib.request import urlopen
+from urllib.parse import quote
 
 import requests
 
