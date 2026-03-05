@@ -141,6 +141,12 @@ class PdfAsApi implements LoggerAwareInterface
      */
     public function createQualifiedSigningRequestsRedirectUrl(string $requestId, array $requests): string
     {
+        if (count($requests) > 10) {
+            // a-trust fails with more than 10 documents somehow. You can sign 10, but then it redirects
+            // to a page which errors out.
+            throw new SigningException('Too many documents (only <= 10 supported)');
+        }
+
         $qualifiedConfig = $this->bundleConfig->getQualified();
         if ($qualifiedConfig === null) {
             throw new SigningException('Unknown profile');
