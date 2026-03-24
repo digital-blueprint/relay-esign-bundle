@@ -101,4 +101,14 @@ class SignMultipleRequest
     {
         $this->requestID = $requestID;
     }
+
+    public function getConfigurationOverrides(): ?PropertyMap
+    {
+        return $this->configurationOverrides;
+    }
+
+    public function setConfigurationOverrides(?PropertyMap $configurationOverrides): void
+    {
+        $this->configurationOverrides = $configurationOverrides;
+    }
 }

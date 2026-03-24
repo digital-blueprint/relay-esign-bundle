@@ -7,6 +7,8 @@ namespace Dbp\Relay\EsignBundle\Tests\PdfAsApi;
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyEntry;
+use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyMap;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -18,6 +20,16 @@ class PdfAsApiTest extends ApiTestCase
         $router = $this->getContainer()->get('router');
 
         return new PdfAsApi(new Stopwatch(), $router, new BundleConfig($config));
+    }
+
+    public function testPropertyMapIsEqual()
+    {
+        $this->assertTrue(PdfAsApi::propertyMapIsEqual(new PropertyMap([]), new PropertyMap([])));
+        $this->assertTrue(PdfAsApi::propertyMapIsEqual(new PropertyMap([new PropertyEntry('a', 'b')]), new PropertyMap([new PropertyEntry('a', 'b')])));
+        $this->assertFalse(PdfAsApi::propertyMapIsEqual(new PropertyMap([]), new PropertyMap([new PropertyEntry('a', 'b')])));
+        $this->assertFalse(PdfAsApi::propertyMapIsEqual(new PropertyMap([new PropertyEntry('a', 'b')]), new PropertyMap([])));
+        $this->assertFalse(PdfAsApi::propertyMapIsEqual(new PropertyMap([new PropertyEntry('a', 'b')]), new PropertyMap([new PropertyEntry('a', 'c')])));
+        $this->assertFalse(PdfAsApi::propertyMapIsEqual(new PropertyMap([new PropertyEntry('a', 'b')]), new PropertyMap([new PropertyEntry('d', 'b')])));
     }
 
     public function testGetCallbackUrl()

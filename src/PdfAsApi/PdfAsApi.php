@@ -156,6 +156,7 @@ class PdfAsApi implements LoggerAwareInterface
         $multiRequest->setInvokeUrl($this->getCallbackUrl($requestId));
         $multiRequest->setInvokeErrorUrl(Utils::getUriWithPort($this->getErrorCallbackUrl($requestId)));
 
+        $overrides = null;
         foreach ($requests as $request) {
             $profile = $qualifiedConfig->getProfile($request->getProfileName());
             if ($profile === null) {
@@ -164,8 +165,16 @@ class PdfAsApi implements LoggerAwareInterface
             $subRequest = new SignMultipleFile($request->getData(), $request->getRequestId());
             $subRequest->setPosition($request->getSignatureBlockPosition()->toPdfAsFormat());
             $subRequest->setProfile($profile->getProfileId());
+            $subOverrides = self::buildConfigurationOverrides($profile, $request);
+            if ($overrides === null) {
+                $overrides = $subOverrides;
+            }
+            if (!self::propertyMapIsEqual($subOverrides, $overrides)) {
+                throw new SigningException('Signing multiple documents with different user_text not supported.');
+            }
             $multiRequest->addDocument($subRequest);
         }
+        $multiRequest->setConfigurationOverrides($overrides);
 
         $event = $this->stopwatch->start('pdf-as.sign-qualified', 'esign');
         try {
@@ -216,6 +225,26 @@ class PdfAsApi implements LoggerAwareInterface
         }
 
         return new PropertyMap($overrides);
+    }
+
+    /**
+     * Returns whether two PropertyMap instances have the same content.
+     */
+    public static function propertyMapIsEqual(PropertyMap $mapA, PropertyMap $mapB): bool
+    {
+        $entriesA = $mapA->getPropertyEntries();
+        $entriesB = $mapB->getPropertyEntries();
+        if (count($entriesB) !== count($entriesA)) {
+            return false;
+        }
+        foreach ($entriesA as $i => $entryA) {
+            $entryB = $entriesB[$i];
+            if ($entryA->getKey() !== $entryB->getKey() || $entryA->getValue() !== $entryB->getValue()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
