@@ -1,5 +1,10 @@
 # Qualified Batch Signature Example
 
+Batch signing has some limitations:
+
+* Only up to 10 documents can be signed. This is due to a-trust limitations.
+* For all documents everything except the profile and the signature block positioning has to be the same. This is due to pdf-as API limitations.
+
 The following Python example shows how to attach a qualified signature
 to multiple PDF files.
 
