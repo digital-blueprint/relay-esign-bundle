@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## v0.6.2
+
+* batch API: error out if more than 10 documents are passed, and in case they have different user_text/visibility settings.
+  Both things are currently not working with pdf-as.
+* Enable the batch API by default.
+
 ## v0.6.1
 
 * Added three new health checks for pdf-as.
