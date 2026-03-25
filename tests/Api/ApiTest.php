@@ -10,7 +10,6 @@ use Dbp\Relay\EsignBundle\Api\CreateQualifiedBatchSigningRequestAction;
 use Dbp\Relay\EsignBundle\Api\CreateQualifiedSigningRequestAction;
 use Dbp\Relay\EsignBundle\Api\QualifiedSigningRequest;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
-use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningResponse;
 use PHPUnit\Framework\TestCase;
@@ -20,12 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 class ApiTest extends TestCase
 {
     private array $tempFiles = [];
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $_ENV['ESIGN_PDF_AS_BATCH_ENABLE'] = 'true';
-    }
 
     protected function tearDown(): void
     {
@@ -118,7 +111,7 @@ class ApiTest extends TestCase
             ->method('checkCanSignWithProfile')
             ->with('official');
 
-        $action = new CreateQualifiedBatchSigningRequestAction($api, $auth, new BundleConfig());
+        $action = new CreateQualifiedBatchSigningRequestAction($api, $auth);
         $result = $action($request);
         $this->assertSame('https://example.com/redirect', $result->getUrl());
     }
@@ -142,7 +135,7 @@ class ApiTest extends TestCase
             ->method('checkCanSignWithProfile')
             ->with('official');
 
-        $action = new CreateQualifiedBatchSigningRequestAction($api, $auth, new BundleConfig());
+        $action = new CreateQualifiedBatchSigningRequestAction($api, $auth);
         $result = $action($request);
         $this->assertSame('https://example.com/redirect', $result->getUrl());
     }
