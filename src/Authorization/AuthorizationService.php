@@ -28,7 +28,7 @@ class AuthorizationService extends AbstractAuthorizationService
     /**
      * Returns if the current user has permissions to sign with the given profile.
      */
-    private function getCanSignWithProfile(string $profileName): bool
+    public function getCanSignWithProfile(string $profileName): bool
     {
         $profile = $this->config->getProfile($profileName);
         if ($profile === null) {

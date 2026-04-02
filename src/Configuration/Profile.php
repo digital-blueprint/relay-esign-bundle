@@ -25,6 +25,21 @@ abstract class Profile
         return $this->config['profile_id'];
     }
 
+    public function getAllowManualPositioning(): bool
+    {
+        return $this->config['allow_manual_positioning'];
+    }
+
+    public function getAllowAnnotations(): bool
+    {
+        return $this->config['allow_annotations'];
+    }
+
+    public function getPreviewImage(): string
+    {
+        return $this->config['preview_image'];
+    }
+
     public function getUserText(): ?UserTextConfig
     {
         if (array_key_exists('user_text', $this->config)) {
