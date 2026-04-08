@@ -29,6 +29,9 @@ class ProfilesProvider implements ProviderInterface
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|object|null
     {
+        if (!array_key_exists('filters', $context)) {
+            throw new ApiError(Response::HTTP_BAD_REQUEST, 'No query parameters given!');
+        }
         $filters = $context['filters'];
 
         if (!array_key_exists('type', $filters) || !is_string($filters['type'])) {
