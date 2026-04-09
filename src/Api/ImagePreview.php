@@ -8,6 +8,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\OpenApi\Model\Operation;
+use ApiPlatform\OpenApi\Model\Parameter;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource(
@@ -20,7 +21,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
             openapi: new Operation(
                 tags: ['Electronic Signatures'],
                 summary: 'Get the image preview for a specified signature profile',
-                parameters: [],
+                parameters: [
+                    new Parameter(
+                        name: 'identifier',
+                        in: 'path',
+                        description: 'ID of the signature profile for which the image preview is requested',
+                        required: true,
+                        schema: ['type' => 'string'],
+                        example: 'advanced',
+                    ),
+                ],
             ),
             output: false,
             read: false,
@@ -34,7 +44,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     routePrefix: '/esign',
     normalizationContext: [
         'groups' => ['EsignImagePreview:output'],
-    ]
+    ],
+    security: 'is_granted("IS_AUTHENTICATED_FULLY")',
 )]
 class ImagePreview
 {

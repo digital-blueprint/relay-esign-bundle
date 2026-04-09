@@ -42,7 +42,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     routePrefix: '/esign',
     normalizationContext: [
         'groups' => ['EsignProfiles:output'],
-    ]
+    ],
+    security: 'is_granted("IS_AUTHENTICATED_FULLY")'
 )]
 class Profiles
 {

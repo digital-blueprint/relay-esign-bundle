@@ -18,9 +18,9 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @implements ProviderInterface<object>
  */
-class ProfilesProvider implements ProviderInterface
+readonly class ProfilesProvider implements ProviderInterface
 {
-    public function __construct(private readonly AuthorizationService $authorizationService, private readonly BundleConfig $config)
+    public function __construct(private AuthorizationService $authorizationService, private BundleConfig $config)
     {
     }
 
