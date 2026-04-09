@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## v0.6.3
+* Add new endpoint `/esign/profiles` that lists all available signing profiles for a given signature type
+* Add new endpoint `/esign/preview/{identifier}` that generates a preview of the signature block for a given profile
 
 ## v0.6.2
 
