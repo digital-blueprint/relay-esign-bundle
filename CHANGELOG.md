@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+* Rename `/esign/preview/{identifier}` to `/esign/previews/{identifier}`
 
 ## v0.6.4
 * `/esign/preview/{identifier}` generates preview images now on request instead of serving them from a cache

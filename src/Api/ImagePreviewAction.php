@@ -39,7 +39,7 @@ final class ImagePreviewAction
 
         $this->authorizationService->checkCanSignWithProfile($identifier);
 
-        $image = $this->pdfasApi->createPreviewImage($identifier, 72 * 4);
+        $image = $this->pdfasApi->createPreviewImage($identifier, 72);
 
         $filesystem = new Filesystem();
         $tmpFilePath = $filesystem->tempnam(sys_get_temp_dir(), 'temp_esign_preview_img_');
