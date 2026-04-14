@@ -63,6 +63,18 @@ class Profiles
     #[Groups(['EsignProfiles:output'])]
     private $allowManualPositioning;
 
+    /**
+     * @var string
+     */
+    #[Groups(['EsignProfiles:output'])]
+    private $displayNameEn;
+
+    /**
+     * @var string
+     */
+    #[Groups(['EsignProfiles:output'])]
+    private $displayNameDe;
+
     public function setIdentifier(string $identifier): self
     {
         $this->identifier = $identifier;
@@ -93,6 +105,30 @@ class Profiles
     public function setAllowManualPositioning(bool $allowManualPositioning): self
     {
         $this->allowManualPositioning = $allowManualPositioning;
+
+        return $this;
+    }
+
+    public function getDisplayNameEn(): ?string
+    {
+        return $this->displayNameEn;
+    }
+
+    public function setDisplayNameEn(string $displayNameEn): self
+    {
+        $this->displayNameEn = $displayNameEn;
+
+        return $this;
+    }
+
+    public function getDisplayNameDe(): ?string
+    {
+        return $this->displayNameDe;
+    }
+
+    public function setDisplayNameDe(string $displayNameDe): self
+    {
+        $this->displayNameDe = $displayNameDe;
 
         return $this;
     }

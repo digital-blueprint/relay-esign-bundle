@@ -8,6 +8,8 @@ use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\CoreBundle\Rest\CustomControllerTrait;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
+use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +20,7 @@ final class ImagePreviewAction
 {
     use CustomControllerTrait;
 
-    public function __construct(private readonly AuthorizationService $authorizationService, private readonly BundleConfig $config)
+    public function __construct(private readonly AuthorizationService $authorizationService, private readonly BundleConfig $config, private readonly PdfAsApi $pdfasApi)
     {
     }
 
@@ -36,16 +38,16 @@ final class ImagePreviewAction
         }
 
         $this->authorizationService->checkCanSignWithProfile($identifier);
-        $path = $this->config->getAdvanced()->getProfile($identifier)->getPreviewImage();
 
-        if (empty($path)) {
-            throw ApiError::withDetails(Response::HTTP_BAD_REQUEST, 'There is no preview image defined for this profile', 'esign:no-preview-image-defined');
-        }
+        $image = $this->pdfasApi->createPreviewImage($identifier, 72 * 4);
 
-        if (!file_exists($path)) {
-            throw ApiError::withDetails(Response::HTTP_INTERNAL_SERVER_ERROR, 'The defined preview image does not exist', 'esign:preview-image-does-not-exists');
-        }
+        $filesystem = new Filesystem();
+        $tmpFilePath = $filesystem->tempnam(sys_get_temp_dir(), 'temp_esign_preview_img_');
+        $filesystem->dumpFile($tmpFilePath, $image);
 
-        return new BinaryFileResponse($path);
+        $response = new BinaryFileResponse($tmpFilePath);
+        $response->deleteFileAfterSend();
+
+        return $response;
     }
 }

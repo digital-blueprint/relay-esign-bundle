@@ -68,6 +68,8 @@ readonly class ProfilesProvider implements ProviderInterface
             $newProfile->setIdentifier($profile->getName());
             $newProfile->setAllowAnnotations($profile->getAllowAnnotations());
             $newProfile->setAllowManualPositioning($profile->getAllowManualPositioning());
+            $newProfile->setDisplayNameDe($profile->getDisplayNameDe());
+            $newProfile->setDisplayNameEn($profile->getDisplayNameEn());
             $availableProfiles[] = $newProfile;
         }
 

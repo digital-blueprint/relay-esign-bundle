@@ -35,9 +35,14 @@ abstract class Profile
         return $this->config['allow_annotations'];
     }
 
-    public function getPreviewImage(): string
+    public function getDisplayNameEn(): string
     {
-        return $this->config['preview_image'];
+        return $this->config['display_name_en'];
+    }
+
+    public function getDisplayNameDe(): string
+    {
+        return $this->config['display_name_de'];
     }
 
     public function getUserText(): ?UserTextConfig
