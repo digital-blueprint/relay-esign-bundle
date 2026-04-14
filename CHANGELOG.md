@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+## v0.6.4
+* `/esign/preview/{identifier}` generates preview images now on request instead of serving them from a cache
+* `/esign/profiles` returns translations for the display name of the profiles
+
 ## v0.6.3
 * Add new endpoint `/esign/profiles` that lists all available signing profiles for a given signature type
 * Add new endpoint `/esign/preview/{identifier}` that generates a preview of the signature block for a given profile
