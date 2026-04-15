@@ -45,6 +45,15 @@ abstract class Profile
         return $this->config['display_name_de'];
     }
 
+    public function getInvisible(): bool
+    {
+        if (array_key_exists('invisible', $this->config)) {
+            return $this->config['invisible'];
+        }
+
+        return false;
+    }
+
     public function getUserText(): ?UserTextConfig
     {
         if (array_key_exists('user_text', $this->config)) {

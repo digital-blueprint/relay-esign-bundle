@@ -112,6 +112,10 @@ class PdfAsApi implements LoggerAwareInterface
     public function checkPdfAsProfiles()
     {
         foreach ($this->bundleConfig->getProfiles() as $profile) {
+            if ($profile->getInvisible()) {
+                // dont create preview image if profile is supposed to be invisible
+                continue;
+            }
             $this->createPreviewImage($profile->getName(), 16);
         }
     }

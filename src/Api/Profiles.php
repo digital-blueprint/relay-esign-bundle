@@ -75,6 +75,12 @@ class Profiles
     #[Groups(['EsignProfiles:output'])]
     private $displayNameDe;
 
+    /**
+     * @var bool
+     */
+    #[Groups(['EsignProfiles:output'])]
+    private $invisible;
+
     public function setIdentifier(string $identifier): self
     {
         $this->identifier = $identifier;
@@ -131,5 +137,17 @@ class Profiles
         $this->displayNameDe = $displayNameDe;
 
         return $this;
+    }
+
+    public function setInvisible(bool $invisible): self
+    {
+        $this->invisible = $invisible;
+
+        return $this;
+    }
+
+    public function getInvisible(): bool
+    {
+        return $this->invisible;
     }
 }
