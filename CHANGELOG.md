@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## v0.6.5
 * Rename `/esign/preview/{identifier}` to `/esign/previews/{identifier}`
+* Add config option `invisible` that indicates whether the signature is visible or not
 
 ## v0.6.4
 * `/esign/preview/{identifier}` generates preview images now on request instead of serving them from a cache
