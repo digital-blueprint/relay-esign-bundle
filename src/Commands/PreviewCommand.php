@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Commands;
 
+use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -19,10 +20,13 @@ class PreviewCommand extends Command implements LoggerAwareInterface
 
     protected $api;
 
-    public function __construct(PdfAsApi $api)
+    protected $config;
+
+    public function __construct(PdfAsApi $api, BundleConfig $config)
     {
         parent::__construct();
         $this->api = $api;
+        $this->config = $config;
     }
 
     protected function configure(): void
@@ -38,8 +42,9 @@ class PreviewCommand extends Command implements LoggerAwareInterface
         $outputPath = $input->getArgument('output-path');
         $profile = $input->getArgument('profile-id');
 
-        $resolution = 72 * 4;
-        $data = $this->api->createPreviewImage($profile, $resolution);
+        $data = $this->api->createPreviewImage($profile);
+
+        $resolution = $this->config->getProfile($profile)->getPreviewImageResolution();
 
         $imagesize = getimagesizefromstring($data);
         if ($imagesize === false) {

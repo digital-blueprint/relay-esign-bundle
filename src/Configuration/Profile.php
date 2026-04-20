@@ -45,6 +45,11 @@ abstract class Profile
         return $this->config['display_name_de'];
     }
 
+    public function getPreviewImageResolution(): int
+    {
+        return $this->config['preview_image_resolution'];
+    }
+
     public function getInvisible(): bool
     {
         if (array_key_exists('invisible', $this->config)) {
