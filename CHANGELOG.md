@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+## v0.6.6
+* Add config parameter `preview_image_resolution` which controls the resolution of the generated signature preview image
+
 ## v0.6.5
 * Rename `/esign/preview/{identifier}` to `/esign/previews/{identifier}`
 * Add config option `invisible` that indicates whether the signature is visible or not
