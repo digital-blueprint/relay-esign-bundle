@@ -2,12 +2,19 @@
 
 ## Unreleased
 
+## v0.6.7
+* Add config parameter `preview_image_resolution` to qualified signatures which controls the resolution of the generated signature preview image
+* Add config parameter `allow_annotations` to qualified signatures which indicates if the annotations are allowed or not
+* Add config parameter `allow_manual_positioning` to qualified signatures which indicates if the manual positioning of the signature is allowed or not
+* Add config parameter `display_name_de` to qualified signatures which is the german display name of the profile (for the frontend)
+* Add config parameter `display_name_en` to qualified signatures which is the english display name of the profile (for the frontend)
+* Add config option `invisible` to qualified signatures that indicates whether the signature is visible or not
 ## v0.6.6
-* Add config parameter `preview_image_resolution` which controls the resolution of the generated signature preview image
+* Add config parameter `preview_image_resolution` to advanced signatures which controls the resolution of the generated signature preview image
 
 ## v0.6.5
 * Rename `/esign/preview/{identifier}` to `/esign/previews/{identifier}`
-* Add config option `invisible` that indicates whether the signature is visible or not
+* Add config option `invisible` to advanced signatures that indicates whether the signature is visible or not
 
 ## v0.6.4
 * `/esign/preview/{identifier}` generates preview images now on request instead of serving them from a cache
