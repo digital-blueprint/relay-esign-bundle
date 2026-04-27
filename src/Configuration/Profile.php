@@ -50,6 +50,11 @@ abstract class Profile
         return $this->config['preview_image_resolution'];
     }
 
+    public function getLanguage(): string
+    {
+        return $this->config['language'];
+    }
+
     public function getInvisible(): bool
     {
         if (array_key_exists('invisible', $this->config)) {

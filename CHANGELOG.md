@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## v0.6.8
+* Add config parameter `language` to qualified and advanced signatures which indicates the language of the text
+
 ## v0.6.7
 * Add config parameter `preview_image_resolution` to qualified signatures which controls the resolution of the generated signature preview image
 * Add config parameter `allow_annotations` to qualified signatures which indicates if the annotations are allowed or not
@@ -9,6 +12,7 @@
 * Add config parameter `display_name_de` to qualified signatures which is the german display name of the profile (for the frontend)
 * Add config parameter `display_name_en` to qualified signatures which is the english display name of the profile (for the frontend)
 * Add config option `invisible` to qualified signatures that indicates whether the signature is visible or not
+
 ## v0.6.6
 * Add config parameter `preview_image_resolution` to advanced signatures which controls the resolution of the generated signature preview image
 

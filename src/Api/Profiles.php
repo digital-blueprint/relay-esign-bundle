@@ -76,6 +76,12 @@ class Profiles
     private $displayNameDe;
 
     /**
+     * @var string
+     */
+    #[Groups(['EsignProfiles:output'])]
+    private $language;
+
+    /**
      * @var bool
      */
     #[Groups(['EsignProfiles:output'])]
@@ -137,6 +143,18 @@ class Profiles
         $this->displayNameDe = $displayNameDe;
 
         return $this;
+    }
+
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    public function getLanguage(): string
+    {
+        return $this->language;
     }
 
     public function setInvisible(bool $invisible): self
