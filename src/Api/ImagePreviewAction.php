@@ -39,6 +39,10 @@ final class ImagePreviewAction
 
         $this->authorizationService->checkCanSignWithProfile($identifier);
 
+        if ($this->config->getProfile($identifier)->getInvisible()) {
+            throw new ApiError(Response::HTTP_BAD_REQUEST, "Profile $identifier is invisible");
+        }
+
         $image = $this->pdfasApi->createPreviewImage($identifier);
 
         $filesystem = new Filesystem();
