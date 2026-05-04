@@ -1,0 +1,16 @@
+profile_display_names:
+  advanced-invisible-de_HR: Employee documents with an invisible signature
+  advanced-en_various: Documents as an employee in English
+  advanced-de_various: Documents as an employee in German
+  advanced-SAP-de_SAPorders: SAP-orders
+  advanced-official_CO: /
+  advanced-official_various: Documents in official capacity
+  advanced-rector_various: Documents with the rector’s signature
+  advanced-en_invoices: Invoices in English
+  advanced-de_invoices: Invoices in German
+  advanced-de_recognitions: Recognitions
+  advanced-invisible-de_inspectionReports: Inspection reports with an invisible signature
+  official: Official Signature (Legacy)
+  qualified-de: Documents with a personal signature in German
+  qualified-en: Documents with a personal signature in English
+  default: Qualified Signature (Legacy)

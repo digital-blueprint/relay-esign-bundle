@@ -11,6 +11,7 @@ use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * For GET endpoints which we don't implement, either return an empty collection
@@ -20,7 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 readonly class ProfilesProvider implements ProviderInterface
 {
-    public function __construct(private AuthorizationService $authorizationService, private BundleConfig $config)
+    public function __construct(private AuthorizationService $authorizationService, private BundleConfig $config, private TranslatorInterface $translator)
     {
     }
 
@@ -68,8 +69,8 @@ readonly class ProfilesProvider implements ProviderInterface
             $newProfile->setIdentifier($profile->getName());
             $newProfile->setAllowAnnotations($profile->getAllowAnnotations());
             $newProfile->setAllowManualPositioning($profile->getAllowManualPositioning());
-            $newProfile->setDisplayNameDe($profile->getDisplayNameDe());
-            $newProfile->setDisplayNameEn($profile->getDisplayNameEn());
+            $newProfile->setDisplayNameDe($this->translator->trans('profile_display_names.'.$profile->getName(), domain: 'dbp_relay_esign_bundle', locale: 'de'));
+            $newProfile->setDisplayNameEn($this->translator->trans('profile_display_names.'.$profile->getName(), domain: 'dbp_relay_esign_bundle', locale: 'en'));
             $newProfile->setLanguage($profile->getLanguage());
             $newProfile->setInvisible($profile->getInvisible());
             $availableProfiles[] = $newProfile;

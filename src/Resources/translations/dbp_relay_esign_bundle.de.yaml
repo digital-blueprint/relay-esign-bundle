@@ -1,0 +1,16 @@
+profile_display_names:
+  advanced-invisible-de_HR: Personaldokumente mit unsichtbarer Signatur
+  advanced-en_various: Dokumente als Angestellte*r auf Englisch
+  advanced-de_various: Dokumente als Angestellte*r auf Deutsch
+  advanced-SAP-de_SAPorders: SAP-Bestellungen
+  advanced-official_CO: /
+  advanced-official_various: Dokumente mit amtlicher Signatur
+  advanced-rector_various: Dokumente als Rektor signieren
+  advanced-en_invoices: Abrechnungen auf Englisch
+  advanced-de_invoices: Abrechnungen auf Deutsch
+  advanced-de_recognitions: Anerkennungen
+  advanced-invisible-de_inspectionReports: Prüfberichte mit unsichtbarer Signatur
+  official: Offizielle Signatur (Legacy)
+  qualified-de: Qualifizierte Signatur auf Deutsch
+  qualified-en: Qualifizierte Signatur auf Englisch
+  default: Qualifizierte Signatur (Legacy)
