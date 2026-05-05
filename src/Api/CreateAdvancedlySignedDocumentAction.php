@@ -104,8 +104,20 @@ final class CreateAdvancedlySignedDocumentAction
 
         // sign the pdf data
         $requestId = PdfAsApiUtils::generateRequestId();
+
+        // if for whatever reason a negative value appears where it shouldnt be
+        // then fallback to auto placement
+        if ($hasPositionParams && ($x < 0 || $y < 0 || $width < 0)) {
+            $x = SignatureBlockPosition::AUTO;
+            $y = SignatureBlockPosition::AUTO;
+            $page = SignatureBlockPosition::AUTO;
+            $width = SignatureBlockPosition::AUTO;
+            $rotation = 0.0;
+        }
+
         $blockPosition = new SignatureBlockPosition(x: $x, y: $y, width : $width, rotation: $rotation, page: $page);
         $request = new SigningRequest($data, $profileName, $requestId, $blockPosition, $userText, invisible: $invisible);
+
         try {
             $result = $this->api->advancedlySignPdf($request);
         } catch (SigningUnavailableException $e) {
