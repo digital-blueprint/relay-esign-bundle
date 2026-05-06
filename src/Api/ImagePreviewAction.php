@@ -43,7 +43,13 @@ final class ImagePreviewAction
             throw new ApiError(Response::HTTP_BAD_REQUEST, "Profile $identifier is invisible");
         }
 
-        $image = $this->pdfasApi->createPreviewImage($identifier);
+        $res = $this->config->getProfile($identifier)->getPreviewImageResolution();
+
+        if ($request->query->has('width')) {
+            $res = (int) round($request->query->get('width', $res * 6.389) / 6.389); // 6.389 is width(px) / res
+        }
+
+        $image = $this->pdfasApi->createPreviewImage($identifier, $res);
 
         $filesystem = new Filesystem();
         $tmpFilePath = $filesystem->tempnam(sys_get_temp_dir(), 'temp_esign_preview_img_');

@@ -42,9 +42,9 @@ class PreviewCommand extends Command implements LoggerAwareInterface
         $outputPath = $input->getArgument('output-path');
         $profile = $input->getArgument('profile-id');
 
-        $data = $this->api->createPreviewImage($profile);
-
         $resolution = $this->config->getProfile($profile)->getPreviewImageResolution();
+
+        $data = $this->api->createPreviewImage($profile, $resolution);
 
         $imagesize = getimagesizefromstring($data);
         if ($imagesize === false) {

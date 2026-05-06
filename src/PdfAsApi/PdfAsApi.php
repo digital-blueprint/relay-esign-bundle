@@ -116,7 +116,7 @@ class PdfAsApi implements LoggerAwareInterface
                 // dont create preview image if profile is supposed to be invisible
                 continue;
             }
-            $this->createPreviewImage($profile->getName());
+            $this->createPreviewImage($profile->getName(), $profile->getPreviewImageResolution());
         }
     }
 
@@ -550,7 +550,7 @@ class PdfAsApi implements LoggerAwareInterface
         return $pdfResponse;
     }
 
-    public function createPreviewImage(string $profileName): string
+    public function createPreviewImage(string $profileName, int $resolution): string
     {
         $profile = $this->bundleConfig->getProfile($profileName);
         if ($profile === null) {
@@ -562,9 +562,16 @@ class PdfAsApi implements LoggerAwareInterface
             $serverUrl = $this->bundleConfig->getQualified()->getServerUrl();
         }
 
-        $resolution = $profile->getPreviewImageResolution();
+        // use min / max resolution if extremes are reached
+        if ($resolution < 16) {
+            $resolution = 16;
+        }
+        if ($resolution > 512) {
+            $resolution = 512;
+        }
 
         $uriTemplate = new UriTemplate('/visblock{?r,p}');
+
         $uri = rtrim($serverUrl, '/').$uriTemplate->expand([
             'p' => $profile->getProfileId(),
             'r' => $resolution, // 16-512 is possible
