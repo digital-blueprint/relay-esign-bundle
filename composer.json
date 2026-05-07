@@ -11,6 +11,7 @@
         "api-platform/metadata": "^4.1",
         "api-platform/openapi": "^4.1",
         "api-platform/state": "^4.1",
+        "dbp/relay-base-person-bundle": "^0.2.45",
         "dbp/relay-core-bundle": "^0.1.224",
         "guzzlehttp/guzzle": "^7.5",
         "guzzlehttp/promises": "^2.0",
