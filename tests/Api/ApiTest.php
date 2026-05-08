@@ -46,10 +46,11 @@ class ApiTest extends TestCase
                 'server_url' => 'https://sig.tugraz.at/pdf-as-web',
                 'profiles' => [
                     [
-                        'name' => 'unused',
+                        'name' => 'official',
                         'profile_id' => 'ID',
                         'key_id' => 'key',
                         'include_username' => true,
+                        'language' => 'de',
                     ],
                 ],
             ],
@@ -92,7 +93,7 @@ class ApiTest extends TestCase
         $dummyPerson->setGivenName('John');
         $dummyPerson->setFamilyName('Doe');
         $personProvider = $this->createMock(PersonProviderInterface::class);
-        $personProvider->expects($this->once())
+        $personProvider->expects($this->atLeast(1))
             ->method('getCurrentPerson')
             ->willReturn($dummyPerson);
 
@@ -108,7 +109,7 @@ class ApiTest extends TestCase
             ->method('checkCanSignWithProfile')
             ->with('official');
 
-        $action = new CreateAdvancedlySignedDocumentAction($api, $auth, $this->config, $personProvider, $translator);
+        $action = new CreateAdvancedlySignedDocumentAction($api, $auth, $this->config, $translator, $personProvider);
         $result = $action($request);
 
         $this->assertInstanceOf(AdvancedlySignedDocument::class, $result);

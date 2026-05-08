@@ -29,8 +29,13 @@ final class CreateAdvancedlySignedDocumentAction
 {
     private $api;
 
-    public function __construct(PdfAsApi $api, private readonly AuthorizationService $authorizationService, private readonly BundleConfig $config, private readonly PersonProviderInterface $personProvider, private TranslatorInterface $translator)
-    {
+    public function __construct(
+        PdfAsApi $api,
+        private readonly AuthorizationService $authorizationService,
+        private readonly BundleConfig $config,
+        private TranslatorInterface $translator,
+        private readonly ?PersonProviderInterface $personProvider = null,
+    ) {
         $this->api = $api;
     }
 
@@ -49,7 +54,7 @@ final class CreateAdvancedlySignedDocumentAction
         $this->authorizationService->checkCanSignWithProfile($profileName);
 
         $fullname = null;
-        if ($this->config->getProfile($profileName)->getIncludeUsername()) {
+        if ($this->personProvider !== null && $this->config->getProfile($profileName) !== null && $this->config->getProfile($profileName)->getIncludeUsername()) {
             $fullname = $this->personProvider->getCurrentPerson()->getGivenName().' '.$this->personProvider->getCurrentPerson()->getFamilyName();
         }
 
