@@ -57,6 +57,47 @@ class Configuration implements ConfigurationInterface
         return $builder;
     }
 
+    private function getSystemTextNode(): ArrayNodeDefinition
+    {
+        $builder = new ArrayNodeDefinition('system_text');
+        $builder
+            ->info('For extending the PDF-AS signature layout with system provided text (optional)')
+                ->children()
+                    ->scalarNode('target_table')
+                    ->info('The profile table ID to attach the content to.')
+                    ->example('systemcontent')
+                    ->isRequired()
+                ->end()
+                ->integerNode('target_row')
+                    ->info('The index of the first unset row in the table (starts with 1)')
+                    ->example('1')
+                    ->isRequired()
+                ->end()
+                ->arrayNode('attach')
+                    ->info('In case there is content "child_table" will be attached to "parent_table" at "parent_row" (optional)')
+                    ->children()
+                        ->scalarNode('parent_table')
+                            ->info('The name of the parent table')
+                            ->example('parent')
+                            ->isRequired()
+                        ->end()
+                        ->scalarNode('child_table')
+                            ->info('Child table name')
+                            ->example('child')
+                            ->isRequired()
+                        ->end()
+                        ->integerNode('parent_row')
+                            ->info('The index of the row where the child table will be attached to')
+                            ->example('4')
+                            ->isRequired()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+
+        return $builder;
+    }
+
     private function getAuthNode(): NodeDefinition
     {
         return AuthorizationConfigDefinition::create()
@@ -183,6 +224,12 @@ class Configuration implements ConfigurationInterface
                                         ->example('true')
                                         ->defaultFalse()
                                     ->end()
+                                    ->booleanNode('include_username')
+                                        ->info('Whether the signature should include the username of the signer or not')
+                                        ->example('true')
+                                        ->defaultFalse()
+                                    ->end()
+                                    ->append($this->getSystemTextNode())
                                     ->append($this->getUserTextNode())
                                 ->end()
                             ->end()

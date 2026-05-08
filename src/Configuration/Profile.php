@@ -40,6 +40,11 @@ abstract class Profile
         return $this->config['preview_image_resolution'];
     }
 
+    public function getIncludeUsername(): bool
+    {
+        return $this->config['include_username'];
+    }
+
     public function getLanguage(): string
     {
         return $this->config['language'];
@@ -58,6 +63,15 @@ abstract class Profile
     {
         if (array_key_exists('user_text', $this->config)) {
             return new UserTextConfig($this->config['user_text']);
+        }
+
+        return null;
+    }
+
+    public function getSystemText(): ?UserTextConfig
+    {
+        if (array_key_exists('system_text', $this->config)) {
+            return new UserTextConfig($this->config['system_text']);
         }
 
         return null;

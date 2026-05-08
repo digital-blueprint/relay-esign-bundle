@@ -209,12 +209,18 @@ class PdfAsApi implements LoggerAwareInterface
 
     public static function buildConfigurationOverrides(Profile $profile, SigningRequest $request): PropertyMap
     {
+        // Add custom system defined text if needed
+        $systemText = $request->getSystemText();
+        if ($systemText !== []) {
+            $overrides = SystemText::buildSystemTextConfigOverride($profile, $systemText);
+        } else {
+            $overrides = [];
+        }
+
         // Add custom user defined text if needed
         $userText = $request->getUserText();
         if ($userText !== []) {
-            $overrides = UserText::buildUserTextConfigOverride($profile, $userText);
-        } else {
-            $overrides = [];
+            $overrides = array_merge($overrides, UserText::buildUserTextConfigOverride($profile, $userText));
         }
 
         // Add the custom signature image

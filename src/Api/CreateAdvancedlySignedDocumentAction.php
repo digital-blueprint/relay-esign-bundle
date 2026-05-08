@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Api;
 
+use Dbp\Relay\BasePersonBundle\API\PersonProviderInterface;
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
+use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Dbp\Relay\EsignBundle\PdfAsApi\SignatureBlockPosition;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningException;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningRequest;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningUnavailableException;
+use Dbp\Relay\EsignBundle\PdfAsApi\SystemDefinedText;
 use Dbp\Relay\EsignBundle\PdfAsApi\Utils as PdfAsApiUtils;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,13 +22,14 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsController]
 final class CreateAdvancedlySignedDocumentAction
 {
     private $api;
 
-    public function __construct(PdfAsApi $api, private readonly AuthorizationService $authorizationService)
+    public function __construct(PdfAsApi $api, private readonly AuthorizationService $authorizationService, private readonly BundleConfig $config, private readonly PersonProviderInterface $personProvider, private TranslatorInterface $translator)
     {
         $this->api = $api;
     }
@@ -43,6 +47,11 @@ final class CreateAdvancedlySignedDocumentAction
         }
 
         $this->authorizationService->checkCanSignWithProfile($profileName);
+
+        $fullname = null;
+        if ($this->config->getProfile($profileName)->getIncludeUsername()) {
+            $fullname = $this->personProvider->getCurrentPerson()->getGivenName().' '.$this->personProvider->getCurrentPerson()->getFamilyName();
+        }
 
         /** @var ?UploadedFile $uploadedFile */
         $uploadedFile = $request->files->get('file');
@@ -94,6 +103,11 @@ final class CreateAdvancedlySignedDocumentAction
             $data = $request->request->all()['user_text'];
             $userText = Utils::parseUserText($data);
         }
+        $systemText = [];
+        if ($fullname !== null) {
+            $desc = $this->translator->trans('table_contents.signer', domain: 'dbp_relay_esign_bundle', locale: $this->config->getProfile($profileName)->getLanguage());
+            $systemText = [new SystemDefinedText($desc, $fullname)];
+        }
 
         $invisible = $request->request->getBoolean('invisible');
         if ($invisible && $hasPositionParams) {
@@ -116,7 +130,7 @@ final class CreateAdvancedlySignedDocumentAction
         }
 
         $blockPosition = new SignatureBlockPosition(x: $x, y: $y, width : $width, rotation: $rotation, page: $page);
-        $request = new SigningRequest($data, $profileName, $requestId, $blockPosition, $userText, invisible: $invisible);
+        $request = new SigningRequest($data, $profileName, $requestId, $blockPosition, $userText, invisible: $invisible, systemText: $systemText);
 
         try {
             $result = $this->api->advancedlySignPdf($request);

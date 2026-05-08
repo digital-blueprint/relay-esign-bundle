@@ -4,21 +4,67 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Tests\Api;
 
+use Dbp\Relay\BasePersonBundle\API\PersonProviderInterface;
+use Dbp\Relay\BasePersonBundle\Entity\Person;
 use Dbp\Relay\EsignBundle\Api\AdvancedlySignedDocument;
 use Dbp\Relay\EsignBundle\Api\CreateAdvancedlySignedDocumentAction;
 use Dbp\Relay\EsignBundle\Api\CreateQualifiedBatchSigningRequestAction;
 use Dbp\Relay\EsignBundle\Api\CreateQualifiedSigningRequestAction;
 use Dbp\Relay\EsignBundle\Api\QualifiedSigningRequest;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
+use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Dbp\Relay\EsignBundle\PdfAsApi\SigningResponse;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ApiTest extends TestCase
 {
     private array $tempFiles = [];
+    private BundleConfig $config;
+
+    public function setUp(): void
+    {
+        $config = [
+            'qualified_signature' => [
+                'server_url' => 'https://sig.tugraz.at/pdf-as-web',
+                'profiles' => [
+                    [
+                        'name' => 'some-profile',
+                        'profile_id' => 'ID',
+                    ],
+                    [
+                        'name' => 'legacy',
+                        'role' => 'SYMFONY_ROLE',
+                        'profile_id' => 'ID',
+                    ],
+                ],
+            ],
+            'advanced_signature' => [
+                'server_url' => 'https://sig.tugraz.at/pdf-as-web',
+                'profiles' => [
+                    [
+                        'name' => 'unused',
+                        'profile_id' => 'ID',
+                        'key_id' => 'key',
+                        'include_username' => true,
+                    ],
+                ],
+            ],
+            'authorization' => [
+                'roles' => [
+                    'ROLE_SIGNER' => 'user.get("HAS_ROLE_SIGNER")',
+                    'ROLE_VERIFIER' => 'user.get("HAS_ROLE_VERIFIER")',
+                ],
+                'resource_permissions' => [
+                    'ROLE_PROFILE_SIGNER' => 'resource.getName() in user.get("ALLOWED_PROFILES")',
+                ],
+            ],
+        ];
+        $this->config = new BundleConfig($config);
+    }
 
     protected function tearDown(): void
     {
@@ -42,6 +88,19 @@ class ApiTest extends TestCase
             ->method('advancedlySignPdf')
             ->willReturn(new SigningResponse('signed', 0, 0, null));
 
+        $dummyPerson = new Person();
+        $dummyPerson->setGivenName('John');
+        $dummyPerson->setFamilyName('Doe');
+        $personProvider = $this->createMock(PersonProviderInterface::class);
+        $personProvider->expects($this->once())
+            ->method('getCurrentPerson')
+            ->willReturn($dummyPerson);
+
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->expects($this->once())
+            ->method('trans')
+            ->willReturn('text');
+
         $auth = $this->createMock(AuthorizationService::class);
         $auth->expects($this->once())
             ->method('checkCanSign');
@@ -49,7 +108,7 @@ class ApiTest extends TestCase
             ->method('checkCanSignWithProfile')
             ->with('official');
 
-        $action = new CreateAdvancedlySignedDocumentAction($api, $auth);
+        $action = new CreateAdvancedlySignedDocumentAction($api, $auth, $this->config, $personProvider, $translator);
         $result = $action($request);
 
         $this->assertInstanceOf(AdvancedlySignedDocument::class, $result);
