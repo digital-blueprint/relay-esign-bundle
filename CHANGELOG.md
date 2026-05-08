@@ -3,6 +3,7 @@
 ## Unreleased
 * Remove config parameters `display_name_en` and `display_name_de`
 * Add `Resources/translations` directory for storing translations for the display name of the profiles
+* Add config parameters `system_text`, which mirrors `user_text` but is used for system content instead of user added content.
 
 ## v0.6.8
 * Add config parameter `language` to qualified and advanced signatures which indicates the language of the text
