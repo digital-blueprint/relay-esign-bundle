@@ -16,3 +16,5 @@ profile_display_names:
   default: Qualifizierte Signatur (Legacy)
 table_contents:
   signer: Unterzeichner
+  additional_information: Zusatzinformationen
+  date: Datum/Zeit-UTC

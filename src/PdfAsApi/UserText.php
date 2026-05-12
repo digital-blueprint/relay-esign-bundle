@@ -32,7 +32,7 @@ class UserText
      *
      * @return PropertyEntry[]
      */
-    public static function buildUserTextConfigOverride(Profile $profile, array $userText): array
+    public static function buildUserTextConfigOverride(Profile $profile, array $userText, ?string $addInfoTranslation = null): array
     {
         $userTextConfig = $profile->getUserText();
         if ($userTextConfig === null) {
@@ -60,8 +60,9 @@ class UserText
             throw new \RuntimeException('invalid profile id');
         }
 
-        // First we insert the user content into the table
         $overrides = [];
+
+        // We insert the user content into the table
         foreach ($userText as $entry) {
             $desc = $entry->getDescription();
             $value = $entry->getValue();
@@ -87,6 +88,25 @@ class UserText
             if ($attachRow <= 0) {
                 throw new \RuntimeException('invalid table row');
             }
+
+            // We want a optional visual separation between the system and user content
+            if ($userTextConfig->getSeparator() && !empty($userText)) {
+                // we want a small empty space between user and system text
+                // so if there is user text, we add a completely empty table row
+                $tableName = 'separator';
+                $separatorTableName = "TABLE-$tableName";
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$attachParent.$attachRow", $separatorTableName);
+                ++$attachRow;
+
+                // we also want to add a row that shows a text that clearly separates user content from system content
+                $tableName = 'addInfo';
+                $additionalInfoTableName = "TABLE-$tableName";
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.key.ADDINFOTEXT", '');
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.value.ADDINFOTEXT", $addInfoTranslation);
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$attachParent.$attachRow", $additionalInfoTableName);
+                ++$attachRow;
+            }
+
             // In case we added something we optionally attach a "child" table to a "parent" one at a specific "row"
             // This can be the table we filled above, or some parent table.
             // This is needed because pdf-as doesn't allow empty tables and we need to attach it only when it has at least

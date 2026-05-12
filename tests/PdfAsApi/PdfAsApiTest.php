@@ -12,6 +12,7 @@ use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyMap;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PdfAsApiTest extends ApiTestCase
 {
@@ -19,7 +20,12 @@ class PdfAsApiTest extends ApiTestCase
     {
         $router = $this->getContainer()->get('router');
 
-        return new PdfAsApi(new Stopwatch(), $router, new BundleConfig($config));
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->expects($this->atLeast(0))
+            ->method('trans')
+            ->willReturn('text');
+
+        return new PdfAsApi(new Stopwatch(), $router, new BundleConfig($config), $translator);
     }
 
     public function testPropertyMapIsEqual()

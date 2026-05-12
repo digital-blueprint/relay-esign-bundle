@@ -43,6 +43,7 @@ class UserTextTest extends TestCase
             'user_text' => [
                 'target_table' => 'target-table',
                 'target_row' => 1,
+                'separator' => true,
                 'attach' => [
                     'parent_table' => 'parent-table',
                     'child_table' => 'child-table',
@@ -51,9 +52,8 @@ class UserTextTest extends TestCase
             ],
         ]);
 
-        $overrides = UserText::buildUserTextConfigOverride($profileConfig, [new UserDefinedText('foo', 'bar')]);
-
-        $this->assertCount(4, $overrides);
+        $overrides = UserText::buildUserTextConfigOverride($profileConfig, [new UserDefinedText('foo', 'bar')], 'Zusatzinformationen');
+        $this->assertCount(8, $overrides);
         $this->assertSame('sig_obj.someid.key.SIG_USER_TEXT_target-table_1', $overrides[0]->getKey());
         $this->assertSame('foo', $overrides[0]->getValue());
         $this->assertSame('sig_obj.someid.value.SIG_USER_TEXT_target-table_1', $overrides[1]->getKey());
@@ -61,9 +61,9 @@ class UserTextTest extends TestCase
         $this->assertSame('sig_obj.someid.table.target-table.1', $overrides[2]->getKey());
         $this->assertSame('SIG_USER_TEXT_target-table_1-cv', $overrides[2]->getValue());
         $this->assertSame('sig_obj.someid.table.parent-table.42', $overrides[3]->getKey());
-        $this->assertSame('TABLE-child-table', $overrides[3]->getValue());
+        $this->assertSame('TABLE-child-table', $overrides[7]->getValue());
 
-        $overrides = UserText::buildUserTextConfigOverride($profileConfig, []);
+        $overrides = UserText::buildUserTextConfigOverride($profileConfig, [], ' ');
         $this->assertCount(0, $overrides);
     }
 

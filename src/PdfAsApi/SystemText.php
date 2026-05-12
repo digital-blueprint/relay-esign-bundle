@@ -14,7 +14,7 @@ class SystemText
      *
      * @return PropertyEntry[]
      */
-    public static function buildSystemTextConfigOverride(Profile $profile, array $systemText): array
+    public static function buildSystemTextConfigOverride(Profile $profile, array $systemText, ?string $dateTrans = null): array
     {
         $systemTextConfig = $profile->getSystemText();
         if ($systemTextConfig === null) {
@@ -48,7 +48,7 @@ class SystemText
             $desc = $entry->getDescription();
             $value = $entry->getValue();
 
-            $entryId = 'SIG_USER_TEXT_'.$systemTable.'_'.$systemRow;
+            $entryId = 'SIG_SYSTEM_TEXT_'.$systemTable.'_'.$systemRow;
             $overrides[] = new PropertyEntry("sig_obj.$profileId.key.$entryId", $desc);
             $overrides[] = new PropertyEntry("sig_obj.$profileId.value.$entryId", $value);
             $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$systemTable.$systemRow", $entryId.'-cv');
@@ -69,6 +69,7 @@ class SystemText
             if ($attachRow <= 0) {
                 throw new \RuntimeException('invalid table row');
             }
+
             // In case we added something we optionally attach a "child" table to a "parent" one at a specific "row"
             // This can be the table we filled above, or some parent table.
             // This is needed because pdf-as doesn't allow empty tables and we need to attach it only when it has at least
@@ -76,7 +77,13 @@ class SystemText
             if (count($overrides) > 0) {
                 $overrides[] = new PropertyEntry(
                     "sig_obj.$profileId.table.$attachParent.$attachRow", 'TABLE-'.$attachChild);
+                ++$attachRow;
             }
+
+            // add date to table
+            $overrides[] = new PropertyEntry("sig_obj.$profileId.key.SIG_DATE", $dateTrans);
+            $overrides[] = new PropertyEntry("sig_obj.$profileId.table.date.1", 'SIG_DATE-cv');
+            $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$attachParent.$attachRow", 'TABLE-date');
         }
 
         return $overrides;

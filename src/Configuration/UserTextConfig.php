@@ -10,6 +10,11 @@ class UserTextConfig
     {
     }
 
+    public function getSeparator(): bool
+    {
+        return $this->config['separator'];
+    }
+
     public function getTargetTable(): string
     {
         return $this->config['target_table'];

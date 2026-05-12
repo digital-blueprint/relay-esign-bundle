@@ -34,6 +34,7 @@ use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PdfAsApi implements LoggerAwareInterface
 {
@@ -44,7 +45,7 @@ class PdfAsApi implements LoggerAwareInterface
     private $stopwatch;
     private $router;
 
-    public function __construct(Stopwatch $stopwatch, UrlGeneratorInterface $router, private BundleConfig $bundleConfig)
+    public function __construct(Stopwatch $stopwatch, UrlGeneratorInterface $router, private BundleConfig $bundleConfig, private TranslatorInterface $translator)
     {
         $this->stopwatch = $stopwatch;
         $this->router = $router;
@@ -207,12 +208,12 @@ class PdfAsApi implements LoggerAwareInterface
         return $redirectUrl;
     }
 
-    public static function buildConfigurationOverrides(Profile $profile, SigningRequest $request): PropertyMap
+    public static function buildConfigurationOverrides(Profile $profile, SigningRequest $request, ?string $addInfoTrans = null, ?string $dateTans = null): PropertyMap
     {
         // Add custom system defined text if needed
         $systemText = $request->getSystemText();
         if ($systemText !== []) {
-            $overrides = SystemText::buildSystemTextConfigOverride($profile, $systemText);
+            $overrides = SystemText::buildSystemTextConfigOverride($profile, $systemText, $dateTans);
         } else {
             $overrides = [];
         }
@@ -220,7 +221,7 @@ class PdfAsApi implements LoggerAwareInterface
         // Add custom user defined text if needed
         $userText = $request->getUserText();
         if ($userText !== []) {
-            $overrides = array_merge($overrides, UserText::buildUserTextConfigOverride($profile, $userText));
+            $overrides = array_merge($overrides, UserText::buildUserTextConfigOverride($profile, $userText, $addInfoTrans));
         }
 
         // Add the custom signature image
@@ -370,10 +371,11 @@ class PdfAsApi implements LoggerAwareInterface
             $params = new SignParameters(Connector::jks);
             $params->setKeyIdentifier($profile->getKeyId());
             $params->setProfile($profile->getProfileId());
-            $params->setConfigurationOverrides(self::buildConfigurationOverrides($profile, $request));
+            $params->setConfigurationOverrides(self::buildConfigurationOverrides($profile, $request, $this->translator->trans('table_contents.additional_information', domain: 'dbp_relay_esign_bundle', locale: $profile->getLanguage()), $this->translator->trans('table_contents.date', domain: 'dbp_relay_esign_bundle', locale: $profile->getLanguage())));
             $params->setPosition($request->getSignatureBlockPosition()->toPdfAsFormat());
 
             $requestId = $request->getRequestId();
+
             $signRequest = new SignRequest($request->getData(), $params, $requestId);
             $signRequests[] = $signRequest;
         }
