@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## v0.6.11
+* Add optional separator between system and user content in the signature block, which can be configured via the `separator` config parameter.
+
 ## v0.6.10
 * Add config parameters `system_text`, which mirrors `user_text` but is used for system content instead of user added content.
 
