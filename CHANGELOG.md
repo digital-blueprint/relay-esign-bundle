@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## v0.6.12
+* Remove date table and add date into system table instead
+
 ## v0.6.11
 * Add optional separator between system and user content in the signature block, which can be configured via the `separator` config parameter.
 
