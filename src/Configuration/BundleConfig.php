@@ -13,7 +13,7 @@ class BundleConfig
         $this->config = $config;
     }
 
-    public function setConfig(array $config): void
+    public function setConfig(array $config = []): void
     {
         $this->config = $config;
         $this->ensureUniqueProfileNames();

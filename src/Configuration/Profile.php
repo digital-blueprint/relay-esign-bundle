@@ -6,7 +6,7 @@ namespace Dbp\Relay\EsignBundle\Configuration;
 
 abstract class Profile
 {
-    public function __construct(private array $config)
+    public function __construct(private array $config = [])
     {
     }
 

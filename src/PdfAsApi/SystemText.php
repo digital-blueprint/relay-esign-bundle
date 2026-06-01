@@ -55,6 +55,10 @@ class SystemText
             ++$systemRow;
         }
 
+        // add date to table
+        $overrides[] = new PropertyEntry("sig_obj.$profileId.key.SIG_DATE", $dateTrans);
+        $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$systemTable.$systemRow", 'SIG_DATE-cv');
+
         if ($systemTextConfig->hasAttach()) {
             $attachParent = $systemTextConfig->getAttachParentTable();
             $attachChild = $systemTextConfig->getAttachChildTable();
@@ -74,16 +78,10 @@ class SystemText
             // This can be the table we filled above, or some parent table.
             // This is needed because pdf-as doesn't allow empty tables and we need to attach it only when it has at least
             // one row. But it also allows us to show extra images for example if there are >0 extra rows
-            if (count($overrides) > 0) {
+            if (count($overrides) > 2) {
                 $overrides[] = new PropertyEntry(
                     "sig_obj.$profileId.table.$attachParent.$attachRow", 'TABLE-'.$attachChild);
-                ++$attachRow;
             }
-
-            // add date to table
-            $overrides[] = new PropertyEntry("sig_obj.$profileId.key.SIG_DATE", $dateTrans);
-            $overrides[] = new PropertyEntry("sig_obj.$profileId.table.date.1", 'SIG_DATE-cv');
-            $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$attachParent.$attachRow", 'TABLE-date');
         }
 
         return $overrides;

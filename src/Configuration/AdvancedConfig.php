@@ -6,7 +6,7 @@ namespace Dbp\Relay\EsignBundle\Configuration;
 
 class AdvancedConfig
 {
-    public function __construct(private array $config)
+    public function __construct(private array $config = [])
     {
     }
 

@@ -6,7 +6,7 @@ namespace Dbp\Relay\EsignBundle\Configuration;
 
 class AdvancedProfile extends Profile
 {
-    public function __construct(private array $config)
+    public function __construct(private array $config = [])
     {
         parent::__construct($config);
     }
