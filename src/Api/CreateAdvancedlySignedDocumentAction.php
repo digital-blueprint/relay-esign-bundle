@@ -111,7 +111,7 @@ final class CreateAdvancedlySignedDocumentAction
         $systemText = [];
         if ($fullname !== null) {
             $desc = $this->translator->trans('table_contents.signer', domain: 'dbp_relay_esign_bundle', locale: $this->config->getProfile($profileName)->getLanguage());
-            $systemText = [new SystemDefinedText($desc, $fullname)];
+            $systemText = ['name' => new SystemDefinedText($desc, $fullname)];
         }
 
         $invisible = $request->request->getBoolean('invisible');

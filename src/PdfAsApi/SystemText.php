@@ -44,15 +44,22 @@ class SystemText
 
         // First we insert the user content into the table
         $overrides = [];
-        foreach ($systemText as $entry) {
+        foreach ($systemText as $key => $entry) {
             $desc = $entry->getDescription();
             $value = $entry->getValue();
 
             $entryId = 'SIG_SYSTEM_TEXT_'.$systemTable.'_'.$systemRow;
-            $overrides[] = new PropertyEntry("sig_obj.$profileId.key.$entryId", $desc);
-            $overrides[] = new PropertyEntry("sig_obj.$profileId.value.$entryId", $value);
-            $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$systemTable.$systemRow", $entryId.'-cv');
-            ++$systemRow;
+            if ($key === 'name' && $systemTextConfig->getNameTable() !== null) {
+                $nameTable = $systemTextConfig->getNameTable();
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.key.$entryId", $desc);
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.value.$entryId", $value);
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$nameTable.1", $entryId.'-cv');
+            } else {
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.key.$entryId", $desc);
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.value.$entryId", $value);
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$systemTable.$systemRow", $entryId.'-cv');
+                ++$systemRow;
+            }
         }
 
         // add date to table

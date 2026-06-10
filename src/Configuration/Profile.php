@@ -68,10 +68,10 @@ abstract class Profile
         return null;
     }
 
-    public function getSystemText(): ?UserTextConfig
+    public function getSystemText(): ?SystemTextConfig
     {
         if (array_key_exists('system_text', $this->config)) {
-            return new UserTextConfig($this->config['system_text']);
+            return new SystemTextConfig($this->config['system_text']);
         }
 
         return null;

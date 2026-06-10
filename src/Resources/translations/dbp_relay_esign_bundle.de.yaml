@@ -7,6 +7,9 @@ profile_display_names:
   advanced-official_various: Dokumente mit amtlicher Signatur
   advanced-rector_various: Dokumente als Rektor signieren
   advanced-en_invoices: Abrechnungen auf Englisch
+  advanced-en_compact: Kompakte Signatur auf Englisch
+  advanced-de_compact: Kompakte Signatur auf Deutsch
+  advanced-de_compact_institute: Kompakte Institutssignatur auf Deutsch
   advanced-de_invoices: Abrechnungen auf Deutsch
   advanced-de_recognitions: Anerkennungen
   advanced-invisible-de_inspectionReports: Prüfberichte mit unsichtbarer Signatur

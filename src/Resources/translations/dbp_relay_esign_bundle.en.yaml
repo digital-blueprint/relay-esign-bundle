@@ -7,6 +7,9 @@ profile_display_names:
   advanced-official_various: Documents in official capacity
   advanced-rector_various: Documents with the rector’s signature
   advanced-en_invoices: Invoices in English
+  advanced-en_compact: Compact signature in English
+  advanced-de_compact: Compact signature in German
+  advanced-de_compact_institute: Compact signature for institutes in German
   advanced-de_invoices: Invoices in German
   advanced-de_recognitions: Recognitions
   advanced-invisible-de_inspectionReports: Inspection reports with an invisible signature
