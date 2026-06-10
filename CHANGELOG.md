@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.6.13
+* Add more translations for additional profiles
+* Add possibility to change styling of name in signature through config option `name_table`
+
 ## v0.6.12
 * Remove date table and add date into system table instead
 
