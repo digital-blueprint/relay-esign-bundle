@@ -127,7 +127,7 @@ final class CreateQualifiedBatchSigningRequestAction
     {
         $hasPositionParams = false;
 
-        $x = SignatureBlockPosition::AUTO;
+        $x = SignatureBlockPosition::PROFILE_DEFAULT;
         if (isset($requestData['x'])) {
             $x = $requestData['x'];
             if (!is_int($x) && !is_float($x)) {
@@ -135,7 +135,7 @@ final class CreateQualifiedBatchSigningRequestAction
             }
             $hasPositionParams = true;
         }
-        $y = SignatureBlockPosition::AUTO;
+        $y = SignatureBlockPosition::PROFILE_DEFAULT;
         if (isset($requestData['y'])) {
             $y = $requestData['y'];
             if (!is_int($y) && !is_float($y)) {
@@ -143,7 +143,7 @@ final class CreateQualifiedBatchSigningRequestAction
             }
             $hasPositionParams = true;
         }
-        $width = SignatureBlockPosition::AUTO;
+        $width = SignatureBlockPosition::PROFILE_DEFAULT;
         if (isset($requestData['width'])) {
             $width = $requestData['width'];
             if (!is_int($width) && !is_float($width)) {
@@ -151,7 +151,7 @@ final class CreateQualifiedBatchSigningRequestAction
             }
             $hasPositionParams = true;
         }
-        $rotation = 0.0;
+        $rotation = SignatureBlockPosition::PROFILE_DEFAULT;
         if (isset($requestData['rotation'])) {
             $rotation = $requestData['rotation'];
             if (!is_int($rotation) && !is_float($rotation)) {
@@ -159,7 +159,7 @@ final class CreateQualifiedBatchSigningRequestAction
             }
             $hasPositionParams = true;
         }
-        $page = SignatureBlockPosition::AUTO;
+        $page = SignatureBlockPosition::PROFILE_DEFAULT;
         if (isset($requestData['page'])) {
             $page = $requestData['page'];
             if (!is_int($page)) {
