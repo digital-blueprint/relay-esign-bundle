@@ -59,27 +59,27 @@ use Symfony\Component\Serializer\Annotation\Groups;
                                         'format' => 'binary',
                                     ],
                                     'x' => [
-                                        'description' => 'Position of the signature from the left (in points)',
+                                        'description' => 'Position of the signature from the left (in points). If omitted, the PDF-AS profile default is used.',
                                         'type' => 'number',
                                         'example' => '300',
                                     ],
                                     'y' => [
-                                        'description' => 'Position of the signature from the bottom (in points)',
+                                        'description' => 'Position of the signature from the bottom (in points). If omitted, the PDF-AS profile default is used.',
                                         'type' => 'number',
                                         'example' => '400',
                                     ],
                                     'r' => [
-                                        'description' => 'Rotation of the signature counterclockwise (in degrees)',
+                                        'description' => 'Rotation of the signature counterclockwise (in degrees). If omitted, the PDF-AS profile default is used.',
                                         'type' => 'number',
                                         'example' => '0',
                                     ],
                                     'w' => [
-                                        'description' => 'Width of the signature (in points)',
+                                        'description' => 'Width of the signature (in points). If omitted, the PDF-AS profile default is used.',
                                         'type' => 'number',
                                         'example' => '340',
                                     ],
                                     'p' => [
-                                        'description' => 'Page number the signature should be placed (starting with 1)',
+                                        'description' => 'Page number the signature should be placed (starting with 1). If omitted, the PDF-AS profile default is used.',
                                         'type' => 'number',
                                         'example' => '2',
                                     ],

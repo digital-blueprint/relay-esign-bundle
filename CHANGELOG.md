@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+* Restore the pre-0.5 behavior for omitted signature block positioning values:
+  PDF-AS profile defaults are used again instead of explicitly sending automatic
+  placement/zero values from the bundle.
 
 ## v0.6.13
 * Add more translations for additional profiles

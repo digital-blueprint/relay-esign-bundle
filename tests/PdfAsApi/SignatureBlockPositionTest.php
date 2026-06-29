@@ -13,18 +13,24 @@ class SignatureBlockPositionTest extends TestCase
     {
         $pos = new SignatureBlockPosition();
 
-        $this->assertSame(SignatureBlockPosition::AUTO, $pos->x);
-        $this->assertSame(SignatureBlockPosition::AUTO, $pos->y);
-        $this->assertSame(SignatureBlockPosition::AUTO, $pos->width);
-        $this->assertSame(SignatureBlockPosition::AUTO, $pos->page);
-        $this->assertSame(0.0, $pos->footerHeight);
-        $this->assertSame(0.0, $pos->rotation);
+        $this->assertSame(SignatureBlockPosition::PROFILE_DEFAULT, $pos->x);
+        $this->assertSame(SignatureBlockPosition::PROFILE_DEFAULT, $pos->y);
+        $this->assertSame(SignatureBlockPosition::PROFILE_DEFAULT, $pos->width);
+        $this->assertSame(SignatureBlockPosition::PROFILE_DEFAULT, $pos->page);
+        $this->assertSame(SignatureBlockPosition::PROFILE_DEFAULT, $pos->footerHeight);
+        $this->assertSame(SignatureBlockPosition::PROFILE_DEFAULT, $pos->rotation);
     }
 
     public function testToPdfAsStringWithDefaults(): void
     {
         $pos = new SignatureBlockPosition();
-        $this->assertSame('x:auto;y:auto;w:auto;p:auto;f:0;r:0', $pos->toPdfAsFormat());
+        $this->assertNull($pos->toPdfAsFormat());
+    }
+
+    public function testToPdfAsStringSkipsProfileDefaults(): void
+    {
+        $pos = new SignatureBlockPosition(x: 0.0, width: 100.0, rotation: 0.0);
+        $this->assertSame('x:0;w:100;r:0', $pos->toPdfAsFormat());
     }
 
     public function testToPdfAsStringWithNumericValues(): void

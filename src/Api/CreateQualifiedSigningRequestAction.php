@@ -51,19 +51,19 @@ final class CreateQualifiedSigningRequestAction
 
         $hasPositionParams = false;
 
-        $x = SignatureBlockPosition::AUTO;
+        $x = SignatureBlockPosition::PROFILE_DEFAULT;
         if (Utils::requestGet($request, 'x', '') !== '') {
             $x = (float) Utils::requestGet($request, 'x');
             $hasPositionParams = true;
         }
 
-        $y = SignatureBlockPosition::AUTO;
+        $y = SignatureBlockPosition::PROFILE_DEFAULT;
         if (Utils::requestGet($request, 'y', '') !== '') {
             $y = (float) Utils::requestGet($request, 'y');
             $hasPositionParams = true;
         }
 
-        $width = SignatureBlockPosition::AUTO;
+        $width = SignatureBlockPosition::PROFILE_DEFAULT;
         if ($request->request->has('width')) {
             $width = $request->request->filter('width', filter: FILTER_VALIDATE_FLOAT);
             $hasPositionParams = true;
@@ -72,7 +72,7 @@ final class CreateQualifiedSigningRequestAction
             $hasPositionParams = true;
         }
 
-        $rotation = 0.0;
+        $rotation = SignatureBlockPosition::PROFILE_DEFAULT;
         if ($request->request->has('rotation')) {
             $rotation = $request->request->filter('rotation', filter: FILTER_VALIDATE_FLOAT);
             $hasPositionParams = true;
@@ -81,7 +81,7 @@ final class CreateQualifiedSigningRequestAction
             $hasPositionParams = true;
         }
 
-        $page = SignatureBlockPosition::AUTO;
+        $page = SignatureBlockPosition::PROFILE_DEFAULT;
         if ($request->request->has('page')) {
             $page = $request->request->getInt('page');
             $hasPositionParams = true;

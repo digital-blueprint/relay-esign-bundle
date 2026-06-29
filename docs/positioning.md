@@ -14,18 +14,22 @@ cm via the DPI, for example "1cm ~ 28.3465pt".
 
 * `page` - The page number where the signature block should be placed, starting
   with 1. A page number larger than the actual page count will append a new page
-  instead. Defaults to the last page, or a newly added page if there isn't
+  instead. If omitted, the PDF-AS profile default is used. Without a profile
+  default, PDF-AS automatically uses the last page or a new page if there isn't
   enough space.
 * `x` - Position of the signature's top left corner in points, from the left of
-  the page. Defaults to the signature block being centered horizontally.
+  the page. If omitted, the PDF-AS profile default is used. Without a profile
+  default, PDF-AS centers the signature block horizontally.
 * `y` - Position of the signature's top left corner in points, from the bottom
-  of the page. Defaults to right after the content on the selected page, or at
+  of the page. If omitted, the PDF-AS profile default is used. Without a profile
+  default, PDF-AS places it right after the content on the selected page, or at
   the top if there is not enough free space.
-* `width` - Width of the signature block in points. Defaults to the default width
-  specified in the backend. Note that making it too small might break the
-  internal layout.
+* `width` - Width of the signature block in points. If omitted, the PDF-AS
+  profile default is used. Without a profile default, PDF-AS uses automatic
+  width. Note that making it too small might break the internal layout.
 * `rotation` - Absolute rotation of the signature block in degrees, counterclockwise.
-  Defaults to 0.
+  If omitted, the PDF-AS profile default is used. Without a profile default,
+  PDF-AS uses 0 degrees.
 
 In case you don't want to have a visible signature block at all you can set `invisible` to `true`:
 

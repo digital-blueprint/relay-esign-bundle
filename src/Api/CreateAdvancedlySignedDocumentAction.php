@@ -64,19 +64,19 @@ final class CreateAdvancedlySignedDocumentAction
 
         $hasPositionParams = false;
 
-        $x = SignatureBlockPosition::AUTO;
+        $x = SignatureBlockPosition::PROFILE_DEFAULT;
         if (Utils::requestGet($request, 'x', '') !== '') {
             $x = (float) Utils::requestGet($request, 'x');
             $hasPositionParams = true;
         }
 
-        $y = SignatureBlockPosition::AUTO;
+        $y = SignatureBlockPosition::PROFILE_DEFAULT;
         if (Utils::requestGet($request, 'y', '') !== '') {
             $y = (float) Utils::requestGet($request, 'y');
             $hasPositionParams = true;
         }
 
-        $width = SignatureBlockPosition::AUTO;
+        $width = SignatureBlockPosition::PROFILE_DEFAULT;
         if ($request->request->has('width')) {
             $width = $request->request->filter('width', filter: \FILTER_VALIDATE_FLOAT);
             $hasPositionParams = true;
@@ -85,7 +85,7 @@ final class CreateAdvancedlySignedDocumentAction
             $hasPositionParams = true;
         }
 
-        $rotation = 0.0;
+        $rotation = SignatureBlockPosition::PROFILE_DEFAULT;
         if ($request->request->has('rotation')) {
             $rotation = $request->request->filter('rotation', filter: \FILTER_VALIDATE_FLOAT);
             $hasPositionParams = true;
@@ -94,7 +94,7 @@ final class CreateAdvancedlySignedDocumentAction
             $hasPositionParams = true;
         }
 
-        $page = SignatureBlockPosition::AUTO;
+        $page = SignatureBlockPosition::PROFILE_DEFAULT;
         if ($request->request->has('page')) {
             $page = $request->request->getInt('page');
             $hasPositionParams = true;
@@ -125,13 +125,13 @@ final class CreateAdvancedlySignedDocumentAction
         $requestId = PdfAsApiUtils::generateRequestId();
 
         // if for whatever reason a negative value appears where it shouldnt be
-        // then fallback to auto placement
-        if ($hasPositionParams && ($x < 0 || $y < 0 || $width < 0)) {
-            $x = SignatureBlockPosition::AUTO;
-            $y = SignatureBlockPosition::AUTO;
-            $page = SignatureBlockPosition::AUTO;
-            $width = SignatureBlockPosition::AUTO;
-            $rotation = 0.0;
+        // then fallback to the PDF-AS profile defaults
+        if ($hasPositionParams && ((is_float($x) && $x < 0) || (is_float($y) && $y < 0) || (is_float($width) && $width < 0))) {
+            $x = SignatureBlockPosition::PROFILE_DEFAULT;
+            $y = SignatureBlockPosition::PROFILE_DEFAULT;
+            $page = SignatureBlockPosition::PROFILE_DEFAULT;
+            $width = SignatureBlockPosition::PROFILE_DEFAULT;
+            $rotation = SignatureBlockPosition::PROFILE_DEFAULT;
         }
 
         $blockPosition = new SignatureBlockPosition(x: $x, y: $y, width : $width, rotation: $rotation, page: $page);
