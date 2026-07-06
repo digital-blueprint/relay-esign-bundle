@@ -1,6 +1,11 @@
 # Changelog
 
 ## Unreleased
+* Remove the `preview_image_resolution` config option for qualified and advanced
+  signatures. The preview image resolution can now be passed via the `resolution`
+  query parameter of the preview API (in DPI, defaults to 72) and via the
+  `--resolution` option of the `dbp:relay:esign:preview` command (in DPI, defaults to 72).
+* Remove the `width` query parameter of the preview API in favor of the `resolution` query parameter.
 
 ## v0.7.0
 * Restore the pre-0.5 behavior for omitted signature block positioning values:

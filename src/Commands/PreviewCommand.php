@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Commands;
 
-use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -20,13 +20,10 @@ class PreviewCommand extends Command implements LoggerAwareInterface
 
     protected $api;
 
-    protected $config;
-
-    public function __construct(PdfAsApi $api, BundleConfig $config)
+    public function __construct(PdfAsApi $api)
     {
         parent::__construct();
         $this->api = $api;
-        $this->config = $config;
     }
 
     protected function configure(): void
@@ -35,6 +32,7 @@ class PreviewCommand extends Command implements LoggerAwareInterface
         $this->setDescription('Create a preview image of the signature block for a given profile');
         $this->addArgument('profile-id', InputArgument::REQUIRED, 'Signing profile ID');
         $this->addArgument('output-path', InputArgument::REQUIRED, 'Output PNG file path');
+        $this->addOption('resolution', null, InputOption::VALUE_REQUIRED, 'Resolution of the preview image in DPI', 72);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -42,7 +40,7 @@ class PreviewCommand extends Command implements LoggerAwareInterface
         $outputPath = $input->getArgument('output-path');
         $profile = $input->getArgument('profile-id');
 
-        $resolution = $this->config->getProfile($profile)->getPreviewImageResolution();
+        $resolution = (int) $input->getOption('resolution');
 
         $data = $this->api->createPreviewImage($profile, $resolution);
 

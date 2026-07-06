@@ -44,10 +44,10 @@ final class ImagePreviewAction
             throw new ApiError(Response::HTTP_BAD_REQUEST, "Profile $profileName is invisible");
         }
 
-        $res = $profile->getPreviewImageResolution();
+        $res = (int) $request->query->get('resolution', 72);
 
-        if ($request->query->has('width')) {
-            $res = (int) round($request->query->get('width', $res * 6.389) / 6.389); // 6.389 is width(px) / res
+        if ($res < 16 || $res > 512) {
+            throw new ApiError(Response::HTTP_BAD_REQUEST, "Resolution out of range (16-512): $res");
         }
 
         $image = $this->pdfasApi->createPreviewImage($profileName, $res);

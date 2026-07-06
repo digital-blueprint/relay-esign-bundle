@@ -35,11 +35,6 @@ abstract class Profile
         return $this->config['allow_annotations'];
     }
 
-    public function getPreviewImageResolution(): int
-    {
-        return $this->config['preview_image_resolution'];
-    }
-
     public function getIncludeUsername(): bool
     {
         return $this->config['include_username'];

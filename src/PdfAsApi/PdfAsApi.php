@@ -117,7 +117,7 @@ class PdfAsApi implements LoggerAwareInterface
                 // dont create preview image if profile is supposed to be invisible
                 continue;
             }
-            $this->createPreviewImage($profile->getName(), $profile->getPreviewImageResolution());
+            $this->createPreviewImage($profile->getName(), 72);
         }
     }
 
@@ -570,12 +570,9 @@ class PdfAsApi implements LoggerAwareInterface
             $serverUrl = $this->bundleConfig->getQualified()->getServerUrl();
         }
 
-        // use min / max resolution if extremes are reached
-        if ($resolution < 16) {
-            $resolution = 16;
-        }
-        if ($resolution > 512) {
-            $resolution = 512;
+        // PDF-AS only supports resolutions in the range 16-512
+        if ($resolution < 16 || $resolution > 512) {
+            throw new SigningException('Resolution out of range (16-512): '.$resolution);
         }
 
         $uriTemplate = new UriTemplate('/visblock{?r,p}');
