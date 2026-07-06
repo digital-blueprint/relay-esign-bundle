@@ -33,23 +33,26 @@ final class ImagePreviewAction
             throw new ApiError(Response::HTTP_BAD_REQUEST, 'Missing signature type');
         }
 
-        if (!$this->config->getProfile($identifier)) {
-            throw new ApiError(Response::HTTP_BAD_REQUEST, "Unknown signature profile: $identifier");
+        $profileName = $identifier;
+        $this->authorizationService->checkCanSignWithProfile($profileName);
+
+        $profile = $this->config->getProfile($profileName);
+
+        if ($profile === null) {
+            throw new ApiError(Response::HTTP_BAD_REQUEST, "Unknown signature profile: $profileName");
         }
 
-        $this->authorizationService->checkCanSignWithProfile($identifier);
-
-        if ($this->config->getProfile($identifier)->getInvisible()) {
-            throw new ApiError(Response::HTTP_BAD_REQUEST, "Profile $identifier is invisible");
+        if ($profile->getInvisible()) {
+            throw new ApiError(Response::HTTP_BAD_REQUEST, "Profile $profileName is invisible");
         }
 
-        $res = $this->config->getProfile($identifier)->getPreviewImageResolution();
+        $res = $profile->getPreviewImageResolution();
 
         if ($request->query->has('width')) {
             $res = (int) round($request->query->get('width', $res * 6.389) / 6.389); // 6.389 is width(px) / res
         }
 
-        $image = $this->pdfasApi->createPreviewImage($identifier, $res);
+        $image = $this->pdfasApi->createPreviewImage($profileName, $res);
 
         $filesystem = new Filesystem();
         $tmpFilePath = $filesystem->tempnam(sys_get_temp_dir(), 'temp_esign_preview_img_');
