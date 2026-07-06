@@ -9,8 +9,6 @@ use Dbp\Relay\CoreBundle\Rest\CustomControllerTrait;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -27,7 +25,7 @@ final class ImagePreviewAction
     /**
      * @throws \Exception
      */
-    public function __invoke(Request $request, string $identifier): BinaryFileResponse
+    public function __invoke(Request $request, string $identifier): Response
     {
         if (!$identifier) {
             throw new ApiError(Response::HTTP_BAD_REQUEST, 'Missing signature type');
@@ -54,13 +52,8 @@ final class ImagePreviewAction
 
         $image = $this->pdfasApi->createPreviewImage($profileName, $res);
 
-        $filesystem = new Filesystem();
-        $tmpFilePath = $filesystem->tempnam(sys_get_temp_dir(), 'temp_esign_preview_img_');
-        $filesystem->dumpFile($tmpFilePath, $image);
-
-        $response = new BinaryFileResponse($tmpFilePath);
-        $response->deleteFileAfterSend();
-
-        return $response;
+        return new Response($image, Response::HTTP_OK, [
+            'Content-Type' => 'image/png',
+        ]);
     }
 }
