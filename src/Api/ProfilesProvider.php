@@ -41,18 +41,16 @@ readonly class ProfilesProvider implements ProviderInterface
 
         $type = $filters['type'];
 
-        if ($type !== 'advanced' && $type !== 'qualified' && $type !== 'simple') {
+        if ($type !== 'advanced' && $type !== 'qualified') {
             throw new ApiError(Response::HTTP_BAD_REQUEST, "Unsupported signature type: {$filters['type']}");
         }
 
         if ($type === 'advanced') {
             $profiles = $this->config->getAdvanced()->getProfiles();
             $availableProfiles = $this->getAvailableProfiles($profiles);
-        } elseif ($type === 'qualified') {
+        } else {
             $profiles = $this->config->getQualified()->getProfiles();
             $availableProfiles = $this->getAvailableProfiles($profiles);
-        } else {
-            $availableProfiles = [];
         }
 
         return $availableProfiles;
