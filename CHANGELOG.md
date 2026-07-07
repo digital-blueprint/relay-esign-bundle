@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.8.0
 * Remove the `preview_image_resolution` config option for qualified and advanced
   signatures. The preview image resolution can now be passed via the `resolution`
   query parameter of the preview API (in DPI, defaults to 72) and via the
