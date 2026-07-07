@@ -6,6 +6,7 @@
   query parameter of the preview API (in DPI, defaults to 72) and via the
   `--resolution` option of the `dbp:relay:esign:preview` command (in DPI, defaults to 72).
 * Remove the `width` query parameter of the preview API in favor of the `resolution` query parameter.
+* Fix leaking the existence of unauthorized profiles in the preview endpoint
 
 ## v0.7.0
 * Restore the pre-0.5 behavior for omitted signature block positioning values:
