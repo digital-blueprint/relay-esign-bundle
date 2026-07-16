@@ -7,6 +7,7 @@ namespace Dbp\Relay\EsignBundle\Api;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use ApiPlatform\OpenApi\Model\Parameter;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -15,6 +16,34 @@ use Symfony\Component\Serializer\Annotation\Groups;
     shortName: 'EsignImagePreview',
     description: 'Image preview for signature profiles',
     operations: [
+        new Post(
+            uriTemplate: '/preview/{identifier}',
+            controller: ImagePreviewAction::class,
+            openapi: new Operation(
+                tags: ['Electronic Signatures'],
+                summary: 'Get the image preview for a specified signature profile',
+                parameters: [
+                    new Parameter(
+                        name: 'identifier',
+                        in: 'path',
+                        description: 'ID of the signature profile for which the image preview is requested',
+                        required: true,
+                        schema: ['type' => 'string'],
+                        example: 'advanced',
+                    ),
+                    new Parameter(
+                        name: 'resolution',
+                        in: 'query',
+                        description: 'Resolution of the preview image in DPI',
+                        required: false,
+                        schema: ['type' => 'integer', 'default' => 72],
+                        example: '72',
+                    ),
+                ],
+            ),
+            output: false,
+            read: false,
+        ),
         new Get(
             uriTemplate: '/preview/{identifier}',
             controller: ImagePreviewAction::class,

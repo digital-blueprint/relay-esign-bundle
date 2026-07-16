@@ -50,7 +50,18 @@ final class ImagePreviewAction
             throw new ApiError(Response::HTTP_BAD_REQUEST, "Resolution out of range (16-512): $res");
         }
 
-        $image = $this->pdfasApi->createPreviewImage($profileName, $res);
+        // if body available, convert it to json
+        // a body should like like this: {"annotations": [{"Verwendungszweck":"abc"}, {...}]}
+        $content = $request->getContent();
+        $annotations = null;
+        if ($content) {
+            $content = json_decode($request->getContent(), true);
+            if (!empty($content['annotations'])) {
+                $annotations = $content['annotations'];
+            }
+        }
+
+        $image = $this->pdfasApi->createPreviewImage($profileName, $res, $annotations);
 
         return new Response($image, Response::HTTP_OK, [
             'Content-Type' => 'image/png',

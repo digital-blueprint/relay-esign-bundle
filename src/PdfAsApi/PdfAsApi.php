@@ -558,7 +558,7 @@ class PdfAsApi implements LoggerAwareInterface
         return $pdfResponse;
     }
 
-    public function createPreviewImage(string $profileName, int $resolution): string
+    public function createPreviewImage(string $profileName, int $resolution, mixed $content): string
     {
         $profile = $this->bundleConfig->getProfile($profileName);
         if ($profile === null) {
@@ -582,8 +582,37 @@ class PdfAsApi implements LoggerAwareInterface
             'r' => $resolution, // 16-512 is possible
         ]);
 
+        // if annotations are given, convert them to suitable user_text
+        $userText = [];
+        if ($content) {
+            foreach ($content as $name => $arr) {
+                foreach ($arr as $key => $value) {
+                    if (is_numeric($value)) {
+                        $value = strval($value);
+                    }
+                    $userText[] = new UserDefinedText($key, $value);
+                }
+            }
+        }
+        $overrides = UserText::buildUserTextConfigOverride($profile, $userText, $this->translator->trans('table_contents.additional_information', domain: 'dbp_relay_esign_bundle', locale: $profile->getLanguage()));
+
+        // pass the user_text overrides as json body to pdf-as
+        // the json body needs to be the same format as the SOAP request
+        $overridesArray = [];
+        foreach ($overrides as $entry) {
+            $arr = [
+                'key' => $entry->getKey(),
+                'value' => $entry->getValue()
+            ];
+            $overridesArray[] = $arr;
+        }
+
+        $body = ['configurationOverrides' => ['propertyEntries' => $overridesArray]];
+
         $client = new Client();
-        $response = $client->get($uri);
+        $response = $client->post($uri, [
+            'json' => $body
+        ]);
         $contentType = $response->getHeaderLine('Content-Type');
         if ($contentType !== 'image/png') {
             throw new \RuntimeException('invalid content type: '.$contentType);
