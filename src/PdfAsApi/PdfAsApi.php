@@ -117,7 +117,7 @@ class PdfAsApi implements LoggerAwareInterface
                 // dont create preview image if profile is supposed to be invisible
                 continue;
             }
-            $this->createPreviewImage($profile->getName(), 72);
+            $this->createPreviewImage($profile->getName(), 72, null);
         }
     }
 
@@ -602,7 +602,7 @@ class PdfAsApi implements LoggerAwareInterface
         foreach ($overrides as $entry) {
             $arr = [
                 'key' => $entry->getKey(),
-                'value' => $entry->getValue()
+                'value' => $entry->getValue(),
             ];
             $overridesArray[] = $arr;
         }
@@ -611,7 +611,7 @@ class PdfAsApi implements LoggerAwareInterface
 
         $client = new Client();
         $response = $client->post($uri, [
-            'json' => $body
+            'json' => $body,
         ]);
         $contentType = $response->getHeaderLine('Content-Type');
         if ($contentType !== 'image/png') {
