@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.8.1
+* Add POST method for `/preview` endpoint to allow to pass user_text (annotations) to pdf-as through the request body.
+
 ## v0.8.0
 * Remove the `preview_image_resolution` config option for qualified and advanced
   signatures. The preview image resolution can now be passed via the `resolution`
