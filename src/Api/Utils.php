@@ -74,7 +74,14 @@ class Utils
         foreach ($parsed as $entry) {
             $description = $entry['description'];
             $value = $entry['value'];
-            $userText[] = new UserDefinedText($description, $value);
+
+            // if type is given copy that, otherwise assume type text
+            if (array_key_exists('type', $entry)) {
+                $type = $entry['type'];
+            } else {
+                $type = UserDefinedText::$TYPE_TEXT;
+            }
+            $userText[] = new UserDefinedText($description, $value, $type);
         }
 
         return $userText;

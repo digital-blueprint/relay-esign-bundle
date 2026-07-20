@@ -66,11 +66,21 @@ class UserText
         foreach ($userText as $entry) {
             $desc = $entry->getDescription();
             $value = $entry->getValue();
+            $type = $entry->getType();
 
-            $entryId = 'SIG_USER_TEXT_'.$userTable.'_'.$userRow;
-            $overrides[] = new PropertyEntry("sig_obj.$profileId.key.$entryId", $desc);
-            $overrides[] = new PropertyEntry("sig_obj.$profileId.value.$entryId", $value);
-            $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$userTable.$userRow", $entryId.'-cv');
+            if ($type === UserDefinedText::$TYPE_TEXT) {
+                $entryId = 'SIG_USER_TEXT_' . $userTable . '_' . $userRow;
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.key.$entryId", $desc);
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.value.$entryId", $value);
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$userTable.$userRow", $entryId . '-cv');
+            } else if ($type === UserDefinedText::$TYPE_IMAGE) {
+                $entryId = 'SIG_USER_IMAGE_' . $userTable . '_' . $userRow;
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.key.$entryId", $desc);
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.value.$entryId", $value);
+                $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$userTable.$userRow", $entryId . '-i');
+            } else {
+                throw new \RuntimeException('invalid user text type');
+            }
             ++$userRow;
         }
 
