@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+
+## v0.8.2
+
 * Support guzzle 8 (in addition to guzzle 7)
 
 ## v0.8.1
