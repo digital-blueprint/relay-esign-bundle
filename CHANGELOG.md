@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+* Support guzzle 8 (in addition to guzzle 7)
+
 ## v0.8.1
 * Add POST method for `/preview` endpoint to allow to pass user_text (annotations) to pdf-as through the request body.
 
