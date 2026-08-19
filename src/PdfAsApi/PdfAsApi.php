@@ -558,7 +558,7 @@ class PdfAsApi implements LoggerAwareInterface
         return $pdfResponse;
     }
 
-    public function createPreviewImage(string $profileName, int $resolution, mixed $content, string $fullname = null): string
+    public function createPreviewImage(string $profileName, int $resolution, mixed $content, ?string $fullname = null): string
     {
         $profile = $this->bundleConfig->getProfile($profileName);
         if ($profile === null) {

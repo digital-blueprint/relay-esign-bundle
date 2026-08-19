@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Api;
 
+use Dbp\Relay\BasePersonBundle\API\PersonProviderInterface;
 use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\CoreBundle\Rest\CustomControllerTrait;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
@@ -12,7 +13,6 @@ use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
-use Dbp\Relay\BasePersonBundle\API\PersonProviderInterface;
 
 #[AsController]
 final class ImagePreviewAction
@@ -20,9 +20,9 @@ final class ImagePreviewAction
     use CustomControllerTrait;
 
     public function __construct(private readonly AuthorizationService $authorizationService,
-                                private readonly BundleConfig $config,
-                                private readonly PdfAsApi $pdfasApi,
-                                private readonly ?PersonProviderInterface $personProvider = null)
+        private readonly BundleConfig $config,
+        private readonly PdfAsApi $pdfasApi,
+        private readonly ?PersonProviderInterface $personProvider = null)
     {
     }
 
