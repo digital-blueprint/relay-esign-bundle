@@ -54,7 +54,7 @@ final class CreateAdvancedlySignedDocumentAction
         $this->authorizationService->checkCanSignWithProfile($profileName);
 
         $fullname = null;
-        if ($this->personProvider !== null && $this->config->getProfile($profileName) !== null && $this->config->getProfile($profileName)->getIncludeUsername()) {
+        if ($this->personProvider !== null && $this->personProvider->getCurrentPerson() !== null && $this->config->getProfile($profileName) !== null && $this->config->getProfile($profileName)->getIncludeUsername()) {
             $fullname = $this->personProvider->getCurrentPerson()->getGivenName().' '.$this->personProvider->getCurrentPerson()->getFamilyName();
         }
 

@@ -12,13 +12,17 @@ use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Dbp\Relay\BasePersonBundle\API\PersonProviderInterface;
 
 #[AsController]
 final class ImagePreviewAction
 {
     use CustomControllerTrait;
 
-    public function __construct(private readonly AuthorizationService $authorizationService, private readonly BundleConfig $config, private readonly PdfAsApi $pdfasApi)
+    public function __construct(private readonly AuthorizationService $authorizationService,
+                                private readonly BundleConfig $config,
+                                private readonly PdfAsApi $pdfasApi,
+                                private readonly ?PersonProviderInterface $personProvider = null)
     {
     }
 
@@ -32,6 +36,7 @@ final class ImagePreviewAction
         }
 
         $profileName = $identifier;
+
         $this->authorizationService->checkCanSignWithProfile($profileName);
 
         $profile = $this->config->getProfile($profileName);
@@ -61,7 +66,12 @@ final class ImagePreviewAction
             }
         }
 
-        $image = $this->pdfasApi->createPreviewImage($profileName, $res, $annotations);
+        $fullname = null;
+        if ($this->personProvider !== null && $this->personProvider->getCurrentPerson() !== null && $this->config->getProfile($profileName) !== null && $this->config->getProfile($profileName)->getIncludeUsername()) {
+            $fullname = $this->personProvider->getCurrentPerson()->getGivenName().' '.$this->personProvider->getCurrentPerson()->getFamilyName();
+        }
+
+        $image = $this->pdfasApi->createPreviewImage($profileName, $res, $annotations, $fullname);
 
         return new Response($image, Response::HTTP_OK, [
             'Content-Type' => 'image/png',

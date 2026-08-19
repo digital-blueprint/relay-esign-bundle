@@ -558,7 +558,7 @@ class PdfAsApi implements LoggerAwareInterface
         return $pdfResponse;
     }
 
-    public function createPreviewImage(string $profileName, int $resolution, mixed $content): string
+    public function createPreviewImage(string $profileName, int $resolution, mixed $content, string $fullname = null): string
     {
         $profile = $this->bundleConfig->getProfile($profileName);
         if ($profile === null) {
@@ -599,6 +599,24 @@ class PdfAsApi implements LoggerAwareInterface
         // pass the user_text overrides as json body to pdf-as
         // the json body needs to be the same format as the SOAP request
         $overridesArray = [];
+        foreach ($overrides as $entry) {
+            $arr = [
+                'key' => $entry->getKey(),
+                'value' => $entry->getValue(),
+            ];
+            $overridesArray[] = $arr;
+        }
+
+        // get the system text (username and date)
+        $systemText = [];
+        if ($fullname !== null) {
+            $desc = $this->translator->trans('table_contents.signer', domain: 'dbp_relay_esign_bundle', locale: $this->bundleConfig->getProfile($profileName)->getLanguage());
+            $systemText = ['name' => new SystemDefinedText($desc, $fullname)];
+        }
+        $overrides = SystemText::buildSystemTextConfigOverride($profile, $systemText, $this->translator->trans('table_contents.date', domain: 'dbp_relay_esign_bundle', locale: $profile->getLanguage()));
+
+        // pass the system_text overrides as json body to pdf-as
+        // the json body needs to be the same format as the SOAP request
         foreach ($overrides as $entry) {
             $arr = [
                 'key' => $entry->getKey(),
