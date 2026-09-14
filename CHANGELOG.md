@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## v0.8.4
+* Fix bug in ImagePreviewAction that sent empty data as system_text if no system_text was configured for the profile.
+
 ## v0.8.3
 * Add support for titles in names
 * Add support for system_text overrides in ImagePreviewAction 

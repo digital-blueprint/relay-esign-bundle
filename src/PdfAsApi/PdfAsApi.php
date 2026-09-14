@@ -613,7 +613,9 @@ class PdfAsApi implements LoggerAwareInterface
             $desc = $this->translator->trans('table_contents.signer', domain: 'dbp_relay_esign_bundle', locale: $this->bundleConfig->getProfile($profileName)->getLanguage());
             $systemText = ['name' => new SystemDefinedText($desc, $fullname)];
         }
-        $overrides = SystemText::buildSystemTextConfigOverride($profile, $systemText, $this->translator->trans('table_contents.date', domain: 'dbp_relay_esign_bundle', locale: $profile->getLanguage()));
+        if (!empty($systemText)) {
+            $overrides = SystemText::buildSystemTextConfigOverride($profile, $systemText, $this->translator->trans('table_contents.date', domain: 'dbp_relay_esign_bundle', locale: $profile->getLanguage()));
+        }
 
         // pass the system_text overrides as json body to pdf-as
         // the json body needs to be the same format as the SOAP request
