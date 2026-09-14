@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.8.3
+* Add support for titles in names
+* Add support for system_text overrides in ImagePreviewAction 
+
 ## v0.8.2
 
 * Support guzzle 8 (in addition to guzzle 7)
