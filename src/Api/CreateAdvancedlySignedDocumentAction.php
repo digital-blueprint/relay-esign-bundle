@@ -6,6 +6,7 @@ namespace Dbp\Relay\EsignBundle\Api;
 
 use Dbp\Relay\BasePersonBundle\API\PersonProviderInterface;
 use Dbp\Relay\CoreBundle\Exception\ApiError;
+use Dbp\Relay\CoreBundle\Rest\Options;
 use Dbp\Relay\EsignBundle\Authorization\AuthorizationService;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
@@ -54,8 +55,17 @@ final class CreateAdvancedlySignedDocumentAction
         $this->authorizationService->checkCanSignWithProfile($profileName);
 
         $fullname = null;
+        $title = null;
         if ($this->personProvider !== null && $this->personProvider->getCurrentPerson() !== null && $this->config->getProfile($profileName) !== null && $this->config->getProfile($profileName)->getIncludeUsername()) {
-            $fullname = $this->personProvider->getCurrentPerson()->getGivenName().' '.$this->personProvider->getCurrentPerson()->getFamilyName();
+            $options = [];
+            $opt = Options::requestLocalDataAttributes($options, ['title']);
+            $person = $this->personProvider->getCurrentPerson($opt);
+
+            $fullname = $person->getGivenName().' '.$person->getFamilyName();
+            if ($person->hasLocalDataValue('title')) {
+                $title = $person->getLocalDataValue('title');
+                $fullname = $fullname.',';
+            }
         }
 
         /** @var ?UploadedFile $uploadedFile */
@@ -108,10 +118,20 @@ final class CreateAdvancedlySignedDocumentAction
             $data = $request->request->all()['user_text'];
             $userText = Utils::parseUserText($data);
         }
+
         $systemText = [];
+        if ($title !== null) {
+            $desc = $this->translator->trans('table_contents.title', domain: 'dbp_relay_esign_bundle', locale: $this->config->getProfile($profileName)->getLanguage());
+            if ($this->config->getProfile($profileName)->getTitleInline()) {
+                $fullname = $fullname.' '.$title;
+            } else {
+                $systemText['title'] = new SystemDefinedText($desc, $title);
+            }
+        }
+
         if ($fullname !== null) {
             $desc = $this->translator->trans('table_contents.signer', domain: 'dbp_relay_esign_bundle', locale: $this->config->getProfile($profileName)->getLanguage());
-            $systemText = ['name' => new SystemDefinedText($desc, $fullname)];
+            $systemText['name'] = new SystemDefinedText($desc, $fullname);
         }
 
         $invisible = $request->request->getBoolean('invisible');

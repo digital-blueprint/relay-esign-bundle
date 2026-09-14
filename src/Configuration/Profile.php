@@ -40,6 +40,11 @@ abstract class Profile
         return $this->config['include_username'];
     }
 
+    public function getTitleInline(): bool
+    {
+        return $this->config['title_inline'];
+    }
+
     public function getLanguage(): string
     {
         return $this->config['language'];
