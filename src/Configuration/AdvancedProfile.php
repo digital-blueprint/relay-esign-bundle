@@ -15,4 +15,14 @@ class AdvancedProfile extends Profile
     {
         return $this->config['key_id'];
     }
+
+    public function getIncludeUsername(): bool
+    {
+        return $this->config['include_username'];
+    }
+
+    public function getTitleInline(): bool
+    {
+        return $this->config['title_inline'];
+    }
 }

@@ -10,4 +10,14 @@ class QualifiedProfile extends Profile
     {
         parent::__construct($config);
     }
+
+    public function getIncludeUsername(): bool
+    {
+        return false;
+    }
+
+    public function getTitleInline(): bool
+    {
+        return false;
+    }
 }

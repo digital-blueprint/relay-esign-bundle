@@ -35,15 +35,9 @@ abstract class Profile
         return $this->config['allow_annotations'];
     }
 
-    public function getIncludeUsername(): bool
-    {
-        return $this->config['include_username'];
-    }
+    abstract public function getIncludeUsername(): bool;
 
-    public function getTitleInline(): bool
-    {
-        return $this->config['title_inline'];
-    }
+    abstract public function getTitleInline(): bool;
 
     public function getLanguage(): string
     {
