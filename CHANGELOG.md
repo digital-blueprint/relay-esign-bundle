@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## v0.8.5
+* Fix preview images for qualified signatures failing with 500
+
 ## v0.8.4
 * Fix bug in ImagePreviewAction that sent empty data as system_text if no system_text was configured for the profile.
 
