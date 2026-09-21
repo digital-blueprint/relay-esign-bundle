@@ -55,7 +55,6 @@ final class CreateAdvancedlySignedDocumentAction
         $this->authorizationService->checkCanSignWithProfile($profileName);
 
         $fullname = null;
-        $title = null;
         if ($this->personProvider !== null && $this->personProvider->getCurrentPerson() !== null && $this->config->getProfile($profileName) !== null && $this->config->getProfile($profileName)->getIncludeUsername()) {
             $options = [];
             $opt = Options::requestLocalDataAttributes($options, ['title']);
@@ -64,7 +63,11 @@ final class CreateAdvancedlySignedDocumentAction
             $fullname = $person->getGivenName().' '.$person->getFamilyName();
             if ($person->hasLocalDataValue('title')) {
                 $title = $person->getLocalDataValue('title');
-                $fullname = $fullname.',';
+                if ($this->config->getProfile($profileName)->getTitleInline()) {
+                    $fullname = $fullname.', '.$title;
+                } else {
+                    $fullname = $fullname . ",\n" . $title;
+                }
             }
         }
 
@@ -120,14 +123,6 @@ final class CreateAdvancedlySignedDocumentAction
         }
 
         $systemText = [];
-        if ($title !== null) {
-            $desc = $this->translator->trans('table_contents.title', domain: 'dbp_relay_esign_bundle', locale: $this->config->getProfile($profileName)->getLanguage());
-            if ($this->config->getProfile($profileName)->getTitleInline()) {
-                $fullname = $fullname.' '.$title;
-            } else {
-                $systemText['title'] = new SystemDefinedText($desc, $title);
-            }
-        }
 
         if ($fullname !== null) {
             $desc = $this->translator->trans('table_contents.signer', domain: 'dbp_relay_esign_bundle', locale: $this->config->getProfile($profileName)->getLanguage());

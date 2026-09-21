@@ -49,19 +49,17 @@ class SystemText
             $desc = $entry->getDescription();
             $value = $entry->getValue();
 
-            $entryId = 'SIG_SYSTEM_TEXT_'.$systemTable.'_'.$entryRow;
+            $entryId = 'SIG_SYSTEM_TEXT_'.$systemTable.'_'.$systemRow;
             if ($key === 'name' && $systemTextConfig->getNameTable() !== null) {
                 $nameTable = $systemTextConfig->getNameTable();
                 $overrides[] = new PropertyEntry("sig_obj.$profileId.key.$entryId", $desc);
                 $overrides[] = new PropertyEntry("sig_obj.$profileId.value.$entryId", $value);
                 $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$nameTable.1", $entryId.'-cv');
-                ++$entryRow;
             } else {
                 $overrides[] = new PropertyEntry("sig_obj.$profileId.key.$entryId", $desc);
                 $overrides[] = new PropertyEntry("sig_obj.$profileId.value.$entryId", $value);
                 $overrides[] = new PropertyEntry("sig_obj.$profileId.table.$systemTable.$systemRow", $entryId.'-cv');
                 ++$systemRow;
-                ++$entryRow;
             }
         }
 
