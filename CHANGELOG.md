@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## v0.8.6
+* Move titles and names further together in the signature block, and also make titles bold.
+
 ## v0.8.5
 * Fix preview images for qualified signatures failing with 500
 
