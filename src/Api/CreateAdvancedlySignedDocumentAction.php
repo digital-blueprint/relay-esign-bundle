@@ -66,7 +66,7 @@ final class CreateAdvancedlySignedDocumentAction
                 if ($this->config->getProfile($profileName)->getTitleInline()) {
                     $fullname = $fullname.', '.$title;
                 } else {
-                    $fullname = $fullname . ",\n" . $title;
+                    $fullname = $fullname.",\n".$title;
                 }
             }
         }
