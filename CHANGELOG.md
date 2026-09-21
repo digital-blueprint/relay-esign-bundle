@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## v0.8.7
+* Display titles in the signature block for qualified and advanced signatures, if configured in the profile.
+
 ## v0.8.6
 * Move titles and names further together in the signature block, and also make titles bold.
 
