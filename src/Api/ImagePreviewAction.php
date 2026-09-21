@@ -67,12 +67,11 @@ final class ImagePreviewAction
             }
         }
 
-        $options = [];
-        $opt = Options::requestLocalDataAttributes($options, ['title']);
-        $person = $this->personProvider->getCurrentPerson($opt);
-
         $fullname = null;
-        if ($this->personProvider !== null && $person !== null && $this->config->getProfile($profileName) !== null && $this->config->getProfile($profileName)->getIncludeUsername()) {
+        if ($this->personProvider !== null && $this->personProvider->getCurrentPerson() !== null && $this->config->getProfile($profileName) !== null && $this->config->getProfile($profileName)->getIncludeUsername()) {
+            $options = [];
+            $opt = Options::requestLocalDataAttributes($options, ['title']);
+            $person = $this->personProvider->getCurrentPerson($opt);
             $fullname = $person->getGivenName().' '.$person->getFamilyName();
             if ($person->hasLocalDataValue('title')) {
                 $title = $person->getLocalDataValue('title');
