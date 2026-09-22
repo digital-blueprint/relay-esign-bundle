@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Tests\PdfAsApi;
 
-use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use Dbp\Relay\EsignBundle\Configuration\BundleConfig;
 use Dbp\Relay\EsignBundle\PdfAsApi\PdfAsApi;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyEntry;
 use Dbp\Relay\EsignBundle\PdfAsSoapClient\PropertyMap;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class PdfAsApiTest extends ApiTestCase
+class PdfAsApiTest extends KernelTestCase
 {
     public function getApi($config): PdfAsApi
     {
