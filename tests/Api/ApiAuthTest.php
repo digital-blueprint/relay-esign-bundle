@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Dbp\Relay\EsignBundle\Tests\Api;
 
-use Dbp\Relay\CoreBundle\TestUtils\AbstractApiTest;
+use Dbp\Relay\CoreBundle\TestUtils\ApiTestCase;
 
-class ApiAuthTest extends AbstractApiTest
+class ApiAuthTest extends ApiTestCase
 {
+    public function setUp(): void
+    {
+        $this->createTestClient();
+    }
+
     public function testNotAuth()
     {
         $endpoints = [
