@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## v0.8.8
+* Dependency updates
+
 ## v0.8.7
 * Display titles in the signature block for qualified and advanced signatures, if configured in the profile.
 
