@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## v0.8.9
+* Add support for api-platform 5
+
 ## v0.8.8
 * Dependency updates
 
