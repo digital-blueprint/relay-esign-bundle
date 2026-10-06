@@ -160,6 +160,9 @@ profiles:
 This allows the user of the API to append custom rows to a table in the visible
 signature block.
 
+The PDF signature's Reason field also includes available signer and user-provided
+text, even when the signature block is invisible.
+
 ![](user_text.png){: style="max-width:400px; width: 100%" }
 
 Both `qualified_profile` as well as every entry in `advanced_profiles` allows

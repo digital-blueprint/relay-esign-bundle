@@ -170,12 +170,12 @@ class PdfAsApi implements LoggerAwareInterface
             $subRequest = new SignMultipleFile($request->getData(), $request->getRequestId());
             $subRequest->setPosition($request->getSignatureBlockPosition()->toPdfAsFormat());
             $subRequest->setProfile($profile->getProfileId());
-            $subOverrides = self::buildConfigurationOverrides($profile, $request);
+            $subOverrides = self::buildConfigurationOverrides($profile, $request, $this->getAdditionalInfoTranslation($profile));
             if ($overrides === null) {
                 $overrides = $subOverrides;
             }
             if (!self::propertyMapIsEqual($subOverrides, $overrides)) {
-                throw new SigningException('Signing multiple documents with different user_text not supported.');
+                throw new SigningException('Signing multiple documents with different configuration overrides not supported.');
             }
             $multiRequest->addDocument($subRequest);
         }
@@ -235,6 +235,12 @@ class PdfAsApi implements LoggerAwareInterface
             $overrides[] = self::buildInvisibleOverride($profile, $invisible);
         }
 
+        $reason = SignatureReason::build($profile, $request, $addInfoTrans);
+        if ($reason !== null) {
+            // adobeSignReasonValue is visible in PDF viewers even if the signature block is invisible.
+            $overrides[] = new PropertyEntry('sig_obj.'.$profile->getProfileId().'.adobeSignReasonValue', $reason);
+        }
+
         return new PropertyMap($overrides);
     }
 
@@ -274,7 +280,7 @@ class PdfAsApi implements LoggerAwareInterface
 
         $params = new SignParameters(Connector::mobilebku);
         $params->setProfile($profile->getProfileId());
-        $params->setConfigurationOverrides(self::buildConfigurationOverrides($profile, $request));
+        $params->setConfigurationOverrides(self::buildConfigurationOverrides($profile, $request, $this->getAdditionalInfoTranslation($profile)));
         $params->setPosition($request->getSignatureBlockPosition()->toPdfAsFormat());
 
         $requestId = $request->getRequestId();
@@ -371,7 +377,7 @@ class PdfAsApi implements LoggerAwareInterface
             $params = new SignParameters(Connector::jks);
             $params->setKeyIdentifier($profile->getKeyId());
             $params->setProfile($profile->getProfileId());
-            $params->setConfigurationOverrides(self::buildConfigurationOverrides($profile, $request, $this->translator->trans('table_contents.additional_information', domain: 'dbp_relay_esign_bundle', locale: $profile->getLanguage()), $this->translator->trans('table_contents.date', domain: 'dbp_relay_esign_bundle', locale: $profile->getLanguage())));
+            $params->setConfigurationOverrides(self::buildConfigurationOverrides($profile, $request, $this->getAdditionalInfoTranslation($profile), $this->translator->trans('table_contents.date', domain: 'dbp_relay_esign_bundle', locale: $profile->getLanguage())));
             $params->setPosition($request->getSignatureBlockPosition()->toPdfAsFormat());
 
             $requestId = $request->getRequestId();
@@ -468,6 +474,11 @@ class PdfAsApi implements LoggerAwareInterface
         if ($this->logger !== null) {
             $this->logger->notice('[{service}] '.$message, $context);
         }
+    }
+
+    private function getAdditionalInfoTranslation(Profile $profile): string
+    {
+        return $this->translator->trans('table_contents.additional_information', domain: 'dbp_relay_esign_bundle', locale: $profile->getLanguage());
     }
 
     /**
@@ -594,7 +605,7 @@ class PdfAsApi implements LoggerAwareInterface
                 }
             }
         }
-        $overrides = UserText::buildUserTextConfigOverride($profile, $userText, $this->translator->trans('table_contents.additional_information', domain: 'dbp_relay_esign_bundle', locale: $profile->getLanguage()));
+        $overrides = UserText::buildUserTextConfigOverride($profile, $userText, $this->getAdditionalInfoTranslation($profile));
 
         // pass the user_text overrides as json body to pdf-as
         // the json body needs to be the same format as the SOAP request
