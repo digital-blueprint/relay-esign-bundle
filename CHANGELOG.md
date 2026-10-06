@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## v0.8.10
+* User and system text are now also passed to pdf-as via the
+  `adobeSignReasonValue` parameter, so they are included and visible in the PDF
+  even if the signature block is invisible.
+
 ## v0.8.9
 * Add support for api-platform 5
 
