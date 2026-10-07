@@ -107,12 +107,15 @@ class PdfAsApi implements LoggerAwareInterface
     }
 
     /**
-     * Check if each configured profile exists by generating a preview image for it.
+     * Check profile text configuration and generate preview images for visible profiles.
      * Also tests that we can access the /visblock endpoint.
      */
     public function checkPdfAsProfiles()
     {
         foreach ($this->bundleConfig->getProfiles() as $profile) {
+            if ($profile instanceof AdvancedProfile && !$profile->getInvisible() && $profile->getIncludeUsername() && $profile->getSystemText() === null) {
+                throw new \RuntimeException(sprintf('Profile "%s": system_text not available/implemented for this profile', $profile->getName()));
+            }
             if ($profile->getInvisible()) {
                 // dont create preview image if profile is supposed to be invisible
                 continue;
