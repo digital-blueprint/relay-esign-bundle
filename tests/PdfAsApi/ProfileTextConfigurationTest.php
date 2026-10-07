@@ -27,4 +27,19 @@ class ProfileTextConfigurationTest extends TestCase
         $this->expectExceptionMessage('Profile "visible": system_text not available/implemented for this profile');
         $api->checkPdfAsProfiles();
     }
+
+    public function testProfileCheckReportsMissingUserTextForVisibleProfile(): void
+    {
+        $config = new BundleConfig(['qualified_signature' => [
+            'profiles' => [
+                ['name' => 'invisible', 'invisible' => true, 'allow_annotations' => true],
+                ['name' => 'visible', 'invisible' => false, 'allow_annotations' => true],
+            ],
+        ]]);
+        $api = new PdfAsApi(new Stopwatch(), $this->createMock(UrlGeneratorInterface::class), $config, $this->createMock(TranslatorInterface::class));
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Profile "visible": user_text not available/implemented for this profile');
+        $api->checkPdfAsProfiles();
+    }
 }

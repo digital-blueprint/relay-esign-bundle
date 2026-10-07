@@ -113,12 +113,15 @@ class PdfAsApi implements LoggerAwareInterface
     public function checkPdfAsProfiles()
     {
         foreach ($this->bundleConfig->getProfiles() as $profile) {
-            if ($profile instanceof AdvancedProfile && !$profile->getInvisible() && $profile->getIncludeUsername() && $profile->getSystemText() === null) {
-                throw new \RuntimeException(sprintf('Profile "%s": system_text not available/implemented for this profile', $profile->getName()));
-            }
             if ($profile->getInvisible()) {
                 // dont create preview image if profile is supposed to be invisible
                 continue;
+            }
+            if ($profile instanceof AdvancedProfile && $profile->getIncludeUsername() && $profile->getSystemText() === null) {
+                throw new \RuntimeException(sprintf('Profile "%s": system_text not available/implemented for this profile', $profile->getName()));
+            }
+            if ($profile->getAllowAnnotations() && $profile->getUserText() === null) {
+                throw new \RuntimeException(sprintf('Profile "%s": user_text not available/implemented for this profile', $profile->getName()));
             }
             $this->createPreviewImage($profile->getName(), 72, null);
         }
