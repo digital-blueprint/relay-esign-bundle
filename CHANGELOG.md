@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.8.11
+* Allow user and system text for invisible profiles, even if the signature block
+  placement config is missing.
+
 ## v0.8.10
 * User and system text are now also passed to pdf-as via the
   `adobeSignReasonValue` parameter, so they are included and visible in the PDF
