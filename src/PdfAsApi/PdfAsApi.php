@@ -210,9 +210,11 @@ class PdfAsApi implements LoggerAwareInterface
 
     public static function buildConfigurationOverrides(Profile $profile, SigningRequest $request, ?string $addInfoTrans = null, ?string $dateTans = null): PropertyMap
     {
+        // Invisible signatures put text in the PDF reason instead of a visible table.
+        $isInvisible = $profile->getInvisible() || $request->isInvisible();
         // Add custom system defined text if needed
         $systemText = $request->getSystemText();
-        if ($systemText !== []) {
+        if (!$isInvisible && $systemText !== []) {
             $overrides = SystemText::buildSystemTextConfigOverride($profile, $systemText, $dateTans);
         } else {
             $overrides = [];
@@ -220,7 +222,7 @@ class PdfAsApi implements LoggerAwareInterface
 
         // Add custom user defined text if needed
         $userText = $request->getUserText();
-        if ($userText !== []) {
+        if (!$isInvisible && $userText !== []) {
             $overrides = array_merge($overrides, UserText::buildUserTextConfigOverride($profile, $userText, $addInfoTrans));
         }
 

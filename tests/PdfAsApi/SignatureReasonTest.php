@@ -44,7 +44,9 @@ class SignatureReasonTest extends TestCase
         $this->assertSame('sig_obj.MYPROFILE.adobeSignReasonValue', $reason->getKey());
         $this->assertSame("Signer: Jane Doe,\r\nDr.;\r\nAdditional information:\r\nReference: 123", $reason->getValue());
         $this->assertSame('Signer: Jane Doe, Dr.; Additional information: Reference: 123', self::normalizeReasonForPreview($reason->getValue()));
-        $this->assertContains('sig_obj.MYPROFILE.isvisible', array_map(static fn ($entry) => $entry->getKey(), $entries));
+        $this->assertSame(
+            ['sig_obj.MYPROFILE.isvisible', 'sig_obj.MYPROFILE.adobeSignReasonValue'],
+            array_map(static fn ($entry) => $entry->getKey(), $entries));
     }
 
     public function testEmptyContentDoesNotOverrideProfileReason(): void
@@ -56,6 +58,20 @@ class SignatureReasonTest extends TestCase
         $this->assertNull(SignatureReason::build($profile, $request));
         $this->assertCount(1, $entries);
         $this->assertSame('sig_obj.MYPROFILE.isvisible', $entries[0]->getKey());
+    }
+
+    public function testInvisibleProfileIncludesTextWithoutLayouts(): void
+    {
+        $profile = new AdvancedProfile(['profile_id' => 'MYPROFILE', 'invisible' => true, 'include_username' => true]);
+        $request = new SigningRequest('pdf', 'profile', 'id',
+            userText: [new UserDefinedText('Reference', '123')],
+            systemText: ['name' => new SystemDefinedText('Signer', 'Jane Doe')]);
+
+        $entries = PdfAsApi::buildConfigurationOverrides($profile, $request)->getPropertyEntries();
+
+        $this->assertCount(1, $entries);
+        $this->assertSame('sig_obj.MYPROFILE.adobeSignReasonValue', $entries[0]->getKey());
+        $this->assertSame("Signer: Jane Doe;\r\nReference: 123", $entries[0]->getValue());
     }
 
     public function testAdvancedSignatureIncludesUserTextWithoutSystemText(): void
