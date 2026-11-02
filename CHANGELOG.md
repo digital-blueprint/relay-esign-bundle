@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+* The `page` position parameter now also accepts `new`, which places the
+  signature block on a newly appended page at the end of the document.
 
 ## v0.8.11
 * Allow user and system text for invisible profiles, even if the signature block

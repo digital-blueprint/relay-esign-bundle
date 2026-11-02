@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dbp\Relay\EsignBundle\Api;
 
 use Dbp\Relay\CoreBundle\Exception\ApiError;
+use Dbp\Relay\EsignBundle\PdfAsApi\SignatureBlockPosition;
 use Dbp\Relay\EsignBundle\PdfAsApi\UserDefinedText;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -105,6 +106,18 @@ class Utils
         }
 
         return $default;
+    }
+
+    /**
+     * Parses the "page" position parameter. Either a page number or "new" to append a new page.
+     */
+    public static function parsePage(mixed $value): int|string
+    {
+        if ($value === SignatureBlockPosition::PAGE_NEW) {
+            return SignatureBlockPosition::PAGE_NEW;
+        }
+
+        return (int) $value;
     }
 
     public static function validateUploadedFile(?UploadedFile $uploadedFile): UploadedFile

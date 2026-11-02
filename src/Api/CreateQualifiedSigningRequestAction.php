@@ -83,10 +83,10 @@ final class CreateQualifiedSigningRequestAction
 
         $page = SignatureBlockPosition::PROFILE_DEFAULT;
         if ($request->request->has('page')) {
-            $page = $request->request->getInt('page');
+            $page = Utils::parsePage($request->request->get('page'));
             $hasPositionParams = true;
         } elseif (Utils::requestGet($request, 'p', '') !== '') {
-            $page = (int) Utils::requestGet($request, 'p');
+            $page = Utils::parsePage(Utils::requestGet($request, 'p'));
             $hasPositionParams = true;
         }
 
