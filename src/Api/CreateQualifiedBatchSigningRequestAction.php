@@ -162,7 +162,7 @@ final class CreateQualifiedBatchSigningRequestAction
         $page = SignatureBlockPosition::PROFILE_DEFAULT;
         if (isset($requestData['page'])) {
             $page = $requestData['page'];
-            if (!is_int($page)) {
+            if (!is_int($page) && $page !== SignatureBlockPosition::PAGE_NEW) {
                 throw new BadRequestHttpException('Invalid "page" payload');
             }
             $hasPositionParams = true;

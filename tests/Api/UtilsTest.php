@@ -33,6 +33,13 @@ class UtilsTest extends TestCase
         Utils::parseUserText($input);
     }
 
+    public function testParsePage()
+    {
+        $this->assertSame('new', Utils::parsePage('new'));
+        $this->assertSame(3, Utils::parsePage('3'));
+        $this->assertSame(3, Utils::parsePage(3));
+    }
+
     public function testGenerateSignedFileName()
     {
         $this->assertSame('foo-sig.pdf', Utils::generateSignedFileName('foo.pdf'));

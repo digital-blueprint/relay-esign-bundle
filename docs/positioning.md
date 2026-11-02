@@ -14,9 +14,10 @@ cm via the DPI, for example "1cm ~ 28.3465pt".
 
 * `page` - The page number where the signature block should be placed, starting
   with 1. A page number larger than the actual page count will append a new page
-  instead. If omitted, the PDF-AS profile default is used. Without a profile
-  default, PDF-AS automatically uses the last page or a new page if there isn't
-  enough space.
+  instead. Use `new` to always place the signature block on a newly appended
+  page at the end. If omitted, the PDF-AS profile default is used. Without a
+  profile default, PDF-AS automatically uses the last page or a new page if
+  there isn't enough space.
 * `x` - Position of the signature's top left corner in points, from the left of
   the page. If omitted, the PDF-AS profile default is used. Without a profile
   default, PDF-AS centers the signature block horizontally.

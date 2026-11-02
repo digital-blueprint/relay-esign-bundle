@@ -200,6 +200,56 @@ class ApiTest extends TestCase
         $this->assertSame('https://example.com/redirect', $result->getUrl());
     }
 
+    public function testQualifiedSigningBatchRequestNewPage(): void
+    {
+        $request = new Request();
+        $file = $this->createUploadedFile('single.pdf');
+        $request->files->set('files', [$file]);
+        $request->request->set('requests', [json_encode(['profile' => 'official', 'page' => 'new'])]);
+
+        $api = $this->createMock(PdfAsApi::class);
+        $api->expects($this->once())
+            ->method('createQualifiedSigningRequestsRedirectUrl')
+            ->with($this->anything(), $this->callback(function (array $requests) {
+                return $requests[0]->getSignatureBlockPosition()->toPdfAsFormat() === 'p:new';
+            }))
+            ->willReturn('https://example.com/redirect');
+
+        $auth = $this->createMock(AuthorizationService::class);
+
+        $action = new CreateQualifiedBatchSigningRequestAction($api, $auth);
+        $result = $action($request);
+        $this->assertSame('https://example.com/redirect', $result->getUrl());
+    }
+
+    public function testAdvancedlySignedDocumentsNewPage(): void
+    {
+        $request = new Request();
+        $request->query->set('profile', 'official');
+        $request->request->set('page', 'new');
+        $request->files->set('file', $this->createUploadedFile('single.pdf'));
+
+        $api = $this->createMock(PdfAsApi::class);
+        $api->expects($this->once())
+            ->method('advancedlySignPdf')
+            ->with($this->callback(function ($signingRequest) {
+                return $signingRequest->getSignatureBlockPosition()->toPdfAsFormat() === 'p:new';
+            }))
+            ->willReturn(new SigningResponse('signed', 0, 0, null));
+
+        $dummyPerson = new Person();
+        $dummyPerson->setGivenName('John');
+        $dummyPerson->setFamilyName('Doe');
+        $personProvider = $this->createMock(PersonProviderInterface::class);
+        $personProvider->method('getCurrentPerson')->willReturn($dummyPerson);
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->method('trans')->willReturn('text');
+        $auth = $this->createMock(AuthorizationService::class);
+
+        $action = new CreateAdvancedlySignedDocumentAction($api, $auth, $this->config, $translator, $personProvider);
+        $this->assertInstanceOf(AdvancedlySignedDocument::class, $action($request));
+    }
+
     private function createUploadedFile(string $name, string $content = "%PDF-1.4\n%PDF\n"): UploadedFile
     {
         $path = tempnam(sys_get_temp_dir(), 'esign');
