@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## v0.8.12
 * The `page` position parameter now also accepts `new`, which places the
   signature block on a newly appended page at the end of the document.
 
