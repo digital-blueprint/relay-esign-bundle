@@ -117,7 +117,12 @@ class Utils
             return SignatureBlockPosition::PAGE_NEW;
         }
 
-        return (int) $value;
+        $page = filter_var($value, \FILTER_VALIDATE_INT, \FILTER_NULL_ON_FAILURE);
+        if ($page === null) {
+            throw new BadRequestHttpException('Invalid "page" payload');
+        }
+
+        return $page;
     }
 
     public static function validateUploadedFile(?UploadedFile $uploadedFile): UploadedFile
