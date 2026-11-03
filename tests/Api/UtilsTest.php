@@ -8,6 +8,7 @@ use Dbp\Relay\CoreBundle\Exception\ApiError;
 use Dbp\Relay\EsignBundle\Api\Utils;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UtilsTest extends TestCase
 {
@@ -38,6 +39,18 @@ class UtilsTest extends TestCase
         $this->assertSame('new', Utils::parsePage('new'));
         $this->assertSame(3, Utils::parsePage('3'));
         $this->assertSame(3, Utils::parsePage(3));
+    }
+
+    public static function invalidPage()
+    {
+        return [['nope'], [''], ['1.5'], ['NEW']];
+    }
+
+    #[DataProvider('invalidPage')]
+    public function testParsePageInvalid(string $input)
+    {
+        $this->expectException(BadRequestHttpException::class);
+        Utils::parsePage($input);
     }
 
     public function testGenerateSignedFileName()

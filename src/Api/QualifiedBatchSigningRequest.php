@@ -86,7 +86,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
                                                 ],
                                                 'page' => [
                                                     'description' => 'Page number the signature should be placed (starting with 1), or "new" to place it on a newly appended page. If omitted, the PDF-AS profile default is used.',
-                                                    'type' => 'number',
+                                                    'oneOf' => [
+                                                        ['type' => 'integer', 'minimum' => 1],
+                                                        ['type' => 'string', 'enum' => ['new']],
+                                                    ],
                                                     'example' => '2',
                                                 ],
                                                 'invisible' => [
